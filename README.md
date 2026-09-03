@@ -46,7 +46,7 @@ Na plataforma **stock.io**, oferecemos a visualização e execução de dois dos
 - **Uso Prático:** Para distâncias geográficas longas (acima de 15km), o Dijkstra encontra a rota em milissegundos.
 
 ![Execução Bellman-Ford](frontend/public/bellmanFord.png)
-*Figura 2: Animação e cálculo de rota utilizando o algoritmo de Bellman-Ford.*
+*Figura 2: Cálculo de rota utilizando o algoritmo de Bellman-Ford.*
 
 ### Bellman-Ford
 - **Complexidade de Tempo:** O(V * E).
@@ -141,13 +141,15 @@ Para acessar o sistema, você pode utilizar os seguintes usuários já cadastrad
 - **Senha:** mauricio123@
 
 ### Passo a Passo da Aplicação
-1. Faça login utilizando uma das credenciais acima.
-2. Navegue até a tela de rotas de um pedido.
-3. Na barra lateral, digite o **CEP de Origem** (ex: `71940-540` para Águas Claras, ou `71065-023` para Guará II). O destino já estará preenchido dependendo da tela.
-4. O sistema tentará localizar os pontos no mapa com alta precisão através do Nominatim/ViaCEP.
-5. Escolha o algoritmo desejado (Dijkstra ou Bellman-Ford).
-6. Clique em encontrar rota. O sistema baixará a malha viária do local e desenhará na tela o avanço passo-a-passo da exploração do algoritmo até a origem ser conectada ao destino.
+1. Faça login utilizando uma das credenciais acima
+2. Realize o pedido de um item na plataforma
+3. Acesse a plataforma como entregador
+4. Escolha um pedido
+5. Calcule a rota do pedido com o algoritmo escolhido
 
-## Autores e Contribuidores
+## Equipe
 
-- Grupo 7 (G7) - Projeto de Algoritmos (PA) / 2026.2
+| Foto | Nome |
+| :---: | :--- |
+| ![Johnnatan Salles](https://github.com/jsalless.png?size=100) | **Johnnatan Salles** |
+| ![Julia Gabriella](https://github.com/juliagabriellafs.png?size=100) | **Julia Gabriella** |
