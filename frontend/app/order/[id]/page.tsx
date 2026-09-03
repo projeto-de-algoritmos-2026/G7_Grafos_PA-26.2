@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getOrderById } from "../../../api/api";
-import { buildRoadGraph, geocodeCEP, findNearestNode, runBellmanFord, OSMGraph, BellmanFordResult } from "../../../utils/osmGraph";
+import { buildRoadGraph, geocodeCEP, findNearestNode, runBellmanFord, runDijkstra, OSMGraph, RouteResult } from "../../../utils/osmGraph";
 import { FiArrowLeft, FiMapPin, FiClock, FiSearch } from "react-icons/fi";
 import { FaWalking, FaBicycle, FaMotorcycle, FaCar } from "react-icons/fa";
 import dynamic from "next/dynamic";
@@ -20,13 +20,13 @@ export default function DeliveryRoutePage() {
     const [order, setOrder] = useState<any>(null);
     const [loadingMsg, setLoadingMsg] = useState<string>("Buscando pedido...");
     const [graphData, setGraphData] = useState<{ graph: OSMGraph, start: number, end: number } | null>(null);
-    const [routeResult, setRouteResult] = useState<BellmanFordResult | null>(null);
+    const [routeResult, setRouteResult] = useState<RouteResult | null>(null);
     const [algorithm, setAlgorithm] = useState<"bellman" | "dijkstra">("bellman");
     const [transport, setTransport] = useState<"walk" | "bike" | "moto" | "car">("bike");
 
     // Novo estado para o CEP de origem
     const [originCep, setOriginCep] = useState("");
-    const [destCoords, setDestCoords] = useState<{lat: number, lon: number} | null>(null);
+    const [destCoords, setDestCoords] = useState<{ lat: number, lon: number } | null>(null);
 
     useEffect(() => {
         async function fetchOrderInfo() {
@@ -45,19 +45,20 @@ export default function DeliveryRoutePage() {
                 const safeDest = geoResult || { lat: -23.550520, lon: -46.633308 };
                 setDestCoords(safeDest);
 
-                setLoadingMsg(""); 
+                setLoadingMsg("");
             } catch (err: any) {
                 console.error(err);
                 toast.error(err.message || "Erro inesperado");
                 setLoadingMsg("");
             }
         }
-        
+
         if (orderId) fetchOrderInfo();
     }, [orderId]);
 
     const handleCalculateRoute = async () => {
-        if (!originCep || originCep.length < 8) {
+        const cleanCep = originCep.replace(/\D/g, '');
+        if (!cleanCep || cleanCep.length < 8) {
             toast.warning("Digite um CEP de origem válido com 8 dígitos.");
             return;
         }
@@ -68,6 +69,8 @@ export default function DeliveryRoutePage() {
 
         try {
             setLoadingMsg("Buscando localização da origem...");
+            // Espaçamento para respeitar o limite de 1 req/s do Nominatim
+            await new Promise(r => setTimeout(r, 1100));
             const originGeo = await geocodeCEP(originCep);
             const safeOrigin = originGeo || { lat: -23.552520, lon: -46.635308 };
 
@@ -91,10 +94,10 @@ export default function DeliveryRoutePage() {
 
             setGraphData({ graph, start: sNode, end: eNode });
 
-            setLoadingMsg("Calculando menor caminho com Bellman-Ford...");
-            const result = runBellmanFord(graph, sNode, eNode);
+            setLoadingMsg(`Calculando menor caminho com ${algorithm === 'bellman' ? 'Bellman-Ford' : 'Dijkstra'}...`);
+            const result = algorithm === 'bellman' ? runBellmanFord(graph, sNode, eNode) : runDijkstra(graph, sNode, eNode);
             if (!result) toast.warning("Não foi possível traçar uma rota conexa entre os pontos.");
-            
+
             setRouteResult(result);
             setLoadingMsg("");
 
@@ -107,20 +110,18 @@ export default function DeliveryRoutePage() {
 
     const handleAlgorithmChange = (alg: "bellman" | "dijkstra") => {
         setAlgorithm(alg);
-        if (alg === "dijkstra") {
-            toast.info("O Algoritmo de Dijkstra foi selecionado apenas visualmente, conforme as especificações. O caminho exibido continua sendo de Bellman-Ford.");
-        }
     };
 
-    if (loadingMsg) {
-        return (
-            <div className="min-h-screen bg-[#F6F3E4] flex flex-col items-center justify-center p-6 text-center">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#6032F6] mb-6"></div>
-                <h2 className="text-2xl font-black text-[#17181A] uppercase tracking-wider mb-2">Processando</h2>
-                <p className="text-[#17181A]/60 font-medium max-w-md">{loadingMsg}</p>
-            </div>
-        );
-    }
+    // Remover tela inteira de carregamento para não desmontar o mapa
+    // if (loadingMsg) {
+    //     return (
+    //         <div className="min-h-screen bg-[#F6F3E4] flex flex-col items-center justify-center p-6 text-center">
+    //             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#6032F6] mb-6"></div>
+    //             <h2 className="text-2xl font-black text-[#17181A] uppercase tracking-wider mb-2">Processando</h2>
+    //             <p className="text-[#17181A]/60 font-medium max-w-md">{loadingMsg}</p>
+    //         </div>
+    //     );
+    // }
 
     // Calcular tempo estimado baseado no transporte
     let speedKmh = 15; // default bike
@@ -133,12 +134,12 @@ export default function DeliveryRoutePage() {
 
     return (
         <div className="min-h-screen bg-[#F6F3E4] font-sans flex items-center justify-center p-0 sm:p-6">
-            
+
             <div className="w-full max-w-6xl bg-white shadow-2xl overflow-hidden flex flex-col lg:flex-row relative h-[100dvh] sm:h-[90dvh] sm:rounded-[40px] border-4 border-white/50">
-                
+
                 {/* Coluna Esquerda: Controles */}
                 <div className="w-full lg:w-[420px] flex flex-col bg-white z-10 flex-shrink-0 relative border-r border-[#F5F2EB]">
-                    
+
                     {/* Header e Inputs */}
                     <div className="px-6 pt-8 pb-4 flex-1 overflow-y-auto">
                         <div className="flex items-center gap-4 mb-8">
@@ -150,26 +151,34 @@ export default function DeliveryRoutePage() {
 
                         <div className="space-y-3 mb-8 relative">
                             <div className="absolute left-5 top-5 bottom-5 w-0.5 bg-gray-200 z-0"></div>
-                            
+
                             <div className="relative z-10 bg-[#F5F2EB] rounded-2xl px-4 py-2.5 flex items-center gap-3 border border-transparent focus-within:border-[#6032F6] transition-colors shadow-sm">
-                                <div className="w-3 h-3 rounded-full bg-[#17181A] shadow-md border-2 border-white shrink-0"></div>
-                                <input 
-                                    type="text" 
-                                    placeholder="Digite o CEP de Origem" 
+                                <div className="w-3 h-3 rounded-full bg-blue shadow-md border-2 border-white shrink-0"></div>
+                                <input
+                                    type="text"
+                                    placeholder="Digite o CEP de Origem"
                                     value={originCep}
-                                    onChange={(e) => setOriginCep(e.target.value.replace(/\D/g, ''))}
-                                    maxLength={8}
-                                    className="bg-transparent font-medium text-sm text-[#17181A] outline-none w-full" 
+                                    onChange={(e) => {
+                                        const clean = e.target.value.replace(/\D/g, '');
+                                        if (clean.length > 5) {
+                                            setOriginCep(`${clean.slice(0, 5)}-${clean.slice(5, 8)}`);
+                                        } else {
+                                            setOriginCep(clean);
+                                        }
+                                    }}
+                                    maxLength={9}
+                                    className="bg-transparent font-medium text-sm text-[#17181A] outline-none w-full"
                                 />
-                                <button 
+                                <button
                                     onClick={handleCalculateRoute}
-                                    className="bg-[#6032F6] text-white p-2 rounded-xl hover:bg-[#5227DF] transition-colors cursor-pointer shrink-0 shadow-md"
+                                    disabled={!!loadingMsg}
+                                    className="bg-[#6032F6] text-white p-2 rounded-xl hover:bg-[#5227DF] transition-colors cursor-pointer shrink-0 shadow-md disabled:opacity-50 flex items-center justify-center"
                                     title="Buscar Rota"
                                 >
-                                    <FiSearch />
+                                    {loadingMsg ? <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" /> : <FiSearch />}
                                 </button>
                             </div>
-                            
+
                             <div className="relative z-10 bg-[#F5F2EB] rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm">
                                 <div className="w-3 h-3 rounded-full bg-red-500 shadow-md border-2 border-white shrink-0"></div>
                                 <input type="text" value={`Destino: CEP ${order?.cep}`} readOnly className="bg-transparent font-medium text-sm text-[#17181A] outline-none w-full cursor-default" />
@@ -220,39 +229,40 @@ export default function DeliveryRoutePage() {
                         </div>
 
                         <div className="flex gap-2 mb-6 p-1 bg-[#F5F2EB] rounded-full">
-                            <button 
+                            <button
                                 onClick={() => handleAlgorithmChange('bellman')}
                                 className={`flex-1 py-2.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${algorithm === 'bellman' ? 'bg-white shadow-sm text-[#6032F6]' : 'text-[#17181A]/50'}`}
                             >
                                 Bellman-Ford
                             </button>
-                            <button 
+                            <button
                                 onClick={() => handleAlgorithmChange('dijkstra')}
                                 className={`flex-1 py-2.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${algorithm === 'dijkstra' ? 'bg-white shadow-sm text-[#6032F6]' : 'text-[#17181A]/50'}`}
                             >
                                 Dijkstra
                             </button>
                         </div>
-
-                        <button className="w-full bg-[#17181A] hover:bg-black text-white rounded-full py-4 font-black uppercase tracking-widest text-sm shadow-xl flex items-center justify-center gap-3 transition-transform active:scale-[0.98] cursor-pointer">
-                            Iniciar entrega agora
-                            {transport === 'walk' && <FaWalking size={18} />}
-                            {transport === 'bike' && <FaBicycle size={18} />}
-                            {transport === 'moto' && <FaMotorcycle size={18} />}
-                            {transport === 'car' && <FaCar size={18} />}
-                        </button>
                     </div>
 
                 </div>
 
                 {/* Coluna Direita: Mapa */}
                 <div className="flex-1 relative bg-[#EBE7DD] flex flex-col min-h-[400px] lg:min-h-0">
+                    {loadingMsg && (
+                        <div className="absolute inset-0 z-50 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center">
+                            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-[#6032F6] mb-4"></div>
+                            <h2 className="text-lg font-black text-[#17181A] uppercase tracking-wider mb-1">Processando</h2>
+                            <p className="text-[#17181A]/80 font-medium text-sm text-center px-4">{loadingMsg}</p>
+                        </div>
+                    )}
+
                     {graphData ? (
-                        <DeliveryMap 
-                            graph={graphData.graph} 
-                            startNode={graphData.start} 
-                            endNode={graphData.end} 
-                            path={routeResult?.path || []} 
+                        <DeliveryMap
+                            graph={graphData.graph}
+                            startNode={graphData.start}
+                            endNode={graphData.end}
+                            path={routeResult?.path || []}
+                            visitedEdges={routeResult?.visitedEdges || []}
                         />
                     ) : (
                         <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center bg-[#EBE7DD] absolute inset-0">
