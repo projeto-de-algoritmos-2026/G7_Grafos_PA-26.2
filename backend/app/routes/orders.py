@@ -4,8 +4,8 @@ from pydantic import BaseModel
 from typing import List
 
 router = APIRouter(
-    prefix="/api/checkout",
-    tags=["Checkout"]
+    prefix="/api",
+    tags=["Orders and Checkout"]
 )
 
 class OrderItemInput(BaseModel):
@@ -17,7 +17,7 @@ class CheckoutPayload(BaseModel):
     cep: str
     user_id: str | None = None
 
-@router.post("")
+@router.post("/checkout")
 async def process_checkout(payload: CheckoutPayload):
     """
     Processa a finalização de uma compra simulada.
@@ -36,13 +36,11 @@ async def process_checkout(payload: CheckoutPayload):
                 "price": product.price
             })
             
-    # Cria o pedido e os itens vinculados
-    order = await prisma.order.create(
+        order = await prisma.order.create(
         data={
             "userId": payload.user_id,
             "cep": payload.cep,
             "totalPrice": total_price,
-            "status": "SIMULATED",
             "items": {
                 "create": valid_items
             }
@@ -53,3 +51,39 @@ async def process_checkout(payload: CheckoutPayload):
     )
     
     return {"message": "Compra simulada com sucesso", "order_id": order.id}
+
+@router.get("/orders")
+async def list_orders():
+    """
+    Lista todos os pedidos registrados.
+    """
+    orders = await prisma.order.find_many(
+        include={
+            "items": {
+                "include": {
+                    "product": True
+                }
+            }
+        },
+        order={"createdAt": "desc"}
+    )
+    return orders
+
+@router.get("/orders/{order_id}")
+async def get_order(order_id: int):
+    """
+    Busca um pedido específico pelo ID.
+    """
+    order = await prisma.order.find_unique(
+        where={
+            "id": order_id
+        },
+        include={
+            "items": {
+                "include": {
+                    "product": True
+                }
+            }
+        }
+    )
+    return order

@@ -80,3 +80,29 @@ export async function processCheckout(payload: { items: any[], cep: string, user
         throw e;
     }
 }
+
+export async function getAllOrders() {
+    try {
+        const res = await fetch(`${BASE_URL}/api/orders`, {
+            headers: getAuthHeaders()
+        });
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
+
+export async function getOrderById(orderId: string | number) {
+    try {
+        const res = await fetch(`${BASE_URL}/api/orders/${orderId}`, {
+            headers: getAuthHeaders()
+        });
+        if (!res.ok) return null;
+        return await res.json();
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+}

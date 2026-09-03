@@ -53,7 +53,6 @@ model Order {
   userId     String?     @map("user_id")
   cep        String
   totalPrice Float       @map("total_price")
-  status     String      @default("SIMULATED")
   createdAt  DateTime    @default(now()) @map("created_at")
 
   items      OrderItem[]

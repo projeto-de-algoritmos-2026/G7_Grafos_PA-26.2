@@ -13,14 +13,17 @@
     "@fontsource/inter": "^5.3.0",
     "@iconify/react": "^6.0.2",
     "jwt-decode": "^4.0.0",
+    "leaflet": "^1.9.4",
     "next": "16.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-icons": "^5.7.0",
+    "react-leaflet": "^5.0.0",
     "react-toastify": "^11.1.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/leaflet": "^1.9.22",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

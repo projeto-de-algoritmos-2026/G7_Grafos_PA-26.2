@@ -55,7 +55,7 @@ const PaymentModal = ({ isOpen, onClose, total, cartItems, onSuccess }: any) => 
                     try {
                         const payload = JSON.parse(atob(token.split('.')[1]));
                         userId = payload.sub;
-                    } catch (e) {}
+                    } catch (e) { }
                 }
 
                 await processCheckout({
@@ -101,7 +101,7 @@ const PaymentModal = ({ isOpen, onClose, total, cartItems, onSuccess }: any) => 
 
                         <div className="text-left mb-6">
                             <label className="block text-sm font-semibold text-text mb-2">CEP de Entrega</label>
-                            <input 
+                            <input
                                 type="text"
                                 placeholder="00000-000"
                                 value={cep}
@@ -345,7 +345,7 @@ export default function Navbar() {
                             <Link href="/login" className="text-white font-bold tracking-wider hover:text-gray-300 transition-colors uppercase text-sm">
                                 LOGIN
                             </Link>
-                            <Link href="/register" className="bg-[#7C3AED] text-white px-6 py-2.5 rounded-full font-bold tracking-wider hover:brightness-110 transition-all uppercase text-sm shadow-md">
+                            <Link href="/signup" className="bg-[#7C3AED] text-white px-6 py-2.5 rounded-full font-bold tracking-wider hover:brightness-110 transition-all uppercase text-sm shadow-md">
                                 CADASTRE-SE
                             </Link>
                         </div>

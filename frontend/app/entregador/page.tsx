@@ -53,7 +53,7 @@ export default function LoginPage() {
                 localStorage.setItem('stockio_role', data.user.role);
             }
             setTimeout(() => {
-                router.push('/');
+                router.push('/orders');
             }, 1000);
         } catch (err: any) {
             setError(err.message || 'Falha ao conectar com o servidor.');
