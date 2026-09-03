@@ -1,10 +1,10 @@
-# 🛵 Delivery Routing com Grafos (G7_Grafos_PA-26.2)
+# Delivery Routing com Grafos - stock.io (G7_Grafos_PA-26.2)
 
 Este projeto foi desenvolvido para a disciplina de **Projeto de Algoritmos (PA) - 2026.2**, com foco na aplicação prática de teoria de grafos no mundo real.
 
-A aplicação simula um sistema de rotas de entrega (delivery) conectando pontos geográficos reais através do **OpenStreetMap**, extraindo a malha viária e calculando a rota mais curta e viável utilizando os algoritmos de **Dijkstra** e **Bellman-Ford**.
+A aplicação simula um sistema de rotas de entrega (delivery) para a plataforma **stock.io**, conectando pontos geográficos reais através do **OpenStreetMap**, extraindo a malha viária e calculando a rota mais curta e viável utilizando os algoritmos de **Dijkstra** e **Bellman-Ford**.
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 O projeto está dividido em duas partes principais:
 
@@ -23,7 +23,7 @@ O projeto está dividido em duas partes principais:
 
 ---
 
-## ⚙️ Funcionalidades e Algoritmos
+## Funcionalidades e Algoritmos
 
 * **Geocodificação Inteligente:** O sistema aceita a entrada de CEPs e utiliza múltiplas APIs (ViaCEP + Nominatim) para traçar as exatas coordenadas de ruas e bairros brasileiros de forma dinâmica e resiliente.
 * **Mapeamento em Tempo Real:** Conexão direta com a API do **Overpass / OSM** para extrair a malha viária (ruas, rodovias, avenidas) baseada na distância entre a Origem e o Destino.
@@ -33,7 +33,23 @@ O projeto está dividido em duas partes principais:
 
 ---
 
-## 💻 Como Configurar e Executar
+## Comparação de Eficiência: Dijkstra x Bellman-Ford
+
+Na plataforma **stock.io**, oferecemos a visualização e execução de dois dos mais importantes algoritmos de caminho mínimo. Como nosso grafo representa uma malha viária do mundo real (onde as distâncias são estritamente positivas), podemos observar uma diferença brutal na eficiência:
+
+### Dijkstra
+- **Complexidade de Tempo:** O(V log V + E) ou O(V^2), dependendo da estrutura de fila de prioridade utilizada.
+- **Vantagem no Mapa:** É extremamente rápido e eficiente para mapas de ruas. Ele se expande geograficamente em formato de "diamante" (buscando em largura a partir da origem), processando apenas os nós mais promissores.
+- **Uso Prático:** Para distâncias geográficas longas (acima de 15km), o Dijkstra encontra a rota em milissegundos.
+
+### Bellman-Ford
+- **Complexidade de Tempo:** O(V * E).
+- **Desvantagem no Mapa:** Ele relaxa **todas** as arestas do mapa, repetidas vezes (até V-1). Num grafo de cidade com milhares de nós (esquinas) e arestas (ruas), isso resulta em milhões de operações computacionais desnecessárias, já que não temos ruas com "distância negativa".
+- **Otimização Implementada:** Para viabilizar a demonstração do Bellman-Ford no navegador sem travamentos, implementamos um *Early Stopping* (parada antecipada). O algoritmo interrompe o laço caso nenhuma distância seja relaxada durante uma iteração inteira, cortando o processamento exponencial pela metade em cenários lineares. Ainda assim, é visivelmente mais lento que o Dijkstra na animação de exploração do mapa.
+
+---
+
+## Como Configurar e Executar
 
 Siga as instruções abaixo para rodar o projeto localmente na sua máquina.
 
@@ -94,7 +110,6 @@ cd frontend
    ```bash
    npm install
    ```
-   *(ou `yarn install` / `pnpm install`)*
 
 2. **Inicie o servidor de desenvolvimento:**
    ```bash
@@ -106,7 +121,7 @@ cd frontend
 
 ---
 
-## 🗺️ Como usar a aplicação
+## Como usar a aplicação
 
 1. Navegue até a tela de rotas de um pedido.
 2. Na barra lateral, digite o **CEP de Origem** (ex: `71940-540` para Águas Claras, ou `71065-023` para Guará II). O destino já estará preenchido dependendo da tela.
@@ -114,6 +129,6 @@ cd frontend
 4. Escolha o algoritmo desejado (Dijkstra ou Bellman-Ford).
 5. Clique em encontrar rota. O sistema baixará a malha viária do local e desenhará na tela o avanço passo-a-passo da exploração do algoritmo até a origem ser conectada ao destino.
 
-## 🤝 Autores e Contribuidores
+## Autores e Contribuidores
 
 - Grupo 7 (G7) - Projeto de Algoritmos (PA) / 2026.2
