@@ -39,6 +39,7 @@ class UserData(BaseModel):
     id: str
     email: str
     fullName: Optional[str] = None
+    role: str
     metadata: Optional[Dict[str, Any]] = None
 
 

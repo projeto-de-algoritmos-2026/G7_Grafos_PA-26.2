@@ -72,22 +72,22 @@ export default function SignUpPage() {
       <header className="lg:hidden pt-5 px-8 sm:pt-6 sm:px-12 z-20 shrink-0 flex justify-center">
         <div className="inline-block transition-transform duration-300 hover:scale-[1.03] cursor-default select-none">
           <Image
-            src="/Logo.svg"
+            src="/LogoPreta.svg"
             alt="STOCK.IO"
             width={320}
             height={90}
             priority
-            className="h-auto w-52 sm:w-64 object-contain"
+            className="h-auto w-44 sm:w-52 object-contain"
           />
         </div>
       </header>
 
       <div className="flex-1 min-h-0 flex flex-col lg:flex-row items-center lg:items-end justify-between px-6 sm:px-10 lg:px-[200px] xl:px-[240px] relative z-10 overflow-hidden">
 
-        <div className="w-full lg:w-[654px] shrink-0 flex justify-center lg:justify-start h-full max-h-[92vh] items-end">
-          <div className="w-full max-w-[654px] lg:w-[654px] bg-[#17181A] text-white rounded-t-[36px] sm:rounded-t-[44px] rounded-b-none px-8 sm:px-14 lg:px-16 pt-[112px] pb-8 sm:pb-10 shadow-2xl h-full flex flex-col justify-start overflow-hidden">
+        <div className="w-full lg:w-[520px] shrink-0 flex justify-center lg:justify-start h-full max-h-[92vh] items-end">
+          <div className="w-full max-w-[520px] lg:w-[520px] bg-[#17181A] text-white rounded-t-[36px] sm:rounded-t-[44px] rounded-b-none px-8 sm:px-14 lg:px-16 pt-[72px] pb-8 sm:pb-10 shadow-2xl h-full flex flex-col justify-start overflow-hidden">
 
-            <h1 className="text-[#F6F3E4] text-2xl sm:text-[44px] font-black tracking-wide text-center uppercase leading-tight m-0 mb-[60px]">
+            <h1 className="text-[#F6F3E4] text-2xl sm:text-[44px] font-black tracking-wide text-center uppercase leading-tight m-0 mb-[40px]">
               CRIE SUA CONTA
             </h1>
 
@@ -217,12 +217,12 @@ export default function SignUpPage() {
           <div className="w-full flex justify-center pointer-events-auto">
             <div className="inline-block transition-transform duration-300 hover:scale-[1.03] cursor-default select-none">
               <Image
-                src="/Logo.svg"
+                src="/LogoPreta.svg"
                 alt="STOCK.IO"
                 width={420}
                 height={120}
                 priority
-                className="h-auto w-72 lg:w-[350px] xl:w-[390px] object-contain drop-shadow-xs"
+                className="h-auto w-56 lg:w-[280px] xl:w-[320px] object-contain drop-shadow-xs"
               />
             </div>
           </div>

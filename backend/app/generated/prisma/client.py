@@ -95,9 +95,17 @@ class Prisma(AsyncBasePrisma):
     # Note: these property names can be customised using `/// @Python(instance_name: '...')`
     # https://prisma-client-py.readthedocs.io/en/stable/reference/schema-extensions/#instance_name
     user: 'actions.UserActions[models.User]'
+    product: 'actions.ProductActions[models.Product]'
+    productimage: 'actions.ProductImageActions[models.ProductImage]'
+    order: 'actions.OrderActions[models.Order]'
+    orderitem: 'actions.OrderItemActions[models.OrderItem]'
 
     __slots__ = (
         'user',
+        'product',
+        'productimage',
+        'order',
+        'orderitem',
     )
 
     def __init__(
@@ -129,6 +137,10 @@ class Prisma(AsyncBasePrisma):
         )
 
         self.user = actions.UserActions[models.User](self, models.User)
+        self.product = actions.ProductActions[models.Product](self, models.Product)
+        self.productimage = actions.ProductImageActions[models.ProductImage](self, models.ProductImage)
+        self.order = actions.OrderActions[models.Order](self, models.Order)
+        self.orderitem = actions.OrderItemActions[models.OrderItem](self, models.OrderItem)
 
         if auto_register:
             register(self)
@@ -280,12 +292,20 @@ TransactionManager = AsyncTransactionManager[Prisma]
 # TODO: don't require copy-pasting arguments between actions and batch actions
 class Batch:
     user: 'UserBatchActions'
+    product: 'ProductBatchActions'
+    productimage: 'ProductImageBatchActions'
+    order: 'OrderBatchActions'
+    orderitem: 'OrderItemBatchActions'
 
     def __init__(self, client: Prisma) -> None:
         self.__client = client
         self.__queries: List[str] = []
         self._active_provider = client._active_provider
         self.user = UserBatchActions(self)
+        self.product = ProductBatchActions(self)
+        self.productimage = ProductImageBatchActions(self)
+        self.order = OrderBatchActions(self)
+        self.orderitem = OrderItemBatchActions(self)
 
     def _add(self, **kwargs: Any) -> None:
         builder = QueryBuilder(
@@ -443,6 +463,450 @@ class UserBatchActions:
         self._batcher._add(
             method='delete_many',
             model=models.User,
+            arguments={'where': where},
+            root_selection=['count'],
+        )
+
+
+
+# NOTE: some arguments are meaningless in this context but are included
+# for completeness sake
+class ProductBatchActions:
+    def __init__(self, batcher: Batch) -> None:
+        self._batcher = batcher
+
+    def create(
+        self,
+        data: types.ProductCreateInput,
+        include: Optional[types.ProductInclude] = None
+    ) -> None:
+        self._batcher._add(
+            method='create',
+            model=models.Product,
+            arguments={
+                'data': data,
+                'include': include,
+            },
+        )
+
+    def create_many(
+        self,
+        data: List[types.ProductCreateWithoutRelationsInput],
+        *,
+        skip_duplicates: Optional[bool] = None,
+    ) -> None:
+        if skip_duplicates and self._batcher._active_provider in CREATE_MANY_SKIP_DUPLICATES_UNSUPPORTED:
+            raise errors.UnsupportedDatabaseError(self._batcher._active_provider, 'create_many_skip_duplicates')
+
+        self._batcher._add(
+            method='create_many',
+            model=models.Product,
+            arguments={
+                'data': data,
+                'skipDuplicates': skip_duplicates,
+            },
+            root_selection=['count'],
+        )
+
+    def delete(
+        self,
+        where: types.ProductWhereUniqueInput,
+        include: Optional[types.ProductInclude] = None,
+    ) -> None:
+        self._batcher._add(
+            method='delete',
+            model=models.Product,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+
+    def update(
+        self,
+        data: types.ProductUpdateInput,
+        where: types.ProductWhereUniqueInput,
+        include: Optional[types.ProductInclude] = None
+    ) -> None:
+        self._batcher._add(
+            method='update',
+            model=models.Product,
+            arguments={
+                'data': data,
+                'where': where,
+                'include': include,
+            },
+        )
+
+    def upsert(
+        self,
+        where: types.ProductWhereUniqueInput,
+        data: types.ProductUpsertInput,
+        include: Optional[types.ProductInclude] = None,
+    ) -> None:
+        self._batcher._add(
+            method='upsert',
+            model=models.Product,
+            arguments={
+                'where': where,
+                'include': include,
+                'create': data.get('create'),
+                'update': data.get('update'),
+            },
+        )
+
+    def update_many(
+        self,
+        data: types.ProductUpdateManyMutationInput,
+        where: types.ProductWhereInput,
+    ) -> None:
+        self._batcher._add(
+            method='update_many',
+            model=models.Product,
+            arguments={'data': data, 'where': where,},
+            root_selection=['count'],
+        )
+
+    def delete_many(
+        self,
+        where: Optional[types.ProductWhereInput] = None,
+    ) -> None:
+        self._batcher._add(
+            method='delete_many',
+            model=models.Product,
+            arguments={'where': where},
+            root_selection=['count'],
+        )
+
+
+
+# NOTE: some arguments are meaningless in this context but are included
+# for completeness sake
+class ProductImageBatchActions:
+    def __init__(self, batcher: Batch) -> None:
+        self._batcher = batcher
+
+    def create(
+        self,
+        data: types.ProductImageCreateInput,
+        include: Optional[types.ProductImageInclude] = None
+    ) -> None:
+        self._batcher._add(
+            method='create',
+            model=models.ProductImage,
+            arguments={
+                'data': data,
+                'include': include,
+            },
+        )
+
+    def create_many(
+        self,
+        data: List[types.ProductImageCreateWithoutRelationsInput],
+        *,
+        skip_duplicates: Optional[bool] = None,
+    ) -> None:
+        if skip_duplicates and self._batcher._active_provider in CREATE_MANY_SKIP_DUPLICATES_UNSUPPORTED:
+            raise errors.UnsupportedDatabaseError(self._batcher._active_provider, 'create_many_skip_duplicates')
+
+        self._batcher._add(
+            method='create_many',
+            model=models.ProductImage,
+            arguments={
+                'data': data,
+                'skipDuplicates': skip_duplicates,
+            },
+            root_selection=['count'],
+        )
+
+    def delete(
+        self,
+        where: types.ProductImageWhereUniqueInput,
+        include: Optional[types.ProductImageInclude] = None,
+    ) -> None:
+        self._batcher._add(
+            method='delete',
+            model=models.ProductImage,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+
+    def update(
+        self,
+        data: types.ProductImageUpdateInput,
+        where: types.ProductImageWhereUniqueInput,
+        include: Optional[types.ProductImageInclude] = None
+    ) -> None:
+        self._batcher._add(
+            method='update',
+            model=models.ProductImage,
+            arguments={
+                'data': data,
+                'where': where,
+                'include': include,
+            },
+        )
+
+    def upsert(
+        self,
+        where: types.ProductImageWhereUniqueInput,
+        data: types.ProductImageUpsertInput,
+        include: Optional[types.ProductImageInclude] = None,
+    ) -> None:
+        self._batcher._add(
+            method='upsert',
+            model=models.ProductImage,
+            arguments={
+                'where': where,
+                'include': include,
+                'create': data.get('create'),
+                'update': data.get('update'),
+            },
+        )
+
+    def update_many(
+        self,
+        data: types.ProductImageUpdateManyMutationInput,
+        where: types.ProductImageWhereInput,
+    ) -> None:
+        self._batcher._add(
+            method='update_many',
+            model=models.ProductImage,
+            arguments={'data': data, 'where': where,},
+            root_selection=['count'],
+        )
+
+    def delete_many(
+        self,
+        where: Optional[types.ProductImageWhereInput] = None,
+    ) -> None:
+        self._batcher._add(
+            method='delete_many',
+            model=models.ProductImage,
+            arguments={'where': where},
+            root_selection=['count'],
+        )
+
+
+
+# NOTE: some arguments are meaningless in this context but are included
+# for completeness sake
+class OrderBatchActions:
+    def __init__(self, batcher: Batch) -> None:
+        self._batcher = batcher
+
+    def create(
+        self,
+        data: types.OrderCreateInput,
+        include: Optional[types.OrderInclude] = None
+    ) -> None:
+        self._batcher._add(
+            method='create',
+            model=models.Order,
+            arguments={
+                'data': data,
+                'include': include,
+            },
+        )
+
+    def create_many(
+        self,
+        data: List[types.OrderCreateWithoutRelationsInput],
+        *,
+        skip_duplicates: Optional[bool] = None,
+    ) -> None:
+        if skip_duplicates and self._batcher._active_provider in CREATE_MANY_SKIP_DUPLICATES_UNSUPPORTED:
+            raise errors.UnsupportedDatabaseError(self._batcher._active_provider, 'create_many_skip_duplicates')
+
+        self._batcher._add(
+            method='create_many',
+            model=models.Order,
+            arguments={
+                'data': data,
+                'skipDuplicates': skip_duplicates,
+            },
+            root_selection=['count'],
+        )
+
+    def delete(
+        self,
+        where: types.OrderWhereUniqueInput,
+        include: Optional[types.OrderInclude] = None,
+    ) -> None:
+        self._batcher._add(
+            method='delete',
+            model=models.Order,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+
+    def update(
+        self,
+        data: types.OrderUpdateInput,
+        where: types.OrderWhereUniqueInput,
+        include: Optional[types.OrderInclude] = None
+    ) -> None:
+        self._batcher._add(
+            method='update',
+            model=models.Order,
+            arguments={
+                'data': data,
+                'where': where,
+                'include': include,
+            },
+        )
+
+    def upsert(
+        self,
+        where: types.OrderWhereUniqueInput,
+        data: types.OrderUpsertInput,
+        include: Optional[types.OrderInclude] = None,
+    ) -> None:
+        self._batcher._add(
+            method='upsert',
+            model=models.Order,
+            arguments={
+                'where': where,
+                'include': include,
+                'create': data.get('create'),
+                'update': data.get('update'),
+            },
+        )
+
+    def update_many(
+        self,
+        data: types.OrderUpdateManyMutationInput,
+        where: types.OrderWhereInput,
+    ) -> None:
+        self._batcher._add(
+            method='update_many',
+            model=models.Order,
+            arguments={'data': data, 'where': where,},
+            root_selection=['count'],
+        )
+
+    def delete_many(
+        self,
+        where: Optional[types.OrderWhereInput] = None,
+    ) -> None:
+        self._batcher._add(
+            method='delete_many',
+            model=models.Order,
+            arguments={'where': where},
+            root_selection=['count'],
+        )
+
+
+
+# NOTE: some arguments are meaningless in this context but are included
+# for completeness sake
+class OrderItemBatchActions:
+    def __init__(self, batcher: Batch) -> None:
+        self._batcher = batcher
+
+    def create(
+        self,
+        data: types.OrderItemCreateInput,
+        include: Optional[types.OrderItemInclude] = None
+    ) -> None:
+        self._batcher._add(
+            method='create',
+            model=models.OrderItem,
+            arguments={
+                'data': data,
+                'include': include,
+            },
+        )
+
+    def create_many(
+        self,
+        data: List[types.OrderItemCreateWithoutRelationsInput],
+        *,
+        skip_duplicates: Optional[bool] = None,
+    ) -> None:
+        if skip_duplicates and self._batcher._active_provider in CREATE_MANY_SKIP_DUPLICATES_UNSUPPORTED:
+            raise errors.UnsupportedDatabaseError(self._batcher._active_provider, 'create_many_skip_duplicates')
+
+        self._batcher._add(
+            method='create_many',
+            model=models.OrderItem,
+            arguments={
+                'data': data,
+                'skipDuplicates': skip_duplicates,
+            },
+            root_selection=['count'],
+        )
+
+    def delete(
+        self,
+        where: types.OrderItemWhereUniqueInput,
+        include: Optional[types.OrderItemInclude] = None,
+    ) -> None:
+        self._batcher._add(
+            method='delete',
+            model=models.OrderItem,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+
+    def update(
+        self,
+        data: types.OrderItemUpdateInput,
+        where: types.OrderItemWhereUniqueInput,
+        include: Optional[types.OrderItemInclude] = None
+    ) -> None:
+        self._batcher._add(
+            method='update',
+            model=models.OrderItem,
+            arguments={
+                'data': data,
+                'where': where,
+                'include': include,
+            },
+        )
+
+    def upsert(
+        self,
+        where: types.OrderItemWhereUniqueInput,
+        data: types.OrderItemUpsertInput,
+        include: Optional[types.OrderItemInclude] = None,
+    ) -> None:
+        self._batcher._add(
+            method='upsert',
+            model=models.OrderItem,
+            arguments={
+                'where': where,
+                'include': include,
+                'create': data.get('create'),
+                'update': data.get('update'),
+            },
+        )
+
+    def update_many(
+        self,
+        data: types.OrderItemUpdateManyMutationInput,
+        where: types.OrderItemWhereInput,
+    ) -> None:
+        self._batcher._add(
+            method='update_many',
+            model=models.OrderItem,
+            arguments={'data': data, 'where': where,},
+            root_selection=['count'],
+        )
+
+    def delete_many(
+        self,
+        where: Optional[types.OrderItemWhereInput] = None,
+    ) -> None:
+        self._batcher._add(
+            method='delete_many',
+            model=models.OrderItem,
             arguments={'where': where},
             root_selection=['count'],
         )

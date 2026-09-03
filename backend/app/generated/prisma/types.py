@@ -1145,6 +1145,7 @@ DecimalListUpdate = Union[
 class UserOptionalCreateInput(TypedDict, total=False):
     """Optional arguments to the User create method"""
     id: _str
+    role: _str
     createdAt: datetime.datetime
     updatedAt: datetime.datetime
 
@@ -1162,6 +1163,7 @@ class UserCreateInput(UserOptionalCreateInput):
 class UserOptionalCreateWithoutRelationsInput(TypedDict, total=False):
     """Optional arguments to the User create method, without relations"""
     id: _str
+    role: _str
     createdAt: datetime.datetime
     updatedAt: datetime.datetime
 
@@ -1215,6 +1217,7 @@ class UserUpdateInput(TypedDict, total=False):
     email: _str
     fullName: _str
     password: _str
+    role: _str
     createdAt: datetime.datetime
     updatedAt: datetime.datetime
 
@@ -1225,6 +1228,7 @@ class UserUpdateManyMutationInput(TypedDict, total=False):
     email: _str
     fullName: _str
     password: _str
+    role: _str
     createdAt: datetime.datetime
     updatedAt: datetime.datetime
 
@@ -1293,6 +1297,14 @@ _User_password_OrderByInput = TypedDict(
     total=True
 )
 
+_User_role_OrderByInput = TypedDict(
+    '_User_role_OrderByInput',
+    {
+        'role': 'SortOrder',
+    },
+    total=True
+)
+
 _User_createdAt_OrderByInput = TypedDict(
     '_User_createdAt_OrderByInput',
     {
@@ -1332,6 +1344,7 @@ UserOrderByInput = Union[
     '_User_email_OrderByInput',
     '_User_fullName_OrderByInput',
     '_User_password_OrderByInput',
+    '_User_role_OrderByInput',
     '_User_createdAt_OrderByInput',
     '_User_updatedAt_OrderByInput',
     '_User_RelevanceOrderByInput',
@@ -1468,6 +1481,434 @@ class FindManyUserArgsFromUserRecursive4(TypedDict, total=False):
     cursor: 'UserWhereUniqueInput'
     distinct: List['UserScalarFieldKeys']
     
+    
+
+class ProductIncludeFromUser(TypedDict, total=False):
+    """Relational arguments for User"""
+    images: Union[bool, 'FindManyProductImageArgsFromUserRecursive1']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromUserRecursive1']
+
+
+class ProductIncludeFromUserRecursive1(TypedDict, total=False):
+    """Relational arguments for User"""
+    images: Union[bool, 'FindManyProductImageArgsFromUserRecursive2']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromUserRecursive2']
+
+
+class ProductIncludeFromUserRecursive2(TypedDict, total=False):
+    """Relational arguments for User"""
+    images: Union[bool, 'FindManyProductImageArgsFromUserRecursive3']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromUserRecursive3']
+
+
+class ProductIncludeFromUserRecursive3(TypedDict, total=False):
+    """Relational arguments for User"""
+    images: Union[bool, 'FindManyProductImageArgsFromUserRecursive4']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromUserRecursive4']
+
+
+class ProductIncludeFromUserRecursive4(TypedDict, total=False):
+    """Relational arguments for User"""
+
+    
+
+class ProductArgsFromUser(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'ProductIncludeFromProductRecursive1'
+
+
+class ProductArgsFromUserRecursive1(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'ProductIncludeFromProductRecursive2'
+
+
+class ProductArgsFromUserRecursive2(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'ProductIncludeFromProductRecursive3'
+
+
+class ProductArgsFromUserRecursive3(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'ProductIncludeFromProductRecursive4'
+
+
+class ProductArgsFromUserRecursive4(TypedDict, total=False):
+    """Arguments for User"""
+    
+    
+
+class FindManyProductArgsFromUser(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive1'
+
+
+class FindManyProductArgsFromUserRecursive1(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive2'
+
+
+class FindManyProductArgsFromUserRecursive2(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive3'
+
+
+class FindManyProductArgsFromUserRecursive3(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive4'
+
+
+class FindManyProductArgsFromUserRecursive4(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    
+    
+
+class ProductImageIncludeFromUser(TypedDict, total=False):
+    """Relational arguments for User"""
+    product: Union[bool, 'ProductArgsFromUserRecursive1']
+
+
+class ProductImageIncludeFromUserRecursive1(TypedDict, total=False):
+    """Relational arguments for User"""
+    product: Union[bool, 'ProductArgsFromUserRecursive2']
+
+
+class ProductImageIncludeFromUserRecursive2(TypedDict, total=False):
+    """Relational arguments for User"""
+    product: Union[bool, 'ProductArgsFromUserRecursive3']
+
+
+class ProductImageIncludeFromUserRecursive3(TypedDict, total=False):
+    """Relational arguments for User"""
+    product: Union[bool, 'ProductArgsFromUserRecursive4']
+
+
+class ProductImageIncludeFromUserRecursive4(TypedDict, total=False):
+    """Relational arguments for User"""
+
+    
+
+class ProductImageArgsFromUser(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'ProductImageIncludeFromProductImageRecursive1'
+
+
+class ProductImageArgsFromUserRecursive1(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'ProductImageIncludeFromProductImageRecursive2'
+
+
+class ProductImageArgsFromUserRecursive2(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'ProductImageIncludeFromProductImageRecursive3'
+
+
+class ProductImageArgsFromUserRecursive3(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'ProductImageIncludeFromProductImageRecursive4'
+
+
+class ProductImageArgsFromUserRecursive4(TypedDict, total=False):
+    """Arguments for User"""
+    
+    
+
+class FindManyProductImageArgsFromUser(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive1'
+
+
+class FindManyProductImageArgsFromUserRecursive1(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive2'
+
+
+class FindManyProductImageArgsFromUserRecursive2(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive3'
+
+
+class FindManyProductImageArgsFromUserRecursive3(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive4'
+
+
+class FindManyProductImageArgsFromUserRecursive4(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    
+    
+
+class OrderIncludeFromUser(TypedDict, total=False):
+    """Relational arguments for User"""
+    items: Union[bool, 'FindManyOrderItemArgsFromUserRecursive1']
+
+
+class OrderIncludeFromUserRecursive1(TypedDict, total=False):
+    """Relational arguments for User"""
+    items: Union[bool, 'FindManyOrderItemArgsFromUserRecursive2']
+
+
+class OrderIncludeFromUserRecursive2(TypedDict, total=False):
+    """Relational arguments for User"""
+    items: Union[bool, 'FindManyOrderItemArgsFromUserRecursive3']
+
+
+class OrderIncludeFromUserRecursive3(TypedDict, total=False):
+    """Relational arguments for User"""
+    items: Union[bool, 'FindManyOrderItemArgsFromUserRecursive4']
+
+
+class OrderIncludeFromUserRecursive4(TypedDict, total=False):
+    """Relational arguments for User"""
+
+    
+
+class OrderArgsFromUser(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'OrderIncludeFromOrderRecursive1'
+
+
+class OrderArgsFromUserRecursive1(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'OrderIncludeFromOrderRecursive2'
+
+
+class OrderArgsFromUserRecursive2(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'OrderIncludeFromOrderRecursive3'
+
+
+class OrderArgsFromUserRecursive3(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'OrderIncludeFromOrderRecursive4'
+
+
+class OrderArgsFromUserRecursive4(TypedDict, total=False):
+    """Arguments for User"""
+    
+    
+
+class FindManyOrderArgsFromUser(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive1'
+
+
+class FindManyOrderArgsFromUserRecursive1(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive2'
+
+
+class FindManyOrderArgsFromUserRecursive2(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive3'
+
+
+class FindManyOrderArgsFromUserRecursive3(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive4'
+
+
+class FindManyOrderArgsFromUserRecursive4(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    
+    
+
+class OrderItemIncludeFromUser(TypedDict, total=False):
+    """Relational arguments for User"""
+    order: Union[bool, 'OrderArgsFromUserRecursive1']
+    product: Union[bool, 'ProductArgsFromUserRecursive1']
+
+
+class OrderItemIncludeFromUserRecursive1(TypedDict, total=False):
+    """Relational arguments for User"""
+    order: Union[bool, 'OrderArgsFromUserRecursive2']
+    product: Union[bool, 'ProductArgsFromUserRecursive2']
+
+
+class OrderItemIncludeFromUserRecursive2(TypedDict, total=False):
+    """Relational arguments for User"""
+    order: Union[bool, 'OrderArgsFromUserRecursive3']
+    product: Union[bool, 'ProductArgsFromUserRecursive3']
+
+
+class OrderItemIncludeFromUserRecursive3(TypedDict, total=False):
+    """Relational arguments for User"""
+    order: Union[bool, 'OrderArgsFromUserRecursive4']
+    product: Union[bool, 'ProductArgsFromUserRecursive4']
+
+
+class OrderItemIncludeFromUserRecursive4(TypedDict, total=False):
+    """Relational arguments for User"""
+
+    
+
+class OrderItemArgsFromUser(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'OrderItemIncludeFromOrderItemRecursive1'
+
+
+class OrderItemArgsFromUserRecursive1(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'OrderItemIncludeFromOrderItemRecursive2'
+
+
+class OrderItemArgsFromUserRecursive2(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'OrderItemIncludeFromOrderItemRecursive3'
+
+
+class OrderItemArgsFromUserRecursive3(TypedDict, total=False):
+    """Arguments for User"""
+    include: 'OrderItemIncludeFromOrderItemRecursive4'
+
+
+class OrderItemArgsFromUserRecursive4(TypedDict, total=False):
+    """Arguments for User"""
+    
+    
+
+class FindManyOrderItemArgsFromUser(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive1'
+
+
+class FindManyOrderItemArgsFromUserRecursive1(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive2'
+
+
+class FindManyOrderItemArgsFromUserRecursive2(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive3'
+
+
+class FindManyOrderItemArgsFromUserRecursive3(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive4'
+
+
+class FindManyOrderItemArgsFromUserRecursive4(TypedDict, total=False):
+    """Arguments for User"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    
 
 
 FindManyUserArgs = FindManyUserArgsFromUser
@@ -1482,6 +1923,7 @@ class UserWhereInput(TypedDict, total=False):
     email: Union[_str, 'types.StringFilter']
     fullName: Union[_str, 'types.StringFilter']
     password: Union[_str, 'types.StringFilter']
+    role: Union[_str, 'types.StringFilter']
     createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
     updatedAt: Union[datetime.datetime, 'types.DateTimeFilter']
 
@@ -1498,6 +1940,7 @@ class UserWhereInputRecursive1(TypedDict, total=False):
     email: Union[_str, 'types.StringFilter']
     fullName: Union[_str, 'types.StringFilter']
     password: Union[_str, 'types.StringFilter']
+    role: Union[_str, 'types.StringFilter']
     createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
     updatedAt: Union[datetime.datetime, 'types.DateTimeFilter']
 
@@ -1514,6 +1957,7 @@ class UserWhereInputRecursive2(TypedDict, total=False):
     email: Union[_str, 'types.StringFilter']
     fullName: Union[_str, 'types.StringFilter']
     password: Union[_str, 'types.StringFilter']
+    role: Union[_str, 'types.StringFilter']
     createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
     updatedAt: Union[datetime.datetime, 'types.DateTimeFilter']
 
@@ -1530,6 +1974,7 @@ class UserWhereInputRecursive3(TypedDict, total=False):
     email: Union[_str, 'types.StringFilter']
     fullName: Union[_str, 'types.StringFilter']
     password: Union[_str, 'types.StringFilter']
+    role: Union[_str, 'types.StringFilter']
     createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
     updatedAt: Union[datetime.datetime, 'types.DateTimeFilter']
 
@@ -1546,6 +1991,7 @@ class UserWhereInputRecursive4(TypedDict, total=False):
     email: Union[_str, 'types.StringFilter']
     fullName: Union[_str, 'types.StringFilter']
     password: Union[_str, 'types.StringFilter']
+    role: Union[_str, 'types.StringFilter']
     createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
     updatedAt: Union[datetime.datetime, 'types.DateTimeFilter']
 
@@ -1562,6 +2008,7 @@ class UserScalarWhereWithAggregatesInput(TypedDict, total=False):
     email: Union[_str, 'types.StringWithAggregatesFilter']
     fullName: Union[_str, 'types.StringWithAggregatesFilter']
     password: Union[_str, 'types.StringWithAggregatesFilter']
+    role: Union[_str, 'types.StringWithAggregatesFilter']
     createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
     updatedAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
 
@@ -1576,6 +2023,7 @@ class UserScalarWhereWithAggregatesInputRecursive1(TypedDict, total=False):
     email: Union[_str, 'types.StringWithAggregatesFilter']
     fullName: Union[_str, 'types.StringWithAggregatesFilter']
     password: Union[_str, 'types.StringWithAggregatesFilter']
+    role: Union[_str, 'types.StringWithAggregatesFilter']
     createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
     updatedAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
 
@@ -1590,6 +2038,7 @@ class UserScalarWhereWithAggregatesInputRecursive2(TypedDict, total=False):
     email: Union[_str, 'types.StringWithAggregatesFilter']
     fullName: Union[_str, 'types.StringWithAggregatesFilter']
     password: Union[_str, 'types.StringWithAggregatesFilter']
+    role: Union[_str, 'types.StringWithAggregatesFilter']
     createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
     updatedAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
 
@@ -1604,6 +2053,7 @@ class UserScalarWhereWithAggregatesInputRecursive3(TypedDict, total=False):
     email: Union[_str, 'types.StringWithAggregatesFilter']
     fullName: Union[_str, 'types.StringWithAggregatesFilter']
     password: Union[_str, 'types.StringWithAggregatesFilter']
+    role: Union[_str, 'types.StringWithAggregatesFilter']
     createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
     updatedAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
 
@@ -1618,6 +2068,7 @@ class UserScalarWhereWithAggregatesInputRecursive4(TypedDict, total=False):
     email: Union[_str, 'types.StringWithAggregatesFilter']
     fullName: Union[_str, 'types.StringWithAggregatesFilter']
     password: Union[_str, 'types.StringWithAggregatesFilter']
+    role: Union[_str, 'types.StringWithAggregatesFilter']
     createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
     updatedAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
 
@@ -1628,6 +2079,7 @@ class UserGroupByOutput(TypedDict, total=False):
     email: _str
     fullName: _str
     password: _str
+    role: _str
     createdAt: datetime.datetime
     updatedAt: datetime.datetime
     _sum: 'UserSumAggregateOutput'
@@ -1651,6 +2103,7 @@ class UserScalarAggregateOutput(TypedDict, total=False):
     email: _str
     fullName: _str
     password: _str
+    role: _str
     createdAt: datetime.datetime
     updatedAt: datetime.datetime
 
@@ -1665,6 +2118,7 @@ class UserMaxAggregateInput(TypedDict, total=False):
     email: bool
     fullName: bool
     password: bool
+    role: bool
     createdAt: bool
     updatedAt: bool
 
@@ -1675,6 +2129,7 @@ class UserMinAggregateInput(TypedDict, total=False):
     email: bool
     fullName: bool
     password: bool
+    role: bool
     createdAt: bool
     updatedAt: bool
 
@@ -1694,6 +2149,7 @@ UserCountAggregateInput = TypedDict(
         'email': bool,
         'fullName': bool,
         'password': bool,
+        'role': bool,
         'createdAt': bool,
         'updatedAt': bool,
         '_all': bool,
@@ -1708,6 +2164,7 @@ UserCountAggregateOutput = TypedDict(
         'email': int,
         'fullName': int,
         'password': int,
+        'role': int,
         'createdAt': int,
         'updatedAt': int,
         '_all': int,
@@ -1721,6 +2178,7 @@ UserKeys = Literal[
     'email',
     'fullName',
     'password',
+    'role',
     'createdAt',
     'updatedAt',
 ]
@@ -1729,12 +2187,4072 @@ UserScalarFieldKeys = Literal[
     'email',
     'fullName',
     'password',
+    'role',
     'createdAt',
     'updatedAt',
 ]
 UserScalarFieldKeysT = TypeVar('UserScalarFieldKeysT', bound=UserScalarFieldKeys)
 
 UserRelationalFieldKeys = _NoneType
+
+# Product types
+
+class ProductOptionalCreateInput(TypedDict, total=False):
+    """Optional arguments to the Product create method"""
+    id: _int
+    stock: _int
+    rating: Optional[_float]
+    createdAt: datetime.datetime
+    images: 'ProductImageCreateManyNestedWithoutRelationsInput'
+    orderItems: 'OrderItemCreateManyNestedWithoutRelationsInput'
+
+
+class ProductCreateInput(ProductOptionalCreateInput):
+    """Required arguments to the Product create method"""
+    name: _str
+    price: _float
+
+
+# TODO: remove this in favour of without explicit relations
+# e.g. PostCreateWithoutAuthorInput
+
+class ProductOptionalCreateWithoutRelationsInput(TypedDict, total=False):
+    """Optional arguments to the Product create method, without relations"""
+    id: _int
+    stock: _int
+    rating: Optional[_float]
+    createdAt: datetime.datetime
+
+
+class ProductCreateWithoutRelationsInput(ProductOptionalCreateWithoutRelationsInput):
+    """Required arguments to the Product create method, without relations"""
+    name: _str
+    price: _float
+
+class ProductConnectOrCreateWithoutRelationsInput(TypedDict):
+    create: 'ProductCreateWithoutRelationsInput'
+    where: 'ProductWhereUniqueInput'
+
+class ProductCreateNestedWithoutRelationsInput(TypedDict, total=False):
+    create: 'ProductCreateWithoutRelationsInput'
+    connect: 'ProductWhereUniqueInput'
+    connect_or_create: 'ProductConnectOrCreateWithoutRelationsInput'
+
+
+class ProductCreateManyNestedWithoutRelationsInput(TypedDict, total=False):
+    create: Union['ProductCreateWithoutRelationsInput', List['ProductCreateWithoutRelationsInput']]
+    connect: Union['ProductWhereUniqueInput', List['ProductWhereUniqueInput']]
+    connect_or_create: Union['ProductConnectOrCreateWithoutRelationsInput', List['ProductConnectOrCreateWithoutRelationsInput']]
+
+_ProductWhereUnique_id_Input = TypedDict(
+    '_ProductWhereUnique_id_Input',
+    {
+        'id': '_int',
+    },
+    total=True
+)
+
+ProductWhereUniqueInput = _ProductWhereUnique_id_Input
+
+
+class ProductUpdateInput(TypedDict, total=False):
+    """Optional arguments for updating a record"""
+    id: Union[AtomicIntInput, _int]
+    name: _str
+    price: Union[AtomicFloatInput, _float]
+    stock: Union[AtomicIntInput, _int]
+    rating: Optional[Union[AtomicFloatInput, _float]]
+    createdAt: datetime.datetime
+    images: 'ProductImageUpdateManyWithoutRelationsInput'
+    orderItems: 'OrderItemUpdateManyWithoutRelationsInput'
+
+
+class ProductUpdateManyMutationInput(TypedDict, total=False):
+    """Arguments for updating many records"""
+    id: Union[AtomicIntInput, _int]
+    name: _str
+    price: Union[AtomicFloatInput, _float]
+    stock: Union[AtomicIntInput, _int]
+    rating: Optional[Union[AtomicFloatInput, _float]]
+    createdAt: datetime.datetime
+
+
+class ProductUpdateManyWithoutRelationsInput(TypedDict, total=False):
+    create: List['ProductCreateWithoutRelationsInput']
+    connect: List['ProductWhereUniqueInput']
+    connect_or_create: List['ProductConnectOrCreateWithoutRelationsInput']
+    set: List['ProductWhereUniqueInput']
+    disconnect: List['ProductWhereUniqueInput']
+    delete: List['ProductWhereUniqueInput']
+
+    # TODO
+    # update: List['ProductUpdateWithWhereUniqueWithoutRelationsInput']
+    # updateMany: List['ProductUpdateManyWithWhereUniqueWithoutRelationsInput']
+    # deleteMany: List['ProductScalarWhereInput']
+    # upsert: List['ProductUpserteWithWhereUniqueWithoutRelationsInput']
+
+
+class ProductUpdateOneWithoutRelationsInput(TypedDict, total=False):
+    create: 'ProductCreateWithoutRelationsInput'
+    connect: 'ProductWhereUniqueInput'
+    connect_or_create: 'ProductConnectOrCreateWithoutRelationsInput'
+    disconnect: bool
+    delete: bool
+
+    # TODO
+    # update: 'ProductUpdateInput'
+    # upsert: 'ProductUpsertWithoutRelationsInput'
+
+
+class ProductUpsertInput(TypedDict):
+    create: 'ProductCreateInput'
+    update: 'ProductUpdateInput'  # pyright: ignore[reportIncompatibleMethodOverride]
+
+
+_Product_id_OrderByInput = TypedDict(
+    '_Product_id_OrderByInput',
+    {
+        'id': 'SortOrder',
+    },
+    total=True
+)
+
+_Product_name_OrderByInput = TypedDict(
+    '_Product_name_OrderByInput',
+    {
+        'name': 'SortOrder',
+    },
+    total=True
+)
+
+_Product_price_OrderByInput = TypedDict(
+    '_Product_price_OrderByInput',
+    {
+        'price': 'SortOrder',
+    },
+    total=True
+)
+
+_Product_stock_OrderByInput = TypedDict(
+    '_Product_stock_OrderByInput',
+    {
+        'stock': 'SortOrder',
+    },
+    total=True
+)
+
+_Product_rating_OrderByInput = TypedDict(
+    '_Product_rating_OrderByInput',
+    {
+        'rating': 'SortOrder',
+    },
+    total=True
+)
+
+_Product_createdAt_OrderByInput = TypedDict(
+    '_Product_createdAt_OrderByInput',
+    {
+        'createdAt': 'SortOrder',
+    },
+    total=True
+)
+
+_Product_RelevanceInner = TypedDict(
+    '_Product_RelevanceInner',
+    {
+        'fields': 'List[ProductScalarFieldKeys]',
+        'search': 'str',
+        'sort': 'SortOrder',
+    },
+    total=True
+)
+
+_Product_RelevanceOrderByInput = TypedDict(
+    '_Product_RelevanceOrderByInput',
+    {
+        '_relevance': '_Product_RelevanceInner',
+    },
+    total=True
+)
+
+ProductOrderByInput = Union[
+    '_Product_id_OrderByInput',
+    '_Product_name_OrderByInput',
+    '_Product_price_OrderByInput',
+    '_Product_stock_OrderByInput',
+    '_Product_rating_OrderByInput',
+    '_Product_createdAt_OrderByInput',
+    '_Product_RelevanceOrderByInput',
+]
+
+
+
+# recursive Product types
+# TODO: cleanup these types
+
+
+# Dict[str, Any] is a mypy limitation
+# see https://github.com/RobertCraigie/prisma-client-py/issues/45
+# switch to pyright for improved types, see https://prisma-client-py.readthedocs.io/en/stable/reference/limitations/
+
+ProductRelationFilter = TypedDict(
+    'ProductRelationFilter',
+    {
+        'is': 'Dict[str, Any]',
+        'is_not': 'Dict[str, Any]',
+    },
+    total=False,
+)
+
+
+class ProductListRelationFilter(TypedDict, total=False):
+    some: 'Dict[str, Any]'
+    none: 'Dict[str, Any]'
+    every: 'Dict[str, Any]'
+
+
+class ProductInclude(TypedDict, total=False):
+    """Product relational arguments"""
+    images: Union[bool, 'FindManyProductImageArgsFromProduct']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromProduct']
+
+
+    
+
+class UserIncludeFromProduct(TypedDict, total=False):
+    """Relational arguments for Product"""
+
+
+class UserIncludeFromProductRecursive1(TypedDict, total=False):
+    """Relational arguments for Product"""
+
+
+class UserIncludeFromProductRecursive2(TypedDict, total=False):
+    """Relational arguments for Product"""
+
+
+class UserIncludeFromProductRecursive3(TypedDict, total=False):
+    """Relational arguments for Product"""
+
+
+class UserIncludeFromProductRecursive4(TypedDict, total=False):
+    """Relational arguments for Product"""
+
+    
+
+class UserArgsFromProduct(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'UserIncludeFromUserRecursive1'
+
+
+class UserArgsFromProductRecursive1(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'UserIncludeFromUserRecursive2'
+
+
+class UserArgsFromProductRecursive2(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'UserIncludeFromUserRecursive3'
+
+
+class UserArgsFromProductRecursive3(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'UserIncludeFromUserRecursive4'
+
+
+class UserArgsFromProductRecursive4(TypedDict, total=False):
+    """Arguments for Product"""
+    
+    
+
+class FindManyUserArgsFromProduct(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive1'
+
+
+class FindManyUserArgsFromProductRecursive1(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive2'
+
+
+class FindManyUserArgsFromProductRecursive2(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive3'
+
+
+class FindManyUserArgsFromProductRecursive3(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive4'
+
+
+class FindManyUserArgsFromProductRecursive4(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    
+    
+
+class ProductIncludeFromProduct(TypedDict, total=False):
+    """Relational arguments for Product"""
+    images: Union[bool, 'FindManyProductImageArgsFromProductRecursive1']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromProductRecursive1']
+
+
+class ProductIncludeFromProductRecursive1(TypedDict, total=False):
+    """Relational arguments for Product"""
+    images: Union[bool, 'FindManyProductImageArgsFromProductRecursive2']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromProductRecursive2']
+
+
+class ProductIncludeFromProductRecursive2(TypedDict, total=False):
+    """Relational arguments for Product"""
+    images: Union[bool, 'FindManyProductImageArgsFromProductRecursive3']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromProductRecursive3']
+
+
+class ProductIncludeFromProductRecursive3(TypedDict, total=False):
+    """Relational arguments for Product"""
+    images: Union[bool, 'FindManyProductImageArgsFromProductRecursive4']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromProductRecursive4']
+
+
+class ProductIncludeFromProductRecursive4(TypedDict, total=False):
+    """Relational arguments for Product"""
+
+    
+
+class ProductArgsFromProduct(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'ProductIncludeFromProductRecursive1'
+
+
+class ProductArgsFromProductRecursive1(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'ProductIncludeFromProductRecursive2'
+
+
+class ProductArgsFromProductRecursive2(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'ProductIncludeFromProductRecursive3'
+
+
+class ProductArgsFromProductRecursive3(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'ProductIncludeFromProductRecursive4'
+
+
+class ProductArgsFromProductRecursive4(TypedDict, total=False):
+    """Arguments for Product"""
+    
+    
+
+class FindManyProductArgsFromProduct(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive1'
+
+
+class FindManyProductArgsFromProductRecursive1(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive2'
+
+
+class FindManyProductArgsFromProductRecursive2(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive3'
+
+
+class FindManyProductArgsFromProductRecursive3(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive4'
+
+
+class FindManyProductArgsFromProductRecursive4(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    
+    
+
+class ProductImageIncludeFromProduct(TypedDict, total=False):
+    """Relational arguments for Product"""
+    product: Union[bool, 'ProductArgsFromProductRecursive1']
+
+
+class ProductImageIncludeFromProductRecursive1(TypedDict, total=False):
+    """Relational arguments for Product"""
+    product: Union[bool, 'ProductArgsFromProductRecursive2']
+
+
+class ProductImageIncludeFromProductRecursive2(TypedDict, total=False):
+    """Relational arguments for Product"""
+    product: Union[bool, 'ProductArgsFromProductRecursive3']
+
+
+class ProductImageIncludeFromProductRecursive3(TypedDict, total=False):
+    """Relational arguments for Product"""
+    product: Union[bool, 'ProductArgsFromProductRecursive4']
+
+
+class ProductImageIncludeFromProductRecursive4(TypedDict, total=False):
+    """Relational arguments for Product"""
+
+    
+
+class ProductImageArgsFromProduct(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'ProductImageIncludeFromProductImageRecursive1'
+
+
+class ProductImageArgsFromProductRecursive1(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'ProductImageIncludeFromProductImageRecursive2'
+
+
+class ProductImageArgsFromProductRecursive2(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'ProductImageIncludeFromProductImageRecursive3'
+
+
+class ProductImageArgsFromProductRecursive3(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'ProductImageIncludeFromProductImageRecursive4'
+
+
+class ProductImageArgsFromProductRecursive4(TypedDict, total=False):
+    """Arguments for Product"""
+    
+    
+
+class FindManyProductImageArgsFromProduct(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive1'
+
+
+class FindManyProductImageArgsFromProductRecursive1(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive2'
+
+
+class FindManyProductImageArgsFromProductRecursive2(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive3'
+
+
+class FindManyProductImageArgsFromProductRecursive3(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive4'
+
+
+class FindManyProductImageArgsFromProductRecursive4(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    
+    
+
+class OrderIncludeFromProduct(TypedDict, total=False):
+    """Relational arguments for Product"""
+    items: Union[bool, 'FindManyOrderItemArgsFromProductRecursive1']
+
+
+class OrderIncludeFromProductRecursive1(TypedDict, total=False):
+    """Relational arguments for Product"""
+    items: Union[bool, 'FindManyOrderItemArgsFromProductRecursive2']
+
+
+class OrderIncludeFromProductRecursive2(TypedDict, total=False):
+    """Relational arguments for Product"""
+    items: Union[bool, 'FindManyOrderItemArgsFromProductRecursive3']
+
+
+class OrderIncludeFromProductRecursive3(TypedDict, total=False):
+    """Relational arguments for Product"""
+    items: Union[bool, 'FindManyOrderItemArgsFromProductRecursive4']
+
+
+class OrderIncludeFromProductRecursive4(TypedDict, total=False):
+    """Relational arguments for Product"""
+
+    
+
+class OrderArgsFromProduct(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'OrderIncludeFromOrderRecursive1'
+
+
+class OrderArgsFromProductRecursive1(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'OrderIncludeFromOrderRecursive2'
+
+
+class OrderArgsFromProductRecursive2(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'OrderIncludeFromOrderRecursive3'
+
+
+class OrderArgsFromProductRecursive3(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'OrderIncludeFromOrderRecursive4'
+
+
+class OrderArgsFromProductRecursive4(TypedDict, total=False):
+    """Arguments for Product"""
+    
+    
+
+class FindManyOrderArgsFromProduct(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive1'
+
+
+class FindManyOrderArgsFromProductRecursive1(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive2'
+
+
+class FindManyOrderArgsFromProductRecursive2(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive3'
+
+
+class FindManyOrderArgsFromProductRecursive3(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive4'
+
+
+class FindManyOrderArgsFromProductRecursive4(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    
+    
+
+class OrderItemIncludeFromProduct(TypedDict, total=False):
+    """Relational arguments for Product"""
+    order: Union[bool, 'OrderArgsFromProductRecursive1']
+    product: Union[bool, 'ProductArgsFromProductRecursive1']
+
+
+class OrderItemIncludeFromProductRecursive1(TypedDict, total=False):
+    """Relational arguments for Product"""
+    order: Union[bool, 'OrderArgsFromProductRecursive2']
+    product: Union[bool, 'ProductArgsFromProductRecursive2']
+
+
+class OrderItemIncludeFromProductRecursive2(TypedDict, total=False):
+    """Relational arguments for Product"""
+    order: Union[bool, 'OrderArgsFromProductRecursive3']
+    product: Union[bool, 'ProductArgsFromProductRecursive3']
+
+
+class OrderItemIncludeFromProductRecursive3(TypedDict, total=False):
+    """Relational arguments for Product"""
+    order: Union[bool, 'OrderArgsFromProductRecursive4']
+    product: Union[bool, 'ProductArgsFromProductRecursive4']
+
+
+class OrderItemIncludeFromProductRecursive4(TypedDict, total=False):
+    """Relational arguments for Product"""
+
+    
+
+class OrderItemArgsFromProduct(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'OrderItemIncludeFromOrderItemRecursive1'
+
+
+class OrderItemArgsFromProductRecursive1(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'OrderItemIncludeFromOrderItemRecursive2'
+
+
+class OrderItemArgsFromProductRecursive2(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'OrderItemIncludeFromOrderItemRecursive3'
+
+
+class OrderItemArgsFromProductRecursive3(TypedDict, total=False):
+    """Arguments for Product"""
+    include: 'OrderItemIncludeFromOrderItemRecursive4'
+
+
+class OrderItemArgsFromProductRecursive4(TypedDict, total=False):
+    """Arguments for Product"""
+    
+    
+
+class FindManyOrderItemArgsFromProduct(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive1'
+
+
+class FindManyOrderItemArgsFromProductRecursive1(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive2'
+
+
+class FindManyOrderItemArgsFromProductRecursive2(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive3'
+
+
+class FindManyOrderItemArgsFromProductRecursive3(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive4'
+
+
+class FindManyOrderItemArgsFromProductRecursive4(TypedDict, total=False):
+    """Arguments for Product"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    
+
+
+FindManyProductArgs = FindManyProductArgsFromProduct
+FindFirstProductArgs = FindManyProductArgsFromProduct
+
+
+    
+
+class ProductWhereInput(TypedDict, total=False):
+    """Product arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    name: Union[_str, 'types.StringFilter']
+    price: Union[_float, 'types.FloatFilter']
+    stock: Union[_int, 'types.IntFilter']
+    rating: Union[None, _float, 'types.FloatFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
+    images: 'ProductImageListRelationFilter'
+    orderItems: 'OrderItemListRelationFilter'
+
+    # should be noted that AND and NOT should be Union['ProductWhereInputRecursive1', List['ProductWhereInputRecursive1']]
+    # but this causes mypy to hang :/
+    AND: List['ProductWhereInputRecursive1']
+    OR: List['ProductWhereInputRecursive1']
+    NOT: List['ProductWhereInputRecursive1']
+
+
+class ProductWhereInputRecursive1(TypedDict, total=False):
+    """Product arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    name: Union[_str, 'types.StringFilter']
+    price: Union[_float, 'types.FloatFilter']
+    stock: Union[_int, 'types.IntFilter']
+    rating: Union[None, _float, 'types.FloatFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
+    images: 'ProductImageListRelationFilter'
+    orderItems: 'OrderItemListRelationFilter'
+
+    # should be noted that AND and NOT should be Union['ProductWhereInputRecursive2', List['ProductWhereInputRecursive2']]
+    # but this causes mypy to hang :/
+    AND: List['ProductWhereInputRecursive2']
+    OR: List['ProductWhereInputRecursive2']
+    NOT: List['ProductWhereInputRecursive2']
+
+
+class ProductWhereInputRecursive2(TypedDict, total=False):
+    """Product arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    name: Union[_str, 'types.StringFilter']
+    price: Union[_float, 'types.FloatFilter']
+    stock: Union[_int, 'types.IntFilter']
+    rating: Union[None, _float, 'types.FloatFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
+    images: 'ProductImageListRelationFilter'
+    orderItems: 'OrderItemListRelationFilter'
+
+    # should be noted that AND and NOT should be Union['ProductWhereInputRecursive3', List['ProductWhereInputRecursive3']]
+    # but this causes mypy to hang :/
+    AND: List['ProductWhereInputRecursive3']
+    OR: List['ProductWhereInputRecursive3']
+    NOT: List['ProductWhereInputRecursive3']
+
+
+class ProductWhereInputRecursive3(TypedDict, total=False):
+    """Product arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    name: Union[_str, 'types.StringFilter']
+    price: Union[_float, 'types.FloatFilter']
+    stock: Union[_int, 'types.IntFilter']
+    rating: Union[None, _float, 'types.FloatFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
+    images: 'ProductImageListRelationFilter'
+    orderItems: 'OrderItemListRelationFilter'
+
+    # should be noted that AND and NOT should be Union['ProductWhereInputRecursive4', List['ProductWhereInputRecursive4']]
+    # but this causes mypy to hang :/
+    AND: List['ProductWhereInputRecursive4']
+    OR: List['ProductWhereInputRecursive4']
+    NOT: List['ProductWhereInputRecursive4']
+
+
+class ProductWhereInputRecursive4(TypedDict, total=False):
+    """Product arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    name: Union[_str, 'types.StringFilter']
+    price: Union[_float, 'types.FloatFilter']
+    stock: Union[_int, 'types.IntFilter']
+    rating: Union[None, _float, 'types.FloatFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
+    images: 'ProductImageListRelationFilter'
+    orderItems: 'OrderItemListRelationFilter'
+
+
+
+# aggregate Product types
+
+
+    
+
+class ProductScalarWhereWithAggregatesInput(TypedDict, total=False):
+    """Product arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    name: Union[_str, 'types.StringWithAggregatesFilter']
+    price: Union[_float, 'types.FloatWithAggregatesFilter']
+    stock: Union[_int, 'types.IntWithAggregatesFilter']
+    rating: Union[_float, 'types.FloatWithAggregatesFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
+
+    AND: List['ProductScalarWhereWithAggregatesInputRecursive1']
+    OR: List['ProductScalarWhereWithAggregatesInputRecursive1']
+    NOT: List['ProductScalarWhereWithAggregatesInputRecursive1']
+
+
+class ProductScalarWhereWithAggregatesInputRecursive1(TypedDict, total=False):
+    """Product arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    name: Union[_str, 'types.StringWithAggregatesFilter']
+    price: Union[_float, 'types.FloatWithAggregatesFilter']
+    stock: Union[_int, 'types.IntWithAggregatesFilter']
+    rating: Union[_float, 'types.FloatWithAggregatesFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
+
+    AND: List['ProductScalarWhereWithAggregatesInputRecursive2']
+    OR: List['ProductScalarWhereWithAggregatesInputRecursive2']
+    NOT: List['ProductScalarWhereWithAggregatesInputRecursive2']
+
+
+class ProductScalarWhereWithAggregatesInputRecursive2(TypedDict, total=False):
+    """Product arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    name: Union[_str, 'types.StringWithAggregatesFilter']
+    price: Union[_float, 'types.FloatWithAggregatesFilter']
+    stock: Union[_int, 'types.IntWithAggregatesFilter']
+    rating: Union[_float, 'types.FloatWithAggregatesFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
+
+    AND: List['ProductScalarWhereWithAggregatesInputRecursive3']
+    OR: List['ProductScalarWhereWithAggregatesInputRecursive3']
+    NOT: List['ProductScalarWhereWithAggregatesInputRecursive3']
+
+
+class ProductScalarWhereWithAggregatesInputRecursive3(TypedDict, total=False):
+    """Product arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    name: Union[_str, 'types.StringWithAggregatesFilter']
+    price: Union[_float, 'types.FloatWithAggregatesFilter']
+    stock: Union[_int, 'types.IntWithAggregatesFilter']
+    rating: Union[_float, 'types.FloatWithAggregatesFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
+
+    AND: List['ProductScalarWhereWithAggregatesInputRecursive4']
+    OR: List['ProductScalarWhereWithAggregatesInputRecursive4']
+    NOT: List['ProductScalarWhereWithAggregatesInputRecursive4']
+
+
+class ProductScalarWhereWithAggregatesInputRecursive4(TypedDict, total=False):
+    """Product arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    name: Union[_str, 'types.StringWithAggregatesFilter']
+    price: Union[_float, 'types.FloatWithAggregatesFilter']
+    stock: Union[_int, 'types.IntWithAggregatesFilter']
+    rating: Union[_float, 'types.FloatWithAggregatesFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
+
+
+
+class ProductGroupByOutput(TypedDict, total=False):
+    id: _int
+    name: _str
+    price: _float
+    stock: _int
+    rating: _float
+    createdAt: datetime.datetime
+    _sum: 'ProductSumAggregateOutput'
+    _avg: 'ProductAvgAggregateOutput'
+    _min: 'ProductMinAggregateOutput'
+    _max: 'ProductMaxAggregateOutput'
+    _count: 'ProductCountAggregateOutput'
+
+
+class ProductAvgAggregateOutput(TypedDict, total=False):
+    """Product output for aggregating averages"""
+    id: float
+    price: float
+    stock: float
+    rating: float
+
+
+class ProductSumAggregateOutput(TypedDict, total=False):
+    """Product output for aggregating sums"""
+    id: _int
+    price: _float
+    stock: _int
+    rating: _float
+
+
+class ProductScalarAggregateOutput(TypedDict, total=False):
+    """Product output including scalar fields"""
+    id: _int
+    name: _str
+    price: _float
+    stock: _int
+    rating: _float
+    createdAt: datetime.datetime
+
+
+ProductMinAggregateOutput = ProductScalarAggregateOutput
+ProductMaxAggregateOutput = ProductScalarAggregateOutput
+
+
+class ProductMaxAggregateInput(TypedDict, total=False):
+    """Product input for aggregating by max"""
+    id: bool
+    name: bool
+    price: bool
+    stock: bool
+    rating: bool
+    createdAt: bool
+
+
+class ProductMinAggregateInput(TypedDict, total=False):
+    """Product input for aggregating by min"""
+    id: bool
+    name: bool
+    price: bool
+    stock: bool
+    rating: bool
+    createdAt: bool
+
+
+class ProductNumberAggregateInput(TypedDict, total=False):
+    """Product input for aggregating numbers"""
+    id: bool
+    price: bool
+    stock: bool
+    rating: bool
+
+
+ProductAvgAggregateInput = ProductNumberAggregateInput
+ProductSumAggregateInput = ProductNumberAggregateInput
+
+
+ProductCountAggregateInput = TypedDict(
+    'ProductCountAggregateInput',
+    {
+        'id': bool,
+        'name': bool,
+        'price': bool,
+        'stock': bool,
+        'rating': bool,
+        'createdAt': bool,
+        '_all': bool,
+    },
+    total=False,
+)
+
+ProductCountAggregateOutput = TypedDict(
+    'ProductCountAggregateOutput',
+    {
+        'id': int,
+        'name': int,
+        'price': int,
+        'stock': int,
+        'rating': int,
+        'createdAt': int,
+        '_all': int,
+    },
+    total=False,
+)
+
+
+ProductKeys = Literal[
+    'id',
+    'name',
+    'price',
+    'stock',
+    'rating',
+    'createdAt',
+    'images',
+    'orderItems',
+]
+ProductScalarFieldKeys = Literal[
+    'id',
+    'name',
+    'price',
+    'stock',
+    'rating',
+    'createdAt',
+]
+ProductScalarFieldKeysT = TypeVar('ProductScalarFieldKeysT', bound=ProductScalarFieldKeys)
+
+ProductRelationalFieldKeys = Literal[
+        'images',
+        'orderItems',
+    ]
+
+# ProductImage types
+
+class ProductImageOptionalCreateInput(TypedDict, total=False):
+    """Optional arguments to the ProductImage create method"""
+    id: _int
+    productId: _int
+    order: _int
+    product: 'ProductCreateNestedWithoutRelationsInput'
+
+
+class ProductImageCreateInput(ProductImageOptionalCreateInput):
+    """Required arguments to the ProductImage create method"""
+    imageUrl: _str
+
+
+# TODO: remove this in favour of without explicit relations
+# e.g. PostCreateWithoutAuthorInput
+
+class ProductImageOptionalCreateWithoutRelationsInput(TypedDict, total=False):
+    """Optional arguments to the ProductImage create method, without relations"""
+    id: _int
+    productId: _int
+    order: _int
+
+
+class ProductImageCreateWithoutRelationsInput(ProductImageOptionalCreateWithoutRelationsInput):
+    """Required arguments to the ProductImage create method, without relations"""
+    imageUrl: _str
+
+class ProductImageConnectOrCreateWithoutRelationsInput(TypedDict):
+    create: 'ProductImageCreateWithoutRelationsInput'
+    where: 'ProductImageWhereUniqueInput'
+
+class ProductImageCreateNestedWithoutRelationsInput(TypedDict, total=False):
+    create: 'ProductImageCreateWithoutRelationsInput'
+    connect: 'ProductImageWhereUniqueInput'
+    connect_or_create: 'ProductImageConnectOrCreateWithoutRelationsInput'
+
+
+class ProductImageCreateManyNestedWithoutRelationsInput(TypedDict, total=False):
+    create: Union['ProductImageCreateWithoutRelationsInput', List['ProductImageCreateWithoutRelationsInput']]
+    connect: Union['ProductImageWhereUniqueInput', List['ProductImageWhereUniqueInput']]
+    connect_or_create: Union['ProductImageConnectOrCreateWithoutRelationsInput', List['ProductImageConnectOrCreateWithoutRelationsInput']]
+
+_ProductImageWhereUnique_id_Input = TypedDict(
+    '_ProductImageWhereUnique_id_Input',
+    {
+        'id': '_int',
+    },
+    total=True
+)
+
+ProductImageWhereUniqueInput = _ProductImageWhereUnique_id_Input
+
+
+class ProductImageUpdateInput(TypedDict, total=False):
+    """Optional arguments for updating a record"""
+    id: Union[AtomicIntInput, _int]
+    imageUrl: _str
+    order: Union[AtomicIntInput, _int]
+    product: 'ProductUpdateOneWithoutRelationsInput'
+
+
+class ProductImageUpdateManyMutationInput(TypedDict, total=False):
+    """Arguments for updating many records"""
+    id: Union[AtomicIntInput, _int]
+    imageUrl: _str
+    order: Union[AtomicIntInput, _int]
+
+
+class ProductImageUpdateManyWithoutRelationsInput(TypedDict, total=False):
+    create: List['ProductImageCreateWithoutRelationsInput']
+    connect: List['ProductImageWhereUniqueInput']
+    connect_or_create: List['ProductImageConnectOrCreateWithoutRelationsInput']
+    set: List['ProductImageWhereUniqueInput']
+    disconnect: List['ProductImageWhereUniqueInput']
+    delete: List['ProductImageWhereUniqueInput']
+
+    # TODO
+    # update: List['ProductImageUpdateWithWhereUniqueWithoutRelationsInput']
+    # updateMany: List['ProductImageUpdateManyWithWhereUniqueWithoutRelationsInput']
+    # deleteMany: List['ProductImageScalarWhereInput']
+    # upsert: List['ProductImageUpserteWithWhereUniqueWithoutRelationsInput']
+
+
+class ProductImageUpdateOneWithoutRelationsInput(TypedDict, total=False):
+    create: 'ProductImageCreateWithoutRelationsInput'
+    connect: 'ProductImageWhereUniqueInput'
+    connect_or_create: 'ProductImageConnectOrCreateWithoutRelationsInput'
+    disconnect: bool
+    delete: bool
+
+    # TODO
+    # update: 'ProductImageUpdateInput'
+    # upsert: 'ProductImageUpsertWithoutRelationsInput'
+
+
+class ProductImageUpsertInput(TypedDict):
+    create: 'ProductImageCreateInput'
+    update: 'ProductImageUpdateInput'  # pyright: ignore[reportIncompatibleMethodOverride]
+
+
+_ProductImage_id_OrderByInput = TypedDict(
+    '_ProductImage_id_OrderByInput',
+    {
+        'id': 'SortOrder',
+    },
+    total=True
+)
+
+_ProductImage_productId_OrderByInput = TypedDict(
+    '_ProductImage_productId_OrderByInput',
+    {
+        'productId': 'SortOrder',
+    },
+    total=True
+)
+
+_ProductImage_imageUrl_OrderByInput = TypedDict(
+    '_ProductImage_imageUrl_OrderByInput',
+    {
+        'imageUrl': 'SortOrder',
+    },
+    total=True
+)
+
+_ProductImage_order_OrderByInput = TypedDict(
+    '_ProductImage_order_OrderByInput',
+    {
+        'order': 'SortOrder',
+    },
+    total=True
+)
+
+_ProductImage_RelevanceInner = TypedDict(
+    '_ProductImage_RelevanceInner',
+    {
+        'fields': 'List[ProductImageScalarFieldKeys]',
+        'search': 'str',
+        'sort': 'SortOrder',
+    },
+    total=True
+)
+
+_ProductImage_RelevanceOrderByInput = TypedDict(
+    '_ProductImage_RelevanceOrderByInput',
+    {
+        '_relevance': '_ProductImage_RelevanceInner',
+    },
+    total=True
+)
+
+ProductImageOrderByInput = Union[
+    '_ProductImage_id_OrderByInput',
+    '_ProductImage_productId_OrderByInput',
+    '_ProductImage_imageUrl_OrderByInput',
+    '_ProductImage_order_OrderByInput',
+    '_ProductImage_RelevanceOrderByInput',
+]
+
+
+
+# recursive ProductImage types
+# TODO: cleanup these types
+
+
+# Dict[str, Any] is a mypy limitation
+# see https://github.com/RobertCraigie/prisma-client-py/issues/45
+# switch to pyright for improved types, see https://prisma-client-py.readthedocs.io/en/stable/reference/limitations/
+
+ProductImageRelationFilter = TypedDict(
+    'ProductImageRelationFilter',
+    {
+        'is': 'Dict[str, Any]',
+        'is_not': 'Dict[str, Any]',
+    },
+    total=False,
+)
+
+
+class ProductImageListRelationFilter(TypedDict, total=False):
+    some: 'Dict[str, Any]'
+    none: 'Dict[str, Any]'
+    every: 'Dict[str, Any]'
+
+
+class ProductImageInclude(TypedDict, total=False):
+    """ProductImage relational arguments"""
+    product: Union[bool, 'ProductArgsFromProductImage']
+
+
+    
+
+class UserIncludeFromProductImage(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+
+
+class UserIncludeFromProductImageRecursive1(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+
+
+class UserIncludeFromProductImageRecursive2(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+
+
+class UserIncludeFromProductImageRecursive3(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+
+
+class UserIncludeFromProductImageRecursive4(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+
+    
+
+class UserArgsFromProductImage(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'UserIncludeFromUserRecursive1'
+
+
+class UserArgsFromProductImageRecursive1(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'UserIncludeFromUserRecursive2'
+
+
+class UserArgsFromProductImageRecursive2(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'UserIncludeFromUserRecursive3'
+
+
+class UserArgsFromProductImageRecursive3(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'UserIncludeFromUserRecursive4'
+
+
+class UserArgsFromProductImageRecursive4(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    
+    
+
+class FindManyUserArgsFromProductImage(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive1'
+
+
+class FindManyUserArgsFromProductImageRecursive1(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive2'
+
+
+class FindManyUserArgsFromProductImageRecursive2(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive3'
+
+
+class FindManyUserArgsFromProductImageRecursive3(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive4'
+
+
+class FindManyUserArgsFromProductImageRecursive4(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    
+    
+
+class ProductIncludeFromProductImage(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    images: Union[bool, 'FindManyProductImageArgsFromProductImageRecursive1']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromProductImageRecursive1']
+
+
+class ProductIncludeFromProductImageRecursive1(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    images: Union[bool, 'FindManyProductImageArgsFromProductImageRecursive2']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromProductImageRecursive2']
+
+
+class ProductIncludeFromProductImageRecursive2(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    images: Union[bool, 'FindManyProductImageArgsFromProductImageRecursive3']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromProductImageRecursive3']
+
+
+class ProductIncludeFromProductImageRecursive3(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    images: Union[bool, 'FindManyProductImageArgsFromProductImageRecursive4']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromProductImageRecursive4']
+
+
+class ProductIncludeFromProductImageRecursive4(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+
+    
+
+class ProductArgsFromProductImage(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'ProductIncludeFromProductRecursive1'
+
+
+class ProductArgsFromProductImageRecursive1(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'ProductIncludeFromProductRecursive2'
+
+
+class ProductArgsFromProductImageRecursive2(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'ProductIncludeFromProductRecursive3'
+
+
+class ProductArgsFromProductImageRecursive3(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'ProductIncludeFromProductRecursive4'
+
+
+class ProductArgsFromProductImageRecursive4(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    
+    
+
+class FindManyProductArgsFromProductImage(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive1'
+
+
+class FindManyProductArgsFromProductImageRecursive1(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive2'
+
+
+class FindManyProductArgsFromProductImageRecursive2(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive3'
+
+
+class FindManyProductArgsFromProductImageRecursive3(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive4'
+
+
+class FindManyProductArgsFromProductImageRecursive4(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    
+    
+
+class ProductImageIncludeFromProductImage(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    product: Union[bool, 'ProductArgsFromProductImageRecursive1']
+
+
+class ProductImageIncludeFromProductImageRecursive1(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    product: Union[bool, 'ProductArgsFromProductImageRecursive2']
+
+
+class ProductImageIncludeFromProductImageRecursive2(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    product: Union[bool, 'ProductArgsFromProductImageRecursive3']
+
+
+class ProductImageIncludeFromProductImageRecursive3(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    product: Union[bool, 'ProductArgsFromProductImageRecursive4']
+
+
+class ProductImageIncludeFromProductImageRecursive4(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+
+    
+
+class ProductImageArgsFromProductImage(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'ProductImageIncludeFromProductImageRecursive1'
+
+
+class ProductImageArgsFromProductImageRecursive1(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'ProductImageIncludeFromProductImageRecursive2'
+
+
+class ProductImageArgsFromProductImageRecursive2(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'ProductImageIncludeFromProductImageRecursive3'
+
+
+class ProductImageArgsFromProductImageRecursive3(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'ProductImageIncludeFromProductImageRecursive4'
+
+
+class ProductImageArgsFromProductImageRecursive4(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    
+    
+
+class FindManyProductImageArgsFromProductImage(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive1'
+
+
+class FindManyProductImageArgsFromProductImageRecursive1(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive2'
+
+
+class FindManyProductImageArgsFromProductImageRecursive2(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive3'
+
+
+class FindManyProductImageArgsFromProductImageRecursive3(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive4'
+
+
+class FindManyProductImageArgsFromProductImageRecursive4(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    
+    
+
+class OrderIncludeFromProductImage(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    items: Union[bool, 'FindManyOrderItemArgsFromProductImageRecursive1']
+
+
+class OrderIncludeFromProductImageRecursive1(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    items: Union[bool, 'FindManyOrderItemArgsFromProductImageRecursive2']
+
+
+class OrderIncludeFromProductImageRecursive2(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    items: Union[bool, 'FindManyOrderItemArgsFromProductImageRecursive3']
+
+
+class OrderIncludeFromProductImageRecursive3(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    items: Union[bool, 'FindManyOrderItemArgsFromProductImageRecursive4']
+
+
+class OrderIncludeFromProductImageRecursive4(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+
+    
+
+class OrderArgsFromProductImage(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'OrderIncludeFromOrderRecursive1'
+
+
+class OrderArgsFromProductImageRecursive1(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'OrderIncludeFromOrderRecursive2'
+
+
+class OrderArgsFromProductImageRecursive2(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'OrderIncludeFromOrderRecursive3'
+
+
+class OrderArgsFromProductImageRecursive3(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'OrderIncludeFromOrderRecursive4'
+
+
+class OrderArgsFromProductImageRecursive4(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    
+    
+
+class FindManyOrderArgsFromProductImage(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive1'
+
+
+class FindManyOrderArgsFromProductImageRecursive1(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive2'
+
+
+class FindManyOrderArgsFromProductImageRecursive2(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive3'
+
+
+class FindManyOrderArgsFromProductImageRecursive3(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive4'
+
+
+class FindManyOrderArgsFromProductImageRecursive4(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    
+    
+
+class OrderItemIncludeFromProductImage(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    order: Union[bool, 'OrderArgsFromProductImageRecursive1']
+    product: Union[bool, 'ProductArgsFromProductImageRecursive1']
+
+
+class OrderItemIncludeFromProductImageRecursive1(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    order: Union[bool, 'OrderArgsFromProductImageRecursive2']
+    product: Union[bool, 'ProductArgsFromProductImageRecursive2']
+
+
+class OrderItemIncludeFromProductImageRecursive2(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    order: Union[bool, 'OrderArgsFromProductImageRecursive3']
+    product: Union[bool, 'ProductArgsFromProductImageRecursive3']
+
+
+class OrderItemIncludeFromProductImageRecursive3(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+    order: Union[bool, 'OrderArgsFromProductImageRecursive4']
+    product: Union[bool, 'ProductArgsFromProductImageRecursive4']
+
+
+class OrderItemIncludeFromProductImageRecursive4(TypedDict, total=False):
+    """Relational arguments for ProductImage"""
+
+    
+
+class OrderItemArgsFromProductImage(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'OrderItemIncludeFromOrderItemRecursive1'
+
+
+class OrderItemArgsFromProductImageRecursive1(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'OrderItemIncludeFromOrderItemRecursive2'
+
+
+class OrderItemArgsFromProductImageRecursive2(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'OrderItemIncludeFromOrderItemRecursive3'
+
+
+class OrderItemArgsFromProductImageRecursive3(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    include: 'OrderItemIncludeFromOrderItemRecursive4'
+
+
+class OrderItemArgsFromProductImageRecursive4(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    
+    
+
+class FindManyOrderItemArgsFromProductImage(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive1'
+
+
+class FindManyOrderItemArgsFromProductImageRecursive1(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive2'
+
+
+class FindManyOrderItemArgsFromProductImageRecursive2(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive3'
+
+
+class FindManyOrderItemArgsFromProductImageRecursive3(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive4'
+
+
+class FindManyOrderItemArgsFromProductImageRecursive4(TypedDict, total=False):
+    """Arguments for ProductImage"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    
+
+
+FindManyProductImageArgs = FindManyProductImageArgsFromProductImage
+FindFirstProductImageArgs = FindManyProductImageArgsFromProductImage
+
+
+    
+
+class ProductImageWhereInput(TypedDict, total=False):
+    """ProductImage arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    productId: Union[_int, 'types.IntFilter']
+    imageUrl: Union[_str, 'types.StringFilter']
+    order: Union[_int, 'types.IntFilter']
+    product: 'ProductRelationFilter'
+
+    # should be noted that AND and NOT should be Union['ProductImageWhereInputRecursive1', List['ProductImageWhereInputRecursive1']]
+    # but this causes mypy to hang :/
+    AND: List['ProductImageWhereInputRecursive1']
+    OR: List['ProductImageWhereInputRecursive1']
+    NOT: List['ProductImageWhereInputRecursive1']
+
+
+class ProductImageWhereInputRecursive1(TypedDict, total=False):
+    """ProductImage arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    productId: Union[_int, 'types.IntFilter']
+    imageUrl: Union[_str, 'types.StringFilter']
+    order: Union[_int, 'types.IntFilter']
+    product: 'ProductRelationFilter'
+
+    # should be noted that AND and NOT should be Union['ProductImageWhereInputRecursive2', List['ProductImageWhereInputRecursive2']]
+    # but this causes mypy to hang :/
+    AND: List['ProductImageWhereInputRecursive2']
+    OR: List['ProductImageWhereInputRecursive2']
+    NOT: List['ProductImageWhereInputRecursive2']
+
+
+class ProductImageWhereInputRecursive2(TypedDict, total=False):
+    """ProductImage arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    productId: Union[_int, 'types.IntFilter']
+    imageUrl: Union[_str, 'types.StringFilter']
+    order: Union[_int, 'types.IntFilter']
+    product: 'ProductRelationFilter'
+
+    # should be noted that AND and NOT should be Union['ProductImageWhereInputRecursive3', List['ProductImageWhereInputRecursive3']]
+    # but this causes mypy to hang :/
+    AND: List['ProductImageWhereInputRecursive3']
+    OR: List['ProductImageWhereInputRecursive3']
+    NOT: List['ProductImageWhereInputRecursive3']
+
+
+class ProductImageWhereInputRecursive3(TypedDict, total=False):
+    """ProductImage arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    productId: Union[_int, 'types.IntFilter']
+    imageUrl: Union[_str, 'types.StringFilter']
+    order: Union[_int, 'types.IntFilter']
+    product: 'ProductRelationFilter'
+
+    # should be noted that AND and NOT should be Union['ProductImageWhereInputRecursive4', List['ProductImageWhereInputRecursive4']]
+    # but this causes mypy to hang :/
+    AND: List['ProductImageWhereInputRecursive4']
+    OR: List['ProductImageWhereInputRecursive4']
+    NOT: List['ProductImageWhereInputRecursive4']
+
+
+class ProductImageWhereInputRecursive4(TypedDict, total=False):
+    """ProductImage arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    productId: Union[_int, 'types.IntFilter']
+    imageUrl: Union[_str, 'types.StringFilter']
+    order: Union[_int, 'types.IntFilter']
+    product: 'ProductRelationFilter'
+
+
+
+# aggregate ProductImage types
+
+
+    
+
+class ProductImageScalarWhereWithAggregatesInput(TypedDict, total=False):
+    """ProductImage arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    productId: Union[_int, 'types.IntWithAggregatesFilter']
+    imageUrl: Union[_str, 'types.StringWithAggregatesFilter']
+    order: Union[_int, 'types.IntWithAggregatesFilter']
+
+    AND: List['ProductImageScalarWhereWithAggregatesInputRecursive1']
+    OR: List['ProductImageScalarWhereWithAggregatesInputRecursive1']
+    NOT: List['ProductImageScalarWhereWithAggregatesInputRecursive1']
+
+
+class ProductImageScalarWhereWithAggregatesInputRecursive1(TypedDict, total=False):
+    """ProductImage arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    productId: Union[_int, 'types.IntWithAggregatesFilter']
+    imageUrl: Union[_str, 'types.StringWithAggregatesFilter']
+    order: Union[_int, 'types.IntWithAggregatesFilter']
+
+    AND: List['ProductImageScalarWhereWithAggregatesInputRecursive2']
+    OR: List['ProductImageScalarWhereWithAggregatesInputRecursive2']
+    NOT: List['ProductImageScalarWhereWithAggregatesInputRecursive2']
+
+
+class ProductImageScalarWhereWithAggregatesInputRecursive2(TypedDict, total=False):
+    """ProductImage arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    productId: Union[_int, 'types.IntWithAggregatesFilter']
+    imageUrl: Union[_str, 'types.StringWithAggregatesFilter']
+    order: Union[_int, 'types.IntWithAggregatesFilter']
+
+    AND: List['ProductImageScalarWhereWithAggregatesInputRecursive3']
+    OR: List['ProductImageScalarWhereWithAggregatesInputRecursive3']
+    NOT: List['ProductImageScalarWhereWithAggregatesInputRecursive3']
+
+
+class ProductImageScalarWhereWithAggregatesInputRecursive3(TypedDict, total=False):
+    """ProductImage arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    productId: Union[_int, 'types.IntWithAggregatesFilter']
+    imageUrl: Union[_str, 'types.StringWithAggregatesFilter']
+    order: Union[_int, 'types.IntWithAggregatesFilter']
+
+    AND: List['ProductImageScalarWhereWithAggregatesInputRecursive4']
+    OR: List['ProductImageScalarWhereWithAggregatesInputRecursive4']
+    NOT: List['ProductImageScalarWhereWithAggregatesInputRecursive4']
+
+
+class ProductImageScalarWhereWithAggregatesInputRecursive4(TypedDict, total=False):
+    """ProductImage arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    productId: Union[_int, 'types.IntWithAggregatesFilter']
+    imageUrl: Union[_str, 'types.StringWithAggregatesFilter']
+    order: Union[_int, 'types.IntWithAggregatesFilter']
+
+
+
+class ProductImageGroupByOutput(TypedDict, total=False):
+    id: _int
+    productId: _int
+    imageUrl: _str
+    order: _int
+    _sum: 'ProductImageSumAggregateOutput'
+    _avg: 'ProductImageAvgAggregateOutput'
+    _min: 'ProductImageMinAggregateOutput'
+    _max: 'ProductImageMaxAggregateOutput'
+    _count: 'ProductImageCountAggregateOutput'
+
+
+class ProductImageAvgAggregateOutput(TypedDict, total=False):
+    """ProductImage output for aggregating averages"""
+    id: float
+    productId: float
+    order: float
+
+
+class ProductImageSumAggregateOutput(TypedDict, total=False):
+    """ProductImage output for aggregating sums"""
+    id: _int
+    productId: _int
+    order: _int
+
+
+class ProductImageScalarAggregateOutput(TypedDict, total=False):
+    """ProductImage output including scalar fields"""
+    id: _int
+    productId: _int
+    imageUrl: _str
+    order: _int
+
+
+ProductImageMinAggregateOutput = ProductImageScalarAggregateOutput
+ProductImageMaxAggregateOutput = ProductImageScalarAggregateOutput
+
+
+class ProductImageMaxAggregateInput(TypedDict, total=False):
+    """ProductImage input for aggregating by max"""
+    id: bool
+    productId: bool
+    imageUrl: bool
+    order: bool
+
+
+class ProductImageMinAggregateInput(TypedDict, total=False):
+    """ProductImage input for aggregating by min"""
+    id: bool
+    productId: bool
+    imageUrl: bool
+    order: bool
+
+
+class ProductImageNumberAggregateInput(TypedDict, total=False):
+    """ProductImage input for aggregating numbers"""
+    id: bool
+    productId: bool
+    order: bool
+
+
+ProductImageAvgAggregateInput = ProductImageNumberAggregateInput
+ProductImageSumAggregateInput = ProductImageNumberAggregateInput
+
+
+ProductImageCountAggregateInput = TypedDict(
+    'ProductImageCountAggregateInput',
+    {
+        'id': bool,
+        'productId': bool,
+        'imageUrl': bool,
+        'order': bool,
+        '_all': bool,
+    },
+    total=False,
+)
+
+ProductImageCountAggregateOutput = TypedDict(
+    'ProductImageCountAggregateOutput',
+    {
+        'id': int,
+        'productId': int,
+        'imageUrl': int,
+        'order': int,
+        '_all': int,
+    },
+    total=False,
+)
+
+
+ProductImageKeys = Literal[
+    'id',
+    'productId',
+    'imageUrl',
+    'order',
+    'product',
+]
+ProductImageScalarFieldKeys = Literal[
+    'id',
+    'productId',
+    'imageUrl',
+    'order',
+]
+ProductImageScalarFieldKeysT = TypeVar('ProductImageScalarFieldKeysT', bound=ProductImageScalarFieldKeys)
+
+ProductImageRelationalFieldKeys = Literal[
+        'product',
+    ]
+
+# Order types
+
+class OrderOptionalCreateInput(TypedDict, total=False):
+    """Optional arguments to the Order create method"""
+    id: _int
+    userId: Optional[_str]
+    status: _str
+    createdAt: datetime.datetime
+    items: 'OrderItemCreateManyNestedWithoutRelationsInput'
+
+
+class OrderCreateInput(OrderOptionalCreateInput):
+    """Required arguments to the Order create method"""
+    cep: _str
+    totalPrice: _float
+
+
+# TODO: remove this in favour of without explicit relations
+# e.g. PostCreateWithoutAuthorInput
+
+class OrderOptionalCreateWithoutRelationsInput(TypedDict, total=False):
+    """Optional arguments to the Order create method, without relations"""
+    id: _int
+    userId: Optional[_str]
+    status: _str
+    createdAt: datetime.datetime
+
+
+class OrderCreateWithoutRelationsInput(OrderOptionalCreateWithoutRelationsInput):
+    """Required arguments to the Order create method, without relations"""
+    cep: _str
+    totalPrice: _float
+
+class OrderConnectOrCreateWithoutRelationsInput(TypedDict):
+    create: 'OrderCreateWithoutRelationsInput'
+    where: 'OrderWhereUniqueInput'
+
+class OrderCreateNestedWithoutRelationsInput(TypedDict, total=False):
+    create: 'OrderCreateWithoutRelationsInput'
+    connect: 'OrderWhereUniqueInput'
+    connect_or_create: 'OrderConnectOrCreateWithoutRelationsInput'
+
+
+class OrderCreateManyNestedWithoutRelationsInput(TypedDict, total=False):
+    create: Union['OrderCreateWithoutRelationsInput', List['OrderCreateWithoutRelationsInput']]
+    connect: Union['OrderWhereUniqueInput', List['OrderWhereUniqueInput']]
+    connect_or_create: Union['OrderConnectOrCreateWithoutRelationsInput', List['OrderConnectOrCreateWithoutRelationsInput']]
+
+_OrderWhereUnique_id_Input = TypedDict(
+    '_OrderWhereUnique_id_Input',
+    {
+        'id': '_int',
+    },
+    total=True
+)
+
+OrderWhereUniqueInput = _OrderWhereUnique_id_Input
+
+
+class OrderUpdateInput(TypedDict, total=False):
+    """Optional arguments for updating a record"""
+    id: Union[AtomicIntInput, _int]
+    userId: Optional[_str]
+    cep: _str
+    totalPrice: Union[AtomicFloatInput, _float]
+    status: _str
+    createdAt: datetime.datetime
+    items: 'OrderItemUpdateManyWithoutRelationsInput'
+
+
+class OrderUpdateManyMutationInput(TypedDict, total=False):
+    """Arguments for updating many records"""
+    id: Union[AtomicIntInput, _int]
+    userId: Optional[_str]
+    cep: _str
+    totalPrice: Union[AtomicFloatInput, _float]
+    status: _str
+    createdAt: datetime.datetime
+
+
+class OrderUpdateManyWithoutRelationsInput(TypedDict, total=False):
+    create: List['OrderCreateWithoutRelationsInput']
+    connect: List['OrderWhereUniqueInput']
+    connect_or_create: List['OrderConnectOrCreateWithoutRelationsInput']
+    set: List['OrderWhereUniqueInput']
+    disconnect: List['OrderWhereUniqueInput']
+    delete: List['OrderWhereUniqueInput']
+
+    # TODO
+    # update: List['OrderUpdateWithWhereUniqueWithoutRelationsInput']
+    # updateMany: List['OrderUpdateManyWithWhereUniqueWithoutRelationsInput']
+    # deleteMany: List['OrderScalarWhereInput']
+    # upsert: List['OrderUpserteWithWhereUniqueWithoutRelationsInput']
+
+
+class OrderUpdateOneWithoutRelationsInput(TypedDict, total=False):
+    create: 'OrderCreateWithoutRelationsInput'
+    connect: 'OrderWhereUniqueInput'
+    connect_or_create: 'OrderConnectOrCreateWithoutRelationsInput'
+    disconnect: bool
+    delete: bool
+
+    # TODO
+    # update: 'OrderUpdateInput'
+    # upsert: 'OrderUpsertWithoutRelationsInput'
+
+
+class OrderUpsertInput(TypedDict):
+    create: 'OrderCreateInput'
+    update: 'OrderUpdateInput'  # pyright: ignore[reportIncompatibleMethodOverride]
+
+
+_Order_id_OrderByInput = TypedDict(
+    '_Order_id_OrderByInput',
+    {
+        'id': 'SortOrder',
+    },
+    total=True
+)
+
+_Order_userId_OrderByInput = TypedDict(
+    '_Order_userId_OrderByInput',
+    {
+        'userId': 'SortOrder',
+    },
+    total=True
+)
+
+_Order_cep_OrderByInput = TypedDict(
+    '_Order_cep_OrderByInput',
+    {
+        'cep': 'SortOrder',
+    },
+    total=True
+)
+
+_Order_totalPrice_OrderByInput = TypedDict(
+    '_Order_totalPrice_OrderByInput',
+    {
+        'totalPrice': 'SortOrder',
+    },
+    total=True
+)
+
+_Order_status_OrderByInput = TypedDict(
+    '_Order_status_OrderByInput',
+    {
+        'status': 'SortOrder',
+    },
+    total=True
+)
+
+_Order_createdAt_OrderByInput = TypedDict(
+    '_Order_createdAt_OrderByInput',
+    {
+        'createdAt': 'SortOrder',
+    },
+    total=True
+)
+
+_Order_RelevanceInner = TypedDict(
+    '_Order_RelevanceInner',
+    {
+        'fields': 'List[OrderScalarFieldKeys]',
+        'search': 'str',
+        'sort': 'SortOrder',
+    },
+    total=True
+)
+
+_Order_RelevanceOrderByInput = TypedDict(
+    '_Order_RelevanceOrderByInput',
+    {
+        '_relevance': '_Order_RelevanceInner',
+    },
+    total=True
+)
+
+OrderOrderByInput = Union[
+    '_Order_id_OrderByInput',
+    '_Order_userId_OrderByInput',
+    '_Order_cep_OrderByInput',
+    '_Order_totalPrice_OrderByInput',
+    '_Order_status_OrderByInput',
+    '_Order_createdAt_OrderByInput',
+    '_Order_RelevanceOrderByInput',
+]
+
+
+
+# recursive Order types
+# TODO: cleanup these types
+
+
+# Dict[str, Any] is a mypy limitation
+# see https://github.com/RobertCraigie/prisma-client-py/issues/45
+# switch to pyright for improved types, see https://prisma-client-py.readthedocs.io/en/stable/reference/limitations/
+
+OrderRelationFilter = TypedDict(
+    'OrderRelationFilter',
+    {
+        'is': 'Dict[str, Any]',
+        'is_not': 'Dict[str, Any]',
+    },
+    total=False,
+)
+
+
+class OrderListRelationFilter(TypedDict, total=False):
+    some: 'Dict[str, Any]'
+    none: 'Dict[str, Any]'
+    every: 'Dict[str, Any]'
+
+
+class OrderInclude(TypedDict, total=False):
+    """Order relational arguments"""
+    items: Union[bool, 'FindManyOrderItemArgsFromOrder']
+
+
+    
+
+class UserIncludeFromOrder(TypedDict, total=False):
+    """Relational arguments for Order"""
+
+
+class UserIncludeFromOrderRecursive1(TypedDict, total=False):
+    """Relational arguments for Order"""
+
+
+class UserIncludeFromOrderRecursive2(TypedDict, total=False):
+    """Relational arguments for Order"""
+
+
+class UserIncludeFromOrderRecursive3(TypedDict, total=False):
+    """Relational arguments for Order"""
+
+
+class UserIncludeFromOrderRecursive4(TypedDict, total=False):
+    """Relational arguments for Order"""
+
+    
+
+class UserArgsFromOrder(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'UserIncludeFromUserRecursive1'
+
+
+class UserArgsFromOrderRecursive1(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'UserIncludeFromUserRecursive2'
+
+
+class UserArgsFromOrderRecursive2(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'UserIncludeFromUserRecursive3'
+
+
+class UserArgsFromOrderRecursive3(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'UserIncludeFromUserRecursive4'
+
+
+class UserArgsFromOrderRecursive4(TypedDict, total=False):
+    """Arguments for Order"""
+    
+    
+
+class FindManyUserArgsFromOrder(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive1'
+
+
+class FindManyUserArgsFromOrderRecursive1(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive2'
+
+
+class FindManyUserArgsFromOrderRecursive2(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive3'
+
+
+class FindManyUserArgsFromOrderRecursive3(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive4'
+
+
+class FindManyUserArgsFromOrderRecursive4(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    
+    
+
+class ProductIncludeFromOrder(TypedDict, total=False):
+    """Relational arguments for Order"""
+    images: Union[bool, 'FindManyProductImageArgsFromOrderRecursive1']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromOrderRecursive1']
+
+
+class ProductIncludeFromOrderRecursive1(TypedDict, total=False):
+    """Relational arguments for Order"""
+    images: Union[bool, 'FindManyProductImageArgsFromOrderRecursive2']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromOrderRecursive2']
+
+
+class ProductIncludeFromOrderRecursive2(TypedDict, total=False):
+    """Relational arguments for Order"""
+    images: Union[bool, 'FindManyProductImageArgsFromOrderRecursive3']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromOrderRecursive3']
+
+
+class ProductIncludeFromOrderRecursive3(TypedDict, total=False):
+    """Relational arguments for Order"""
+    images: Union[bool, 'FindManyProductImageArgsFromOrderRecursive4']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromOrderRecursive4']
+
+
+class ProductIncludeFromOrderRecursive4(TypedDict, total=False):
+    """Relational arguments for Order"""
+
+    
+
+class ProductArgsFromOrder(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'ProductIncludeFromProductRecursive1'
+
+
+class ProductArgsFromOrderRecursive1(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'ProductIncludeFromProductRecursive2'
+
+
+class ProductArgsFromOrderRecursive2(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'ProductIncludeFromProductRecursive3'
+
+
+class ProductArgsFromOrderRecursive3(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'ProductIncludeFromProductRecursive4'
+
+
+class ProductArgsFromOrderRecursive4(TypedDict, total=False):
+    """Arguments for Order"""
+    
+    
+
+class FindManyProductArgsFromOrder(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive1'
+
+
+class FindManyProductArgsFromOrderRecursive1(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive2'
+
+
+class FindManyProductArgsFromOrderRecursive2(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive3'
+
+
+class FindManyProductArgsFromOrderRecursive3(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive4'
+
+
+class FindManyProductArgsFromOrderRecursive4(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    
+    
+
+class ProductImageIncludeFromOrder(TypedDict, total=False):
+    """Relational arguments for Order"""
+    product: Union[bool, 'ProductArgsFromOrderRecursive1']
+
+
+class ProductImageIncludeFromOrderRecursive1(TypedDict, total=False):
+    """Relational arguments for Order"""
+    product: Union[bool, 'ProductArgsFromOrderRecursive2']
+
+
+class ProductImageIncludeFromOrderRecursive2(TypedDict, total=False):
+    """Relational arguments for Order"""
+    product: Union[bool, 'ProductArgsFromOrderRecursive3']
+
+
+class ProductImageIncludeFromOrderRecursive3(TypedDict, total=False):
+    """Relational arguments for Order"""
+    product: Union[bool, 'ProductArgsFromOrderRecursive4']
+
+
+class ProductImageIncludeFromOrderRecursive4(TypedDict, total=False):
+    """Relational arguments for Order"""
+
+    
+
+class ProductImageArgsFromOrder(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'ProductImageIncludeFromProductImageRecursive1'
+
+
+class ProductImageArgsFromOrderRecursive1(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'ProductImageIncludeFromProductImageRecursive2'
+
+
+class ProductImageArgsFromOrderRecursive2(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'ProductImageIncludeFromProductImageRecursive3'
+
+
+class ProductImageArgsFromOrderRecursive3(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'ProductImageIncludeFromProductImageRecursive4'
+
+
+class ProductImageArgsFromOrderRecursive4(TypedDict, total=False):
+    """Arguments for Order"""
+    
+    
+
+class FindManyProductImageArgsFromOrder(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive1'
+
+
+class FindManyProductImageArgsFromOrderRecursive1(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive2'
+
+
+class FindManyProductImageArgsFromOrderRecursive2(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive3'
+
+
+class FindManyProductImageArgsFromOrderRecursive3(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive4'
+
+
+class FindManyProductImageArgsFromOrderRecursive4(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    
+    
+
+class OrderIncludeFromOrder(TypedDict, total=False):
+    """Relational arguments for Order"""
+    items: Union[bool, 'FindManyOrderItemArgsFromOrderRecursive1']
+
+
+class OrderIncludeFromOrderRecursive1(TypedDict, total=False):
+    """Relational arguments for Order"""
+    items: Union[bool, 'FindManyOrderItemArgsFromOrderRecursive2']
+
+
+class OrderIncludeFromOrderRecursive2(TypedDict, total=False):
+    """Relational arguments for Order"""
+    items: Union[bool, 'FindManyOrderItemArgsFromOrderRecursive3']
+
+
+class OrderIncludeFromOrderRecursive3(TypedDict, total=False):
+    """Relational arguments for Order"""
+    items: Union[bool, 'FindManyOrderItemArgsFromOrderRecursive4']
+
+
+class OrderIncludeFromOrderRecursive4(TypedDict, total=False):
+    """Relational arguments for Order"""
+
+    
+
+class OrderArgsFromOrder(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'OrderIncludeFromOrderRecursive1'
+
+
+class OrderArgsFromOrderRecursive1(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'OrderIncludeFromOrderRecursive2'
+
+
+class OrderArgsFromOrderRecursive2(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'OrderIncludeFromOrderRecursive3'
+
+
+class OrderArgsFromOrderRecursive3(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'OrderIncludeFromOrderRecursive4'
+
+
+class OrderArgsFromOrderRecursive4(TypedDict, total=False):
+    """Arguments for Order"""
+    
+    
+
+class FindManyOrderArgsFromOrder(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive1'
+
+
+class FindManyOrderArgsFromOrderRecursive1(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive2'
+
+
+class FindManyOrderArgsFromOrderRecursive2(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive3'
+
+
+class FindManyOrderArgsFromOrderRecursive3(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive4'
+
+
+class FindManyOrderArgsFromOrderRecursive4(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    
+    
+
+class OrderItemIncludeFromOrder(TypedDict, total=False):
+    """Relational arguments for Order"""
+    order: Union[bool, 'OrderArgsFromOrderRecursive1']
+    product: Union[bool, 'ProductArgsFromOrderRecursive1']
+
+
+class OrderItemIncludeFromOrderRecursive1(TypedDict, total=False):
+    """Relational arguments for Order"""
+    order: Union[bool, 'OrderArgsFromOrderRecursive2']
+    product: Union[bool, 'ProductArgsFromOrderRecursive2']
+
+
+class OrderItemIncludeFromOrderRecursive2(TypedDict, total=False):
+    """Relational arguments for Order"""
+    order: Union[bool, 'OrderArgsFromOrderRecursive3']
+    product: Union[bool, 'ProductArgsFromOrderRecursive3']
+
+
+class OrderItemIncludeFromOrderRecursive3(TypedDict, total=False):
+    """Relational arguments for Order"""
+    order: Union[bool, 'OrderArgsFromOrderRecursive4']
+    product: Union[bool, 'ProductArgsFromOrderRecursive4']
+
+
+class OrderItemIncludeFromOrderRecursive4(TypedDict, total=False):
+    """Relational arguments for Order"""
+
+    
+
+class OrderItemArgsFromOrder(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'OrderItemIncludeFromOrderItemRecursive1'
+
+
+class OrderItemArgsFromOrderRecursive1(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'OrderItemIncludeFromOrderItemRecursive2'
+
+
+class OrderItemArgsFromOrderRecursive2(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'OrderItemIncludeFromOrderItemRecursive3'
+
+
+class OrderItemArgsFromOrderRecursive3(TypedDict, total=False):
+    """Arguments for Order"""
+    include: 'OrderItemIncludeFromOrderItemRecursive4'
+
+
+class OrderItemArgsFromOrderRecursive4(TypedDict, total=False):
+    """Arguments for Order"""
+    
+    
+
+class FindManyOrderItemArgsFromOrder(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive1'
+
+
+class FindManyOrderItemArgsFromOrderRecursive1(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive2'
+
+
+class FindManyOrderItemArgsFromOrderRecursive2(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive3'
+
+
+class FindManyOrderItemArgsFromOrderRecursive3(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive4'
+
+
+class FindManyOrderItemArgsFromOrderRecursive4(TypedDict, total=False):
+    """Arguments for Order"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    
+
+
+FindManyOrderArgs = FindManyOrderArgsFromOrder
+FindFirstOrderArgs = FindManyOrderArgsFromOrder
+
+
+    
+
+class OrderWhereInput(TypedDict, total=False):
+    """Order arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    userId: Union[None, _str, 'types.StringFilter']
+    cep: Union[_str, 'types.StringFilter']
+    totalPrice: Union[_float, 'types.FloatFilter']
+    status: Union[_str, 'types.StringFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
+    items: 'OrderItemListRelationFilter'
+
+    # should be noted that AND and NOT should be Union['OrderWhereInputRecursive1', List['OrderWhereInputRecursive1']]
+    # but this causes mypy to hang :/
+    AND: List['OrderWhereInputRecursive1']
+    OR: List['OrderWhereInputRecursive1']
+    NOT: List['OrderWhereInputRecursive1']
+
+
+class OrderWhereInputRecursive1(TypedDict, total=False):
+    """Order arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    userId: Union[None, _str, 'types.StringFilter']
+    cep: Union[_str, 'types.StringFilter']
+    totalPrice: Union[_float, 'types.FloatFilter']
+    status: Union[_str, 'types.StringFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
+    items: 'OrderItemListRelationFilter'
+
+    # should be noted that AND and NOT should be Union['OrderWhereInputRecursive2', List['OrderWhereInputRecursive2']]
+    # but this causes mypy to hang :/
+    AND: List['OrderWhereInputRecursive2']
+    OR: List['OrderWhereInputRecursive2']
+    NOT: List['OrderWhereInputRecursive2']
+
+
+class OrderWhereInputRecursive2(TypedDict, total=False):
+    """Order arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    userId: Union[None, _str, 'types.StringFilter']
+    cep: Union[_str, 'types.StringFilter']
+    totalPrice: Union[_float, 'types.FloatFilter']
+    status: Union[_str, 'types.StringFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
+    items: 'OrderItemListRelationFilter'
+
+    # should be noted that AND and NOT should be Union['OrderWhereInputRecursive3', List['OrderWhereInputRecursive3']]
+    # but this causes mypy to hang :/
+    AND: List['OrderWhereInputRecursive3']
+    OR: List['OrderWhereInputRecursive3']
+    NOT: List['OrderWhereInputRecursive3']
+
+
+class OrderWhereInputRecursive3(TypedDict, total=False):
+    """Order arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    userId: Union[None, _str, 'types.StringFilter']
+    cep: Union[_str, 'types.StringFilter']
+    totalPrice: Union[_float, 'types.FloatFilter']
+    status: Union[_str, 'types.StringFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
+    items: 'OrderItemListRelationFilter'
+
+    # should be noted that AND and NOT should be Union['OrderWhereInputRecursive4', List['OrderWhereInputRecursive4']]
+    # but this causes mypy to hang :/
+    AND: List['OrderWhereInputRecursive4']
+    OR: List['OrderWhereInputRecursive4']
+    NOT: List['OrderWhereInputRecursive4']
+
+
+class OrderWhereInputRecursive4(TypedDict, total=False):
+    """Order arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    userId: Union[None, _str, 'types.StringFilter']
+    cep: Union[_str, 'types.StringFilter']
+    totalPrice: Union[_float, 'types.FloatFilter']
+    status: Union[_str, 'types.StringFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeFilter']
+    items: 'OrderItemListRelationFilter'
+
+
+
+# aggregate Order types
+
+
+    
+
+class OrderScalarWhereWithAggregatesInput(TypedDict, total=False):
+    """Order arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    userId: Union[_str, 'types.StringWithAggregatesFilter']
+    cep: Union[_str, 'types.StringWithAggregatesFilter']
+    totalPrice: Union[_float, 'types.FloatWithAggregatesFilter']
+    status: Union[_str, 'types.StringWithAggregatesFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
+
+    AND: List['OrderScalarWhereWithAggregatesInputRecursive1']
+    OR: List['OrderScalarWhereWithAggregatesInputRecursive1']
+    NOT: List['OrderScalarWhereWithAggregatesInputRecursive1']
+
+
+class OrderScalarWhereWithAggregatesInputRecursive1(TypedDict, total=False):
+    """Order arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    userId: Union[_str, 'types.StringWithAggregatesFilter']
+    cep: Union[_str, 'types.StringWithAggregatesFilter']
+    totalPrice: Union[_float, 'types.FloatWithAggregatesFilter']
+    status: Union[_str, 'types.StringWithAggregatesFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
+
+    AND: List['OrderScalarWhereWithAggregatesInputRecursive2']
+    OR: List['OrderScalarWhereWithAggregatesInputRecursive2']
+    NOT: List['OrderScalarWhereWithAggregatesInputRecursive2']
+
+
+class OrderScalarWhereWithAggregatesInputRecursive2(TypedDict, total=False):
+    """Order arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    userId: Union[_str, 'types.StringWithAggregatesFilter']
+    cep: Union[_str, 'types.StringWithAggregatesFilter']
+    totalPrice: Union[_float, 'types.FloatWithAggregatesFilter']
+    status: Union[_str, 'types.StringWithAggregatesFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
+
+    AND: List['OrderScalarWhereWithAggregatesInputRecursive3']
+    OR: List['OrderScalarWhereWithAggregatesInputRecursive3']
+    NOT: List['OrderScalarWhereWithAggregatesInputRecursive3']
+
+
+class OrderScalarWhereWithAggregatesInputRecursive3(TypedDict, total=False):
+    """Order arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    userId: Union[_str, 'types.StringWithAggregatesFilter']
+    cep: Union[_str, 'types.StringWithAggregatesFilter']
+    totalPrice: Union[_float, 'types.FloatWithAggregatesFilter']
+    status: Union[_str, 'types.StringWithAggregatesFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
+
+    AND: List['OrderScalarWhereWithAggregatesInputRecursive4']
+    OR: List['OrderScalarWhereWithAggregatesInputRecursive4']
+    NOT: List['OrderScalarWhereWithAggregatesInputRecursive4']
+
+
+class OrderScalarWhereWithAggregatesInputRecursive4(TypedDict, total=False):
+    """Order arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    userId: Union[_str, 'types.StringWithAggregatesFilter']
+    cep: Union[_str, 'types.StringWithAggregatesFilter']
+    totalPrice: Union[_float, 'types.FloatWithAggregatesFilter']
+    status: Union[_str, 'types.StringWithAggregatesFilter']
+    createdAt: Union[datetime.datetime, 'types.DateTimeWithAggregatesFilter']
+
+
+
+class OrderGroupByOutput(TypedDict, total=False):
+    id: _int
+    userId: _str
+    cep: _str
+    totalPrice: _float
+    status: _str
+    createdAt: datetime.datetime
+    _sum: 'OrderSumAggregateOutput'
+    _avg: 'OrderAvgAggregateOutput'
+    _min: 'OrderMinAggregateOutput'
+    _max: 'OrderMaxAggregateOutput'
+    _count: 'OrderCountAggregateOutput'
+
+
+class OrderAvgAggregateOutput(TypedDict, total=False):
+    """Order output for aggregating averages"""
+    id: float
+    totalPrice: float
+
+
+class OrderSumAggregateOutput(TypedDict, total=False):
+    """Order output for aggregating sums"""
+    id: _int
+    totalPrice: _float
+
+
+class OrderScalarAggregateOutput(TypedDict, total=False):
+    """Order output including scalar fields"""
+    id: _int
+    userId: _str
+    cep: _str
+    totalPrice: _float
+    status: _str
+    createdAt: datetime.datetime
+
+
+OrderMinAggregateOutput = OrderScalarAggregateOutput
+OrderMaxAggregateOutput = OrderScalarAggregateOutput
+
+
+class OrderMaxAggregateInput(TypedDict, total=False):
+    """Order input for aggregating by max"""
+    id: bool
+    userId: bool
+    cep: bool
+    totalPrice: bool
+    status: bool
+    createdAt: bool
+
+
+class OrderMinAggregateInput(TypedDict, total=False):
+    """Order input for aggregating by min"""
+    id: bool
+    userId: bool
+    cep: bool
+    totalPrice: bool
+    status: bool
+    createdAt: bool
+
+
+class OrderNumberAggregateInput(TypedDict, total=False):
+    """Order input for aggregating numbers"""
+    id: bool
+    totalPrice: bool
+
+
+OrderAvgAggregateInput = OrderNumberAggregateInput
+OrderSumAggregateInput = OrderNumberAggregateInput
+
+
+OrderCountAggregateInput = TypedDict(
+    'OrderCountAggregateInput',
+    {
+        'id': bool,
+        'userId': bool,
+        'cep': bool,
+        'totalPrice': bool,
+        'status': bool,
+        'createdAt': bool,
+        '_all': bool,
+    },
+    total=False,
+)
+
+OrderCountAggregateOutput = TypedDict(
+    'OrderCountAggregateOutput',
+    {
+        'id': int,
+        'userId': int,
+        'cep': int,
+        'totalPrice': int,
+        'status': int,
+        'createdAt': int,
+        '_all': int,
+    },
+    total=False,
+)
+
+
+OrderKeys = Literal[
+    'id',
+    'userId',
+    'cep',
+    'totalPrice',
+    'status',
+    'createdAt',
+    'items',
+]
+OrderScalarFieldKeys = Literal[
+    'id',
+    'userId',
+    'cep',
+    'totalPrice',
+    'status',
+    'createdAt',
+]
+OrderScalarFieldKeysT = TypeVar('OrderScalarFieldKeysT', bound=OrderScalarFieldKeys)
+
+OrderRelationalFieldKeys = Literal[
+        'items',
+    ]
+
+# OrderItem types
+
+class OrderItemOptionalCreateInput(TypedDict, total=False):
+    """Optional arguments to the OrderItem create method"""
+    id: _int
+    orderId: _int
+    productId: _int
+    order: 'OrderCreateNestedWithoutRelationsInput'
+    product: 'ProductCreateNestedWithoutRelationsInput'
+
+
+class OrderItemCreateInput(OrderItemOptionalCreateInput):
+    """Required arguments to the OrderItem create method"""
+    quantity: _int
+    price: _float
+
+
+# TODO: remove this in favour of without explicit relations
+# e.g. PostCreateWithoutAuthorInput
+
+class OrderItemOptionalCreateWithoutRelationsInput(TypedDict, total=False):
+    """Optional arguments to the OrderItem create method, without relations"""
+    id: _int
+    orderId: _int
+    productId: _int
+
+
+class OrderItemCreateWithoutRelationsInput(OrderItemOptionalCreateWithoutRelationsInput):
+    """Required arguments to the OrderItem create method, without relations"""
+    quantity: _int
+    price: _float
+
+class OrderItemConnectOrCreateWithoutRelationsInput(TypedDict):
+    create: 'OrderItemCreateWithoutRelationsInput'
+    where: 'OrderItemWhereUniqueInput'
+
+class OrderItemCreateNestedWithoutRelationsInput(TypedDict, total=False):
+    create: 'OrderItemCreateWithoutRelationsInput'
+    connect: 'OrderItemWhereUniqueInput'
+    connect_or_create: 'OrderItemConnectOrCreateWithoutRelationsInput'
+
+
+class OrderItemCreateManyNestedWithoutRelationsInput(TypedDict, total=False):
+    create: Union['OrderItemCreateWithoutRelationsInput', List['OrderItemCreateWithoutRelationsInput']]
+    connect: Union['OrderItemWhereUniqueInput', List['OrderItemWhereUniqueInput']]
+    connect_or_create: Union['OrderItemConnectOrCreateWithoutRelationsInput', List['OrderItemConnectOrCreateWithoutRelationsInput']]
+
+_OrderItemWhereUnique_id_Input = TypedDict(
+    '_OrderItemWhereUnique_id_Input',
+    {
+        'id': '_int',
+    },
+    total=True
+)
+
+OrderItemWhereUniqueInput = _OrderItemWhereUnique_id_Input
+
+
+class OrderItemUpdateInput(TypedDict, total=False):
+    """Optional arguments for updating a record"""
+    id: Union[AtomicIntInput, _int]
+    quantity: Union[AtomicIntInput, _int]
+    price: Union[AtomicFloatInput, _float]
+    order: 'OrderUpdateOneWithoutRelationsInput'
+    product: 'ProductUpdateOneWithoutRelationsInput'
+
+
+class OrderItemUpdateManyMutationInput(TypedDict, total=False):
+    """Arguments for updating many records"""
+    id: Union[AtomicIntInput, _int]
+    quantity: Union[AtomicIntInput, _int]
+    price: Union[AtomicFloatInput, _float]
+
+
+class OrderItemUpdateManyWithoutRelationsInput(TypedDict, total=False):
+    create: List['OrderItemCreateWithoutRelationsInput']
+    connect: List['OrderItemWhereUniqueInput']
+    connect_or_create: List['OrderItemConnectOrCreateWithoutRelationsInput']
+    set: List['OrderItemWhereUniqueInput']
+    disconnect: List['OrderItemWhereUniqueInput']
+    delete: List['OrderItemWhereUniqueInput']
+
+    # TODO
+    # update: List['OrderItemUpdateWithWhereUniqueWithoutRelationsInput']
+    # updateMany: List['OrderItemUpdateManyWithWhereUniqueWithoutRelationsInput']
+    # deleteMany: List['OrderItemScalarWhereInput']
+    # upsert: List['OrderItemUpserteWithWhereUniqueWithoutRelationsInput']
+
+
+class OrderItemUpdateOneWithoutRelationsInput(TypedDict, total=False):
+    create: 'OrderItemCreateWithoutRelationsInput'
+    connect: 'OrderItemWhereUniqueInput'
+    connect_or_create: 'OrderItemConnectOrCreateWithoutRelationsInput'
+    disconnect: bool
+    delete: bool
+
+    # TODO
+    # update: 'OrderItemUpdateInput'
+    # upsert: 'OrderItemUpsertWithoutRelationsInput'
+
+
+class OrderItemUpsertInput(TypedDict):
+    create: 'OrderItemCreateInput'
+    update: 'OrderItemUpdateInput'  # pyright: ignore[reportIncompatibleMethodOverride]
+
+
+_OrderItem_id_OrderByInput = TypedDict(
+    '_OrderItem_id_OrderByInput',
+    {
+        'id': 'SortOrder',
+    },
+    total=True
+)
+
+_OrderItem_orderId_OrderByInput = TypedDict(
+    '_OrderItem_orderId_OrderByInput',
+    {
+        'orderId': 'SortOrder',
+    },
+    total=True
+)
+
+_OrderItem_productId_OrderByInput = TypedDict(
+    '_OrderItem_productId_OrderByInput',
+    {
+        'productId': 'SortOrder',
+    },
+    total=True
+)
+
+_OrderItem_quantity_OrderByInput = TypedDict(
+    '_OrderItem_quantity_OrderByInput',
+    {
+        'quantity': 'SortOrder',
+    },
+    total=True
+)
+
+_OrderItem_price_OrderByInput = TypedDict(
+    '_OrderItem_price_OrderByInput',
+    {
+        'price': 'SortOrder',
+    },
+    total=True
+)
+
+_OrderItem_RelevanceInner = TypedDict(
+    '_OrderItem_RelevanceInner',
+    {
+        'fields': 'List[OrderItemScalarFieldKeys]',
+        'search': 'str',
+        'sort': 'SortOrder',
+    },
+    total=True
+)
+
+_OrderItem_RelevanceOrderByInput = TypedDict(
+    '_OrderItem_RelevanceOrderByInput',
+    {
+        '_relevance': '_OrderItem_RelevanceInner',
+    },
+    total=True
+)
+
+OrderItemOrderByInput = Union[
+    '_OrderItem_id_OrderByInput',
+    '_OrderItem_orderId_OrderByInput',
+    '_OrderItem_productId_OrderByInput',
+    '_OrderItem_quantity_OrderByInput',
+    '_OrderItem_price_OrderByInput',
+    '_OrderItem_RelevanceOrderByInput',
+]
+
+
+
+# recursive OrderItem types
+# TODO: cleanup these types
+
+
+# Dict[str, Any] is a mypy limitation
+# see https://github.com/RobertCraigie/prisma-client-py/issues/45
+# switch to pyright for improved types, see https://prisma-client-py.readthedocs.io/en/stable/reference/limitations/
+
+OrderItemRelationFilter = TypedDict(
+    'OrderItemRelationFilter',
+    {
+        'is': 'Dict[str, Any]',
+        'is_not': 'Dict[str, Any]',
+    },
+    total=False,
+)
+
+
+class OrderItemListRelationFilter(TypedDict, total=False):
+    some: 'Dict[str, Any]'
+    none: 'Dict[str, Any]'
+    every: 'Dict[str, Any]'
+
+
+class OrderItemInclude(TypedDict, total=False):
+    """OrderItem relational arguments"""
+    order: Union[bool, 'OrderArgsFromOrderItem']
+    product: Union[bool, 'ProductArgsFromOrderItem']
+
+
+    
+
+class UserIncludeFromOrderItem(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+
+
+class UserIncludeFromOrderItemRecursive1(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+
+
+class UserIncludeFromOrderItemRecursive2(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+
+
+class UserIncludeFromOrderItemRecursive3(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+
+
+class UserIncludeFromOrderItemRecursive4(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+
+    
+
+class UserArgsFromOrderItem(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'UserIncludeFromUserRecursive1'
+
+
+class UserArgsFromOrderItemRecursive1(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'UserIncludeFromUserRecursive2'
+
+
+class UserArgsFromOrderItemRecursive2(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'UserIncludeFromUserRecursive3'
+
+
+class UserArgsFromOrderItemRecursive3(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'UserIncludeFromUserRecursive4'
+
+
+class UserArgsFromOrderItemRecursive4(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    
+    
+
+class FindManyUserArgsFromOrderItem(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive1'
+
+
+class FindManyUserArgsFromOrderItemRecursive1(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive2'
+
+
+class FindManyUserArgsFromOrderItemRecursive2(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive3'
+
+
+class FindManyUserArgsFromOrderItemRecursive3(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    include: 'UserIncludeFromUserRecursive4'
+
+
+class FindManyUserArgsFromOrderItemRecursive4(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['UserOrderByInput', List['UserOrderByInput']]
+    where: 'UserWhereInput'
+    cursor: 'UserWhereUniqueInput'
+    distinct: List['UserScalarFieldKeys']
+    
+    
+
+class ProductIncludeFromOrderItem(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    images: Union[bool, 'FindManyProductImageArgsFromOrderItemRecursive1']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromOrderItemRecursive1']
+
+
+class ProductIncludeFromOrderItemRecursive1(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    images: Union[bool, 'FindManyProductImageArgsFromOrderItemRecursive2']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromOrderItemRecursive2']
+
+
+class ProductIncludeFromOrderItemRecursive2(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    images: Union[bool, 'FindManyProductImageArgsFromOrderItemRecursive3']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromOrderItemRecursive3']
+
+
+class ProductIncludeFromOrderItemRecursive3(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    images: Union[bool, 'FindManyProductImageArgsFromOrderItemRecursive4']
+    orderItems: Union[bool, 'FindManyOrderItemArgsFromOrderItemRecursive4']
+
+
+class ProductIncludeFromOrderItemRecursive4(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+
+    
+
+class ProductArgsFromOrderItem(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'ProductIncludeFromProductRecursive1'
+
+
+class ProductArgsFromOrderItemRecursive1(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'ProductIncludeFromProductRecursive2'
+
+
+class ProductArgsFromOrderItemRecursive2(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'ProductIncludeFromProductRecursive3'
+
+
+class ProductArgsFromOrderItemRecursive3(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'ProductIncludeFromProductRecursive4'
+
+
+class ProductArgsFromOrderItemRecursive4(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    
+    
+
+class FindManyProductArgsFromOrderItem(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive1'
+
+
+class FindManyProductArgsFromOrderItemRecursive1(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive2'
+
+
+class FindManyProductArgsFromOrderItemRecursive2(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive3'
+
+
+class FindManyProductArgsFromOrderItemRecursive3(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    include: 'ProductIncludeFromProductRecursive4'
+
+
+class FindManyProductArgsFromOrderItemRecursive4(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['ProductOrderByInput', List['ProductOrderByInput']]
+    where: 'ProductWhereInput'
+    cursor: 'ProductWhereUniqueInput'
+    distinct: List['ProductScalarFieldKeys']
+    
+    
+
+class ProductImageIncludeFromOrderItem(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    product: Union[bool, 'ProductArgsFromOrderItemRecursive1']
+
+
+class ProductImageIncludeFromOrderItemRecursive1(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    product: Union[bool, 'ProductArgsFromOrderItemRecursive2']
+
+
+class ProductImageIncludeFromOrderItemRecursive2(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    product: Union[bool, 'ProductArgsFromOrderItemRecursive3']
+
+
+class ProductImageIncludeFromOrderItemRecursive3(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    product: Union[bool, 'ProductArgsFromOrderItemRecursive4']
+
+
+class ProductImageIncludeFromOrderItemRecursive4(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+
+    
+
+class ProductImageArgsFromOrderItem(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'ProductImageIncludeFromProductImageRecursive1'
+
+
+class ProductImageArgsFromOrderItemRecursive1(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'ProductImageIncludeFromProductImageRecursive2'
+
+
+class ProductImageArgsFromOrderItemRecursive2(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'ProductImageIncludeFromProductImageRecursive3'
+
+
+class ProductImageArgsFromOrderItemRecursive3(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'ProductImageIncludeFromProductImageRecursive4'
+
+
+class ProductImageArgsFromOrderItemRecursive4(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    
+    
+
+class FindManyProductImageArgsFromOrderItem(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive1'
+
+
+class FindManyProductImageArgsFromOrderItemRecursive1(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive2'
+
+
+class FindManyProductImageArgsFromOrderItemRecursive2(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive3'
+
+
+class FindManyProductImageArgsFromOrderItemRecursive3(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    include: 'ProductImageIncludeFromProductImageRecursive4'
+
+
+class FindManyProductImageArgsFromOrderItemRecursive4(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['ProductImageOrderByInput', List['ProductImageOrderByInput']]
+    where: 'ProductImageWhereInput'
+    cursor: 'ProductImageWhereUniqueInput'
+    distinct: List['ProductImageScalarFieldKeys']
+    
+    
+
+class OrderIncludeFromOrderItem(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    items: Union[bool, 'FindManyOrderItemArgsFromOrderItemRecursive1']
+
+
+class OrderIncludeFromOrderItemRecursive1(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    items: Union[bool, 'FindManyOrderItemArgsFromOrderItemRecursive2']
+
+
+class OrderIncludeFromOrderItemRecursive2(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    items: Union[bool, 'FindManyOrderItemArgsFromOrderItemRecursive3']
+
+
+class OrderIncludeFromOrderItemRecursive3(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    items: Union[bool, 'FindManyOrderItemArgsFromOrderItemRecursive4']
+
+
+class OrderIncludeFromOrderItemRecursive4(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+
+    
+
+class OrderArgsFromOrderItem(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'OrderIncludeFromOrderRecursive1'
+
+
+class OrderArgsFromOrderItemRecursive1(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'OrderIncludeFromOrderRecursive2'
+
+
+class OrderArgsFromOrderItemRecursive2(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'OrderIncludeFromOrderRecursive3'
+
+
+class OrderArgsFromOrderItemRecursive3(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'OrderIncludeFromOrderRecursive4'
+
+
+class OrderArgsFromOrderItemRecursive4(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    
+    
+
+class FindManyOrderArgsFromOrderItem(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive1'
+
+
+class FindManyOrderArgsFromOrderItemRecursive1(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive2'
+
+
+class FindManyOrderArgsFromOrderItemRecursive2(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive3'
+
+
+class FindManyOrderArgsFromOrderItemRecursive3(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    include: 'OrderIncludeFromOrderRecursive4'
+
+
+class FindManyOrderArgsFromOrderItemRecursive4(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['OrderOrderByInput', List['OrderOrderByInput']]
+    where: 'OrderWhereInput'
+    cursor: 'OrderWhereUniqueInput'
+    distinct: List['OrderScalarFieldKeys']
+    
+    
+
+class OrderItemIncludeFromOrderItem(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    order: Union[bool, 'OrderArgsFromOrderItemRecursive1']
+    product: Union[bool, 'ProductArgsFromOrderItemRecursive1']
+
+
+class OrderItemIncludeFromOrderItemRecursive1(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    order: Union[bool, 'OrderArgsFromOrderItemRecursive2']
+    product: Union[bool, 'ProductArgsFromOrderItemRecursive2']
+
+
+class OrderItemIncludeFromOrderItemRecursive2(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    order: Union[bool, 'OrderArgsFromOrderItemRecursive3']
+    product: Union[bool, 'ProductArgsFromOrderItemRecursive3']
+
+
+class OrderItemIncludeFromOrderItemRecursive3(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+    order: Union[bool, 'OrderArgsFromOrderItemRecursive4']
+    product: Union[bool, 'ProductArgsFromOrderItemRecursive4']
+
+
+class OrderItemIncludeFromOrderItemRecursive4(TypedDict, total=False):
+    """Relational arguments for OrderItem"""
+
+    
+
+class OrderItemArgsFromOrderItem(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'OrderItemIncludeFromOrderItemRecursive1'
+
+
+class OrderItemArgsFromOrderItemRecursive1(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'OrderItemIncludeFromOrderItemRecursive2'
+
+
+class OrderItemArgsFromOrderItemRecursive2(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'OrderItemIncludeFromOrderItemRecursive3'
+
+
+class OrderItemArgsFromOrderItemRecursive3(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    include: 'OrderItemIncludeFromOrderItemRecursive4'
+
+
+class OrderItemArgsFromOrderItemRecursive4(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    
+    
+
+class FindManyOrderItemArgsFromOrderItem(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive1'
+
+
+class FindManyOrderItemArgsFromOrderItemRecursive1(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive2'
+
+
+class FindManyOrderItemArgsFromOrderItemRecursive2(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive3'
+
+
+class FindManyOrderItemArgsFromOrderItemRecursive3(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    include: 'OrderItemIncludeFromOrderItemRecursive4'
+
+
+class FindManyOrderItemArgsFromOrderItemRecursive4(TypedDict, total=False):
+    """Arguments for OrderItem"""
+    take: int
+    skip: int
+    order_by: Union['OrderItemOrderByInput', List['OrderItemOrderByInput']]
+    where: 'OrderItemWhereInput'
+    cursor: 'OrderItemWhereUniqueInput'
+    distinct: List['OrderItemScalarFieldKeys']
+    
+
+
+FindManyOrderItemArgs = FindManyOrderItemArgsFromOrderItem
+FindFirstOrderItemArgs = FindManyOrderItemArgsFromOrderItem
+
+
+    
+
+class OrderItemWhereInput(TypedDict, total=False):
+    """OrderItem arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    orderId: Union[_int, 'types.IntFilter']
+    productId: Union[_int, 'types.IntFilter']
+    quantity: Union[_int, 'types.IntFilter']
+    price: Union[_float, 'types.FloatFilter']
+    order: 'OrderRelationFilter'
+    product: 'ProductRelationFilter'
+
+    # should be noted that AND and NOT should be Union['OrderItemWhereInputRecursive1', List['OrderItemWhereInputRecursive1']]
+    # but this causes mypy to hang :/
+    AND: List['OrderItemWhereInputRecursive1']
+    OR: List['OrderItemWhereInputRecursive1']
+    NOT: List['OrderItemWhereInputRecursive1']
+
+
+class OrderItemWhereInputRecursive1(TypedDict, total=False):
+    """OrderItem arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    orderId: Union[_int, 'types.IntFilter']
+    productId: Union[_int, 'types.IntFilter']
+    quantity: Union[_int, 'types.IntFilter']
+    price: Union[_float, 'types.FloatFilter']
+    order: 'OrderRelationFilter'
+    product: 'ProductRelationFilter'
+
+    # should be noted that AND and NOT should be Union['OrderItemWhereInputRecursive2', List['OrderItemWhereInputRecursive2']]
+    # but this causes mypy to hang :/
+    AND: List['OrderItemWhereInputRecursive2']
+    OR: List['OrderItemWhereInputRecursive2']
+    NOT: List['OrderItemWhereInputRecursive2']
+
+
+class OrderItemWhereInputRecursive2(TypedDict, total=False):
+    """OrderItem arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    orderId: Union[_int, 'types.IntFilter']
+    productId: Union[_int, 'types.IntFilter']
+    quantity: Union[_int, 'types.IntFilter']
+    price: Union[_float, 'types.FloatFilter']
+    order: 'OrderRelationFilter'
+    product: 'ProductRelationFilter'
+
+    # should be noted that AND and NOT should be Union['OrderItemWhereInputRecursive3', List['OrderItemWhereInputRecursive3']]
+    # but this causes mypy to hang :/
+    AND: List['OrderItemWhereInputRecursive3']
+    OR: List['OrderItemWhereInputRecursive3']
+    NOT: List['OrderItemWhereInputRecursive3']
+
+
+class OrderItemWhereInputRecursive3(TypedDict, total=False):
+    """OrderItem arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    orderId: Union[_int, 'types.IntFilter']
+    productId: Union[_int, 'types.IntFilter']
+    quantity: Union[_int, 'types.IntFilter']
+    price: Union[_float, 'types.FloatFilter']
+    order: 'OrderRelationFilter'
+    product: 'ProductRelationFilter'
+
+    # should be noted that AND and NOT should be Union['OrderItemWhereInputRecursive4', List['OrderItemWhereInputRecursive4']]
+    # but this causes mypy to hang :/
+    AND: List['OrderItemWhereInputRecursive4']
+    OR: List['OrderItemWhereInputRecursive4']
+    NOT: List['OrderItemWhereInputRecursive4']
+
+
+class OrderItemWhereInputRecursive4(TypedDict, total=False):
+    """OrderItem arguments for searching"""
+    id: Union[_int, 'types.IntFilter']
+    orderId: Union[_int, 'types.IntFilter']
+    productId: Union[_int, 'types.IntFilter']
+    quantity: Union[_int, 'types.IntFilter']
+    price: Union[_float, 'types.FloatFilter']
+    order: 'OrderRelationFilter'
+    product: 'ProductRelationFilter'
+
+
+
+# aggregate OrderItem types
+
+
+    
+
+class OrderItemScalarWhereWithAggregatesInput(TypedDict, total=False):
+    """OrderItem arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    orderId: Union[_int, 'types.IntWithAggregatesFilter']
+    productId: Union[_int, 'types.IntWithAggregatesFilter']
+    quantity: Union[_int, 'types.IntWithAggregatesFilter']
+    price: Union[_float, 'types.FloatWithAggregatesFilter']
+
+    AND: List['OrderItemScalarWhereWithAggregatesInputRecursive1']
+    OR: List['OrderItemScalarWhereWithAggregatesInputRecursive1']
+    NOT: List['OrderItemScalarWhereWithAggregatesInputRecursive1']
+
+
+class OrderItemScalarWhereWithAggregatesInputRecursive1(TypedDict, total=False):
+    """OrderItem arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    orderId: Union[_int, 'types.IntWithAggregatesFilter']
+    productId: Union[_int, 'types.IntWithAggregatesFilter']
+    quantity: Union[_int, 'types.IntWithAggregatesFilter']
+    price: Union[_float, 'types.FloatWithAggregatesFilter']
+
+    AND: List['OrderItemScalarWhereWithAggregatesInputRecursive2']
+    OR: List['OrderItemScalarWhereWithAggregatesInputRecursive2']
+    NOT: List['OrderItemScalarWhereWithAggregatesInputRecursive2']
+
+
+class OrderItemScalarWhereWithAggregatesInputRecursive2(TypedDict, total=False):
+    """OrderItem arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    orderId: Union[_int, 'types.IntWithAggregatesFilter']
+    productId: Union[_int, 'types.IntWithAggregatesFilter']
+    quantity: Union[_int, 'types.IntWithAggregatesFilter']
+    price: Union[_float, 'types.FloatWithAggregatesFilter']
+
+    AND: List['OrderItemScalarWhereWithAggregatesInputRecursive3']
+    OR: List['OrderItemScalarWhereWithAggregatesInputRecursive3']
+    NOT: List['OrderItemScalarWhereWithAggregatesInputRecursive3']
+
+
+class OrderItemScalarWhereWithAggregatesInputRecursive3(TypedDict, total=False):
+    """OrderItem arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    orderId: Union[_int, 'types.IntWithAggregatesFilter']
+    productId: Union[_int, 'types.IntWithAggregatesFilter']
+    quantity: Union[_int, 'types.IntWithAggregatesFilter']
+    price: Union[_float, 'types.FloatWithAggregatesFilter']
+
+    AND: List['OrderItemScalarWhereWithAggregatesInputRecursive4']
+    OR: List['OrderItemScalarWhereWithAggregatesInputRecursive4']
+    NOT: List['OrderItemScalarWhereWithAggregatesInputRecursive4']
+
+
+class OrderItemScalarWhereWithAggregatesInputRecursive4(TypedDict, total=False):
+    """OrderItem arguments for searching"""
+    id: Union[_int, 'types.IntWithAggregatesFilter']
+    orderId: Union[_int, 'types.IntWithAggregatesFilter']
+    productId: Union[_int, 'types.IntWithAggregatesFilter']
+    quantity: Union[_int, 'types.IntWithAggregatesFilter']
+    price: Union[_float, 'types.FloatWithAggregatesFilter']
+
+
+
+class OrderItemGroupByOutput(TypedDict, total=False):
+    id: _int
+    orderId: _int
+    productId: _int
+    quantity: _int
+    price: _float
+    _sum: 'OrderItemSumAggregateOutput'
+    _avg: 'OrderItemAvgAggregateOutput'
+    _min: 'OrderItemMinAggregateOutput'
+    _max: 'OrderItemMaxAggregateOutput'
+    _count: 'OrderItemCountAggregateOutput'
+
+
+class OrderItemAvgAggregateOutput(TypedDict, total=False):
+    """OrderItem output for aggregating averages"""
+    id: float
+    orderId: float
+    productId: float
+    quantity: float
+    price: float
+
+
+class OrderItemSumAggregateOutput(TypedDict, total=False):
+    """OrderItem output for aggregating sums"""
+    id: _int
+    orderId: _int
+    productId: _int
+    quantity: _int
+    price: _float
+
+
+class OrderItemScalarAggregateOutput(TypedDict, total=False):
+    """OrderItem output including scalar fields"""
+    id: _int
+    orderId: _int
+    productId: _int
+    quantity: _int
+    price: _float
+
+
+OrderItemMinAggregateOutput = OrderItemScalarAggregateOutput
+OrderItemMaxAggregateOutput = OrderItemScalarAggregateOutput
+
+
+class OrderItemMaxAggregateInput(TypedDict, total=False):
+    """OrderItem input for aggregating by max"""
+    id: bool
+    orderId: bool
+    productId: bool
+    quantity: bool
+    price: bool
+
+
+class OrderItemMinAggregateInput(TypedDict, total=False):
+    """OrderItem input for aggregating by min"""
+    id: bool
+    orderId: bool
+    productId: bool
+    quantity: bool
+    price: bool
+
+
+class OrderItemNumberAggregateInput(TypedDict, total=False):
+    """OrderItem input for aggregating numbers"""
+    id: bool
+    orderId: bool
+    productId: bool
+    quantity: bool
+    price: bool
+
+
+OrderItemAvgAggregateInput = OrderItemNumberAggregateInput
+OrderItemSumAggregateInput = OrderItemNumberAggregateInput
+
+
+OrderItemCountAggregateInput = TypedDict(
+    'OrderItemCountAggregateInput',
+    {
+        'id': bool,
+        'orderId': bool,
+        'productId': bool,
+        'quantity': bool,
+        'price': bool,
+        '_all': bool,
+    },
+    total=False,
+)
+
+OrderItemCountAggregateOutput = TypedDict(
+    'OrderItemCountAggregateOutput',
+    {
+        'id': int,
+        'orderId': int,
+        'productId': int,
+        'quantity': int,
+        'price': int,
+        '_all': int,
+    },
+    total=False,
+)
+
+
+OrderItemKeys = Literal[
+    'id',
+    'orderId',
+    'productId',
+    'quantity',
+    'price',
+    'order',
+    'product',
+]
+OrderItemScalarFieldKeys = Literal[
+    'id',
+    'orderId',
+    'productId',
+    'quantity',
+    'price',
+]
+OrderItemScalarFieldKeysT = TypeVar('OrderItemScalarFieldKeysT', bound=OrderItemScalarFieldKeys)
+
+OrderItemRelationalFieldKeys = Literal[
+        'order',
+        'product',
+    ]
 
 
 

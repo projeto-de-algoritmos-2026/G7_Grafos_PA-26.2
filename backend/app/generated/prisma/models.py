@@ -63,6 +63,7 @@ class User(bases.BaseUser):
     email: _str
     fullName: _str
     password: _str
+    role: _str
     createdAt: datetime.datetime
     updatedAt: datetime.datetime
 
@@ -165,6 +166,541 @@ class User(bases.BaseUser):
         _created_partial_types.add(name)
 
 
+class Product(bases.BaseProduct):
+    """Represents a Product record"""
+
+    id: _int
+    name: _str
+    price: _float
+    stock: _int
+    rating: Optional[_float] = None
+    createdAt: datetime.datetime
+    images: Optional[List['models.ProductImage']] = None
+    orderItems: Optional[List['models.OrderItem']] = None
+
+    # take *args and **kwargs so that other metaclasses can define arguments
+    def __init_subclass__(
+        cls,
+        *args: Any,
+        warn_subclass: Optional[bool] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init_subclass__()
+        if warn_subclass is not None:
+            warnings.warn(
+                'The `warn_subclass` argument is deprecated as it is no longer necessary and will be removed in the next release',
+                DeprecationWarning,
+                stacklevel=3,
+            )
+
+
+    @staticmethod
+    def create_partial(
+        name: str,
+        include: Optional[Iterable['types.ProductKeys']] = None,
+        exclude: Optional[Iterable['types.ProductKeys']] = None,
+        required: Optional[Iterable['types.ProductKeys']] = None,
+        optional: Optional[Iterable['types.ProductKeys']] = None,
+        relations: Optional[Mapping['types.ProductRelationalFieldKeys', str]] = None,
+        exclude_relational_fields: bool = False,
+    ) -> None:
+        if not os.environ.get('PRISMA_GENERATOR_INVOCATION'):
+            raise RuntimeError(
+                'Attempted to create a partial type outside of client generation.'
+            )
+
+        if name in _created_partial_types:
+            raise ValueError(f'Partial type "{name}" has already been created.')
+
+        if include is not None:
+            if exclude is not None:
+                raise TypeError('Exclude and include are mutually exclusive.')
+            if exclude_relational_fields is True:
+                raise TypeError('Include and exclude_relational_fields=True are mutually exclusive.')
+
+        if required and optional:
+            shared = set(required) & set(optional)
+            if shared:
+                raise ValueError(f'Cannot make the same field(s) required and optional {shared}')
+
+        if exclude_relational_fields and relations:
+            raise ValueError(
+                'exclude_relational_fields and relations are mutually exclusive'
+            )
+
+        fields: Dict['types.ProductKeys', PartialModelField] = OrderedDict()
+
+        try:
+            if include:
+                for field in include:
+                    fields[field] = _Product_fields[field].copy()
+            elif exclude:
+                for field in exclude:
+                    if field not in _Product_fields:
+                        raise KeyError(field)
+
+                fields = {
+                    key: data.copy()
+                    for key, data in _Product_fields.items()
+                    if key not in exclude
+                }
+            else:
+                fields = {
+                    key: data.copy()
+                    for key, data in _Product_fields.items()
+                }
+
+            if required:
+                for field in required:
+                    fields[field]['optional'] = False
+
+            if optional:
+                for field in optional:
+                    fields[field]['optional'] = True
+
+            if exclude_relational_fields:
+                fields = {
+                    key: data
+                    for key, data in fields.items()
+                    if key not in _Product_relational_fields
+                }
+
+            if relations:
+                for field, type_ in relations.items():
+                    if field not in _Product_relational_fields:
+                        raise errors.UnknownRelationalFieldError('Product', field)
+
+                    # TODO: this method of validating types is not ideal
+                    # as it means we cannot two create partial types that
+                    # reference each other
+                    if type_ not in _created_partial_types:
+                        raise ValueError(
+                            f'Unknown partial type: "{type_}". '
+                            f'Did you remember to generate the {type_} type before this one?'
+                        )
+
+                    # TODO: support non prisma.partials models
+                    info = fields[field]
+                    if info['is_list']:
+                        info['type'] = f'List[\'partials.{type_}\']'
+                    else:
+                        info['type'] = f'\'partials.{type_}\''
+        except KeyError as exc:
+            raise ValueError(
+                f'{exc.args[0]} is not a valid Product / {name} field.'
+            ) from None
+
+        models = partial_models_ctx.get()
+        models.append(
+            {
+                'name': name,
+                'fields': cast(Mapping[str, PartialModelField], fields),
+                'from_model': 'Product',
+            }
+        )
+        _created_partial_types.add(name)
+
+
+class ProductImage(bases.BaseProductImage):
+    """Represents a ProductImage record"""
+
+    id: _int
+    productId: _int
+    imageUrl: _str
+    order: _int
+    product: Optional['models.Product'] = None
+
+    # take *args and **kwargs so that other metaclasses can define arguments
+    def __init_subclass__(
+        cls,
+        *args: Any,
+        warn_subclass: Optional[bool] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init_subclass__()
+        if warn_subclass is not None:
+            warnings.warn(
+                'The `warn_subclass` argument is deprecated as it is no longer necessary and will be removed in the next release',
+                DeprecationWarning,
+                stacklevel=3,
+            )
+
+
+    @staticmethod
+    def create_partial(
+        name: str,
+        include: Optional[Iterable['types.ProductImageKeys']] = None,
+        exclude: Optional[Iterable['types.ProductImageKeys']] = None,
+        required: Optional[Iterable['types.ProductImageKeys']] = None,
+        optional: Optional[Iterable['types.ProductImageKeys']] = None,
+        relations: Optional[Mapping['types.ProductImageRelationalFieldKeys', str]] = None,
+        exclude_relational_fields: bool = False,
+    ) -> None:
+        if not os.environ.get('PRISMA_GENERATOR_INVOCATION'):
+            raise RuntimeError(
+                'Attempted to create a partial type outside of client generation.'
+            )
+
+        if name in _created_partial_types:
+            raise ValueError(f'Partial type "{name}" has already been created.')
+
+        if include is not None:
+            if exclude is not None:
+                raise TypeError('Exclude and include are mutually exclusive.')
+            if exclude_relational_fields is True:
+                raise TypeError('Include and exclude_relational_fields=True are mutually exclusive.')
+
+        if required and optional:
+            shared = set(required) & set(optional)
+            if shared:
+                raise ValueError(f'Cannot make the same field(s) required and optional {shared}')
+
+        if exclude_relational_fields and relations:
+            raise ValueError(
+                'exclude_relational_fields and relations are mutually exclusive'
+            )
+
+        fields: Dict['types.ProductImageKeys', PartialModelField] = OrderedDict()
+
+        try:
+            if include:
+                for field in include:
+                    fields[field] = _ProductImage_fields[field].copy()
+            elif exclude:
+                for field in exclude:
+                    if field not in _ProductImage_fields:
+                        raise KeyError(field)
+
+                fields = {
+                    key: data.copy()
+                    for key, data in _ProductImage_fields.items()
+                    if key not in exclude
+                }
+            else:
+                fields = {
+                    key: data.copy()
+                    for key, data in _ProductImage_fields.items()
+                }
+
+            if required:
+                for field in required:
+                    fields[field]['optional'] = False
+
+            if optional:
+                for field in optional:
+                    fields[field]['optional'] = True
+
+            if exclude_relational_fields:
+                fields = {
+                    key: data
+                    for key, data in fields.items()
+                    if key not in _ProductImage_relational_fields
+                }
+
+            if relations:
+                for field, type_ in relations.items():
+                    if field not in _ProductImage_relational_fields:
+                        raise errors.UnknownRelationalFieldError('ProductImage', field)
+
+                    # TODO: this method of validating types is not ideal
+                    # as it means we cannot two create partial types that
+                    # reference each other
+                    if type_ not in _created_partial_types:
+                        raise ValueError(
+                            f'Unknown partial type: "{type_}". '
+                            f'Did you remember to generate the {type_} type before this one?'
+                        )
+
+                    # TODO: support non prisma.partials models
+                    info = fields[field]
+                    if info['is_list']:
+                        info['type'] = f'List[\'partials.{type_}\']'
+                    else:
+                        info['type'] = f'\'partials.{type_}\''
+        except KeyError as exc:
+            raise ValueError(
+                f'{exc.args[0]} is not a valid ProductImage / {name} field.'
+            ) from None
+
+        models = partial_models_ctx.get()
+        models.append(
+            {
+                'name': name,
+                'fields': cast(Mapping[str, PartialModelField], fields),
+                'from_model': 'ProductImage',
+            }
+        )
+        _created_partial_types.add(name)
+
+
+class Order(bases.BaseOrder):
+    """Represents a Order record"""
+
+    id: _int
+    userId: Optional[_str] = None
+    cep: _str
+    totalPrice: _float
+    status: _str
+    createdAt: datetime.datetime
+    items: Optional[List['models.OrderItem']] = None
+
+    # take *args and **kwargs so that other metaclasses can define arguments
+    def __init_subclass__(
+        cls,
+        *args: Any,
+        warn_subclass: Optional[bool] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init_subclass__()
+        if warn_subclass is not None:
+            warnings.warn(
+                'The `warn_subclass` argument is deprecated as it is no longer necessary and will be removed in the next release',
+                DeprecationWarning,
+                stacklevel=3,
+            )
+
+
+    @staticmethod
+    def create_partial(
+        name: str,
+        include: Optional[Iterable['types.OrderKeys']] = None,
+        exclude: Optional[Iterable['types.OrderKeys']] = None,
+        required: Optional[Iterable['types.OrderKeys']] = None,
+        optional: Optional[Iterable['types.OrderKeys']] = None,
+        relations: Optional[Mapping['types.OrderRelationalFieldKeys', str]] = None,
+        exclude_relational_fields: bool = False,
+    ) -> None:
+        if not os.environ.get('PRISMA_GENERATOR_INVOCATION'):
+            raise RuntimeError(
+                'Attempted to create a partial type outside of client generation.'
+            )
+
+        if name in _created_partial_types:
+            raise ValueError(f'Partial type "{name}" has already been created.')
+
+        if include is not None:
+            if exclude is not None:
+                raise TypeError('Exclude and include are mutually exclusive.')
+            if exclude_relational_fields is True:
+                raise TypeError('Include and exclude_relational_fields=True are mutually exclusive.')
+
+        if required and optional:
+            shared = set(required) & set(optional)
+            if shared:
+                raise ValueError(f'Cannot make the same field(s) required and optional {shared}')
+
+        if exclude_relational_fields and relations:
+            raise ValueError(
+                'exclude_relational_fields and relations are mutually exclusive'
+            )
+
+        fields: Dict['types.OrderKeys', PartialModelField] = OrderedDict()
+
+        try:
+            if include:
+                for field in include:
+                    fields[field] = _Order_fields[field].copy()
+            elif exclude:
+                for field in exclude:
+                    if field not in _Order_fields:
+                        raise KeyError(field)
+
+                fields = {
+                    key: data.copy()
+                    for key, data in _Order_fields.items()
+                    if key not in exclude
+                }
+            else:
+                fields = {
+                    key: data.copy()
+                    for key, data in _Order_fields.items()
+                }
+
+            if required:
+                for field in required:
+                    fields[field]['optional'] = False
+
+            if optional:
+                for field in optional:
+                    fields[field]['optional'] = True
+
+            if exclude_relational_fields:
+                fields = {
+                    key: data
+                    for key, data in fields.items()
+                    if key not in _Order_relational_fields
+                }
+
+            if relations:
+                for field, type_ in relations.items():
+                    if field not in _Order_relational_fields:
+                        raise errors.UnknownRelationalFieldError('Order', field)
+
+                    # TODO: this method of validating types is not ideal
+                    # as it means we cannot two create partial types that
+                    # reference each other
+                    if type_ not in _created_partial_types:
+                        raise ValueError(
+                            f'Unknown partial type: "{type_}". '
+                            f'Did you remember to generate the {type_} type before this one?'
+                        )
+
+                    # TODO: support non prisma.partials models
+                    info = fields[field]
+                    if info['is_list']:
+                        info['type'] = f'List[\'partials.{type_}\']'
+                    else:
+                        info['type'] = f'\'partials.{type_}\''
+        except KeyError as exc:
+            raise ValueError(
+                f'{exc.args[0]} is not a valid Order / {name} field.'
+            ) from None
+
+        models = partial_models_ctx.get()
+        models.append(
+            {
+                'name': name,
+                'fields': cast(Mapping[str, PartialModelField], fields),
+                'from_model': 'Order',
+            }
+        )
+        _created_partial_types.add(name)
+
+
+class OrderItem(bases.BaseOrderItem):
+    """Represents a OrderItem record"""
+
+    id: _int
+    orderId: _int
+    productId: _int
+    quantity: _int
+    price: _float
+    order: Optional['models.Order'] = None
+    product: Optional['models.Product'] = None
+
+    # take *args and **kwargs so that other metaclasses can define arguments
+    def __init_subclass__(
+        cls,
+        *args: Any,
+        warn_subclass: Optional[bool] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init_subclass__()
+        if warn_subclass is not None:
+            warnings.warn(
+                'The `warn_subclass` argument is deprecated as it is no longer necessary and will be removed in the next release',
+                DeprecationWarning,
+                stacklevel=3,
+            )
+
+
+    @staticmethod
+    def create_partial(
+        name: str,
+        include: Optional[Iterable['types.OrderItemKeys']] = None,
+        exclude: Optional[Iterable['types.OrderItemKeys']] = None,
+        required: Optional[Iterable['types.OrderItemKeys']] = None,
+        optional: Optional[Iterable['types.OrderItemKeys']] = None,
+        relations: Optional[Mapping['types.OrderItemRelationalFieldKeys', str]] = None,
+        exclude_relational_fields: bool = False,
+    ) -> None:
+        if not os.environ.get('PRISMA_GENERATOR_INVOCATION'):
+            raise RuntimeError(
+                'Attempted to create a partial type outside of client generation.'
+            )
+
+        if name in _created_partial_types:
+            raise ValueError(f'Partial type "{name}" has already been created.')
+
+        if include is not None:
+            if exclude is not None:
+                raise TypeError('Exclude and include are mutually exclusive.')
+            if exclude_relational_fields is True:
+                raise TypeError('Include and exclude_relational_fields=True are mutually exclusive.')
+
+        if required and optional:
+            shared = set(required) & set(optional)
+            if shared:
+                raise ValueError(f'Cannot make the same field(s) required and optional {shared}')
+
+        if exclude_relational_fields and relations:
+            raise ValueError(
+                'exclude_relational_fields and relations are mutually exclusive'
+            )
+
+        fields: Dict['types.OrderItemKeys', PartialModelField] = OrderedDict()
+
+        try:
+            if include:
+                for field in include:
+                    fields[field] = _OrderItem_fields[field].copy()
+            elif exclude:
+                for field in exclude:
+                    if field not in _OrderItem_fields:
+                        raise KeyError(field)
+
+                fields = {
+                    key: data.copy()
+                    for key, data in _OrderItem_fields.items()
+                    if key not in exclude
+                }
+            else:
+                fields = {
+                    key: data.copy()
+                    for key, data in _OrderItem_fields.items()
+                }
+
+            if required:
+                for field in required:
+                    fields[field]['optional'] = False
+
+            if optional:
+                for field in optional:
+                    fields[field]['optional'] = True
+
+            if exclude_relational_fields:
+                fields = {
+                    key: data
+                    for key, data in fields.items()
+                    if key not in _OrderItem_relational_fields
+                }
+
+            if relations:
+                for field, type_ in relations.items():
+                    if field not in _OrderItem_relational_fields:
+                        raise errors.UnknownRelationalFieldError('OrderItem', field)
+
+                    # TODO: this method of validating types is not ideal
+                    # as it means we cannot two create partial types that
+                    # reference each other
+                    if type_ not in _created_partial_types:
+                        raise ValueError(
+                            f'Unknown partial type: "{type_}". '
+                            f'Did you remember to generate the {type_} type before this one?'
+                        )
+
+                    # TODO: support non prisma.partials models
+                    info = fields[field]
+                    if info['is_list']:
+                        info['type'] = f'List[\'partials.{type_}\']'
+                    else:
+                        info['type'] = f'\'partials.{type_}\''
+        except KeyError as exc:
+            raise ValueError(
+                f'{exc.args[0]} is not a valid OrderItem / {name} field.'
+            ) from None
+
+        models = partial_models_ctx.get()
+        models.append(
+            {
+                'name': name,
+                'fields': cast(Mapping[str, PartialModelField], fields),
+                'from_model': 'OrderItem',
+            }
+        )
+        _created_partial_types.add(name)
+
+
 
 _User_relational_fields: Set[str] = set()  # pyright: ignore[reportUnusedVariable]
 _User_fields: Dict['types.UserKeys', PartialModelField] = OrderedDict(
@@ -201,6 +737,14 @@ _User_fields: Dict['types.UserKeys', PartialModelField] = OrderedDict(
             'is_relational': False,
             'documentation': None,
         }),
+        ('role', {
+            'name': 'role',
+            'is_list': False,
+            'optional': False,
+            'type': '_str',
+            'is_relational': False,
+            'documentation': None,
+        }),
         ('createdAt', {
             'name': 'createdAt',
             'is_list': False,
@@ -220,6 +764,256 @@ _User_fields: Dict['types.UserKeys', PartialModelField] = OrderedDict(
     ],
 )
 
+_Product_relational_fields: Set[str] = {
+        'images',
+        'orderItems',
+    }
+_Product_fields: Dict['types.ProductKeys', PartialModelField] = OrderedDict(
+    [
+        ('id', {
+            'name': 'id',
+            'is_list': False,
+            'optional': False,
+            'type': '_int',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('name', {
+            'name': 'name',
+            'is_list': False,
+            'optional': False,
+            'type': '_str',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('price', {
+            'name': 'price',
+            'is_list': False,
+            'optional': False,
+            'type': '_float',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('stock', {
+            'name': 'stock',
+            'is_list': False,
+            'optional': False,
+            'type': '_int',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('rating', {
+            'name': 'rating',
+            'is_list': False,
+            'optional': True,
+            'type': '_float',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('createdAt', {
+            'name': 'createdAt',
+            'is_list': False,
+            'optional': False,
+            'type': 'datetime.datetime',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('images', {
+            'name': 'images',
+            'is_list': True,
+            'optional': True,
+            'type': 'List[\'models.ProductImage\']',
+            'is_relational': True,
+            'documentation': None,
+        }),
+        ('orderItems', {
+            'name': 'orderItems',
+            'is_list': True,
+            'optional': True,
+            'type': 'List[\'models.OrderItem\']',
+            'is_relational': True,
+            'documentation': None,
+        }),
+    ],
+)
+
+_ProductImage_relational_fields: Set[str] = {
+        'product',
+    }
+_ProductImage_fields: Dict['types.ProductImageKeys', PartialModelField] = OrderedDict(
+    [
+        ('id', {
+            'name': 'id',
+            'is_list': False,
+            'optional': False,
+            'type': '_int',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('productId', {
+            'name': 'productId',
+            'is_list': False,
+            'optional': False,
+            'type': '_int',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('imageUrl', {
+            'name': 'imageUrl',
+            'is_list': False,
+            'optional': False,
+            'type': '_str',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('order', {
+            'name': 'order',
+            'is_list': False,
+            'optional': False,
+            'type': '_int',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('product', {
+            'name': 'product',
+            'is_list': False,
+            'optional': True,
+            'type': 'models.Product',
+            'is_relational': True,
+            'documentation': None,
+        }),
+    ],
+)
+
+_Order_relational_fields: Set[str] = {
+        'items',
+    }
+_Order_fields: Dict['types.OrderKeys', PartialModelField] = OrderedDict(
+    [
+        ('id', {
+            'name': 'id',
+            'is_list': False,
+            'optional': False,
+            'type': '_int',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('userId', {
+            'name': 'userId',
+            'is_list': False,
+            'optional': True,
+            'type': '_str',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('cep', {
+            'name': 'cep',
+            'is_list': False,
+            'optional': False,
+            'type': '_str',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('totalPrice', {
+            'name': 'totalPrice',
+            'is_list': False,
+            'optional': False,
+            'type': '_float',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('status', {
+            'name': 'status',
+            'is_list': False,
+            'optional': False,
+            'type': '_str',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('createdAt', {
+            'name': 'createdAt',
+            'is_list': False,
+            'optional': False,
+            'type': 'datetime.datetime',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('items', {
+            'name': 'items',
+            'is_list': True,
+            'optional': True,
+            'type': 'List[\'models.OrderItem\']',
+            'is_relational': True,
+            'documentation': None,
+        }),
+    ],
+)
+
+_OrderItem_relational_fields: Set[str] = {
+        'order',
+        'product',
+    }
+_OrderItem_fields: Dict['types.OrderItemKeys', PartialModelField] = OrderedDict(
+    [
+        ('id', {
+            'name': 'id',
+            'is_list': False,
+            'optional': False,
+            'type': '_int',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('orderId', {
+            'name': 'orderId',
+            'is_list': False,
+            'optional': False,
+            'type': '_int',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('productId', {
+            'name': 'productId',
+            'is_list': False,
+            'optional': False,
+            'type': '_int',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('quantity', {
+            'name': 'quantity',
+            'is_list': False,
+            'optional': False,
+            'type': '_int',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('price', {
+            'name': 'price',
+            'is_list': False,
+            'optional': False,
+            'type': '_float',
+            'is_relational': False,
+            'documentation': None,
+        }),
+        ('order', {
+            'name': 'order',
+            'is_list': False,
+            'optional': True,
+            'type': 'models.Order',
+            'is_relational': True,
+            'documentation': None,
+        }),
+        ('product', {
+            'name': 'product',
+            'is_list': False,
+            'optional': True,
+            'type': 'models.Product',
+            'is_relational': True,
+            'documentation': None,
+        }),
+    ],
+)
+
 
 
 # we have to import ourselves as relation types are namespaced to models
@@ -228,3 +1022,7 @@ from . import models, actions
 
 # required to support relationships between models
 model_rebuild(User)
+model_rebuild(Product)
+model_rebuild(ProductImage)
+model_rebuild(Order)
+model_rebuild(OrderItem)

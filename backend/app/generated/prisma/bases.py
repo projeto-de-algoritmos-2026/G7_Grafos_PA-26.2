@@ -84,3 +84,43 @@ class BaseUser(_PrismaModel):
         return actions.UserActions[_PrismaModelT](client or get_client(), cls)
 
 
+class BaseProduct(_PrismaModel):
+    __prisma_model__: ClassVar[Literal['Product']] = 'Product'  # pyright: ignore[reportIncompatibleVariableOverride]
+
+    @classmethod
+    def prisma(cls: Type[_PrismaModelT], client: Optional['Prisma'] = None) -> 'actions.ProductActions[_PrismaModelT]':
+        from .client import get_client
+
+        return actions.ProductActions[_PrismaModelT](client or get_client(), cls)
+
+
+class BaseProductImage(_PrismaModel):
+    __prisma_model__: ClassVar[Literal['ProductImage']] = 'ProductImage'  # pyright: ignore[reportIncompatibleVariableOverride]
+
+    @classmethod
+    def prisma(cls: Type[_PrismaModelT], client: Optional['Prisma'] = None) -> 'actions.ProductImageActions[_PrismaModelT]':
+        from .client import get_client
+
+        return actions.ProductImageActions[_PrismaModelT](client or get_client(), cls)
+
+
+class BaseOrder(_PrismaModel):
+    __prisma_model__: ClassVar[Literal['Order']] = 'Order'  # pyright: ignore[reportIncompatibleVariableOverride]
+
+    @classmethod
+    def prisma(cls: Type[_PrismaModelT], client: Optional['Prisma'] = None) -> 'actions.OrderActions[_PrismaModelT]':
+        from .client import get_client
+
+        return actions.OrderActions[_PrismaModelT](client or get_client(), cls)
+
+
+class BaseOrderItem(_PrismaModel):
+    __prisma_model__: ClassVar[Literal['OrderItem']] = 'OrderItem'  # pyright: ignore[reportIncompatibleVariableOverride]
+
+    @classmethod
+    def prisma(cls: Type[_PrismaModelT], client: Optional['Prisma'] = None) -> 'actions.OrderItemActions[_PrismaModelT]':
+        from .client import get_client
+
+        return actions.OrderItemActions[_PrismaModelT](client or get_client(), cls)
+
+

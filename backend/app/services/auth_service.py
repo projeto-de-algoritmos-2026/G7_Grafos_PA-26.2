@@ -30,7 +30,8 @@ class AuthService:
                 user=UserData(
                     id="mock-user-id",
                     email=str(payload.email),
-                    fullName=payload.fullName
+                    fullName=payload.fullName,
+                    role="cliente"
                 )
             )
 
@@ -61,7 +62,8 @@ class AuthService:
                 user=UserData(
                     id=str(user.id),
                     email=str(user.email),
-                    fullName=str(user.fullName)
+                    fullName=str(user.fullName),
+                    role=str(user.role)
                 )
             )
 
@@ -85,7 +87,8 @@ class AuthService:
                 user=UserData(
                     id="mock-user-id",
                     email=str(payload.email),
-                    fullName="Usuário Demonstração"
+                    fullName="Usuário Demonstração",
+                    role="cliente"
                 ),
                 access_token="mock-token-xyz"
             )
@@ -110,7 +113,8 @@ class AuthService:
                 user=UserData(
                     id=str(user.id),
                     email=str(user.email),
-                    fullName=str(user.fullName)
+                    fullName=str(user.fullName),
+                    role=str(user.role)
                 ),
                 access_token=f"prisma-token-{user.id}"
             )

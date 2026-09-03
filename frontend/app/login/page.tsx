@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { GiFullMotorcycleHelmet } from 'react-icons/gi';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,10 +41,17 @@ export default function LoginPage() {
         throw new Error(data.detail || data.message || 'Erro ao realizar login.');
       }
 
+      if (data.user && data.user.role !== 'cliente') {
+        throw new Error('Acesso restrito para clientes. Entregadores devem acessar a página de parceiros.');
+      }
+
       setSuccess('Login efetuado com sucesso! Redirecionando...');
 
       if (data.access_token) {
         localStorage.setItem('stockio_token', data.access_token);
+      }
+      if (data.user && data.user.role) {
+        localStorage.setItem('stockio_role', data.user.role);
       }
       setTimeout(() => {
         router.push('/');
@@ -61,12 +69,12 @@ export default function LoginPage() {
       <header className="lg:hidden pt-6 px-8 sm:pt-7 sm:px-12 z-20 shrink-0 flex justify-center">
         <div className="inline-block transition-transform duration-300 hover:scale-[1.03] cursor-default select-none">
           <Image
-            src="/Logo.svg"
+            src="/LogoPreta.svg"
             alt="STOCK.IO"
             width={320}
             height={90}
             priority
-            className="h-auto w-60 sm:w-72 object-contain"
+            className="h-auto w-48 sm:w-56 object-contain"
           />
         </div>
       </header>
@@ -78,12 +86,12 @@ export default function LoginPage() {
           <div className="w-full flex justify-center pointer-events-auto -translate-x-6 lg:-translate-x-8 xl:-translate-x-10">
             <div className="inline-block transition-transform duration-300 hover:scale-[1.03] cursor-default select-none">
               <Image
-                src="/Logo.svg"
+                src="/LogoPreta.svg"
                 alt="STOCK.IO"
                 width={420}
                 height={120}
                 priority
-                className="h-auto w-72 lg:w-[350px] xl:w-[390px] object-contain drop-shadow-xs"
+                className="h-auto w-56 lg:w-[280px] xl:w-[320px] object-contain drop-shadow-xs"
               />
             </div>
           </div>
@@ -100,10 +108,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="w-full lg:w-[654px] shrink-0 flex justify-center lg:justify-end h-full max-h-[90vh] items-end">
-          <div className="w-full max-w-[654px] lg:w-[654px] bg-[#17181A] text-white rounded-t-[36px] sm:rounded-t-[44px] rounded-b-none px-8 sm:px-14 lg:px-16 pt-[112px] pb-8 sm:pb-10 shadow-2xl h-full flex flex-col justify-start overflow-hidden">
+        <div className="w-full lg:w-[520px] shrink-0 flex justify-center lg:justify-end h-full max-h-[90vh] items-end">
+          <div className="w-full max-w-[520px] lg:w-[520px] bg-[#17181A] text-white rounded-t-[36px] sm:rounded-t-[44px] rounded-b-none px-8 sm:px-14 lg:px-16 pt-[72px] pb-8 sm:pb-10 shadow-2xl h-full flex flex-col justify-start overflow-hidden">
 
-            <h1 className="text-[#F6F3E4] text-2xl sm:text-[44px] font-black tracking-wide text-center uppercase leading-tight m-0 mb-[60px]">
+            <h1 className="text-[#F6F3E4] text-2xl sm:text-[44px] font-black tracking-wide text-center uppercase leading-tight m-0 mb-[40px]">
               BEM VINDO DE VOLTA!
             </h1>
 
@@ -192,6 +200,16 @@ export default function LoginPage() {
                 className="text-[#6032F6] hover:text-[#784BF8] font-bold hover:underline transition-colors ml-1"
               >
                 Cadastre-se
+              </Link>
+            </div>
+
+            <div className="mt-4 flex justify-center">
+              <Link
+                href="/entregador"
+                className="flex items-center gap-2 px-6 py-3 rounded-full border border-zinc-700 text-zinc-300 hover:text-white hover:border-white hover:bg-zinc-800 transition-all font-semibold text-sm"
+              >
+                <GiFullMotorcycleHelmet className="text-lg" />
+                Entregador parceiro?
               </Link>
             </div>
           </div>

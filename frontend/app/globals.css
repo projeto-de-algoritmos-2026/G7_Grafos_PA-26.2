@@ -1,25 +1,62 @@
 @import "tailwindcss";
+@import "@fontsource/inter";
+
 
 :root {
-  --background: #f5f2eb;
-  --foreground: #17181a;
+    --color-cinza: #e0e0e0;
+    --color-back: #F6F3E4;
+    --color-text: #000000;
+    --color-card: #ffffff;
+    --color-selectDrop: orange;
+    --color-whiteText: white;
+
+    --color-icons: #FF9933;
+    --color-cinzaclaro: #f9fafb;
+
+    --color-cinzaplaceholder: #7F7F7F;
+    --color-modalinfo: #ffffff;
+    --color-bgmodal: #e0e0e0;
+
+    --color-black: #131313;
+    --color-themeBut: #ffa500;
+
+    --font-mono: var(--font-geist-mono);
+    --font-sans: "Outfit", ui-sans-serif, system-ui;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --color-cinza: var(--color-cinza);
+    --color-back: var(--color-back);
+    --color-text: var(--color-text);
+    --color-selectDrop: var(--color-selcetDrop);
+    --color-whiteText: var(--color-whiteText);
+
+    --color-icons: var(--color-icons);
+    --color-cinzaclaro: var(--color-cinzaclaro);
+
+    --color-cinzaplaceholder: var(--color-cinzaplaceholder);
+    --color-modalinfo: var(--color-modalinfo);
+    --color-bgmodal: var(--color-bgmodal);
+
+    --color-card: var(--color-card);
+    --color-black: var(--color-black);
+    --color-themeBut: var(--color-themeBut);
+
+    --font-mono: var(--font-mono);
+    --font-sans: var(--font-sans);
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
 }
 
+.scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
 
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}

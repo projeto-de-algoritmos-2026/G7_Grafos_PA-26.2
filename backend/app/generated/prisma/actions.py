@@ -592,11 +592,11 @@ class UserActions(Generic[_PrismaModelT]):
         Example
         -------
         ```py
-        # find the second User record ordered by the createdAt field
+        # find the second User record ordered by the role field
         user = await User.prisma().find_first_or_raise(
             skip=1,
             order={
-                'createdAt': 'desc',
+                'role': 'desc',
             },
         )
         ```
@@ -766,7 +766,7 @@ class UserActions(Generic[_PrismaModelT]):
         # update all User records
         total = await User.prisma().update_many(
             data={
-                'updatedAt': datetime.datetime.utcnow()
+                'createdAt': datetime.datetime.utcnow()
             },
             where={}
         )
@@ -830,7 +830,7 @@ class UserActions(Generic[_PrismaModelT]):
         results = await User.prisma().count(
             select={
                 '_all': True,
-                'id': True,
+                'updatedAt': True,
             },
         )
         ```
@@ -897,7 +897,7 @@ class UserActions(Generic[_PrismaModelT]):
         results = await User.prisma().count(
             select={
                 '_all': True,
-                'email': True,
+                'id': True,
             },
         )
         ```
@@ -1037,10 +1037,4132 @@ class UserActions(Generic[_PrismaModelT]):
         Example
         -------
         ```py
-        # group User records by fullName values
+        # group User records by email values
         # and count how many records are in each group
         results = await User.prisma().group_by(
-            ['fullName'],
+            ['email'],
+            count=True,
+        )
+        ```
+        """
+        if order is None:
+            if take is not None:
+                raise TypeError('Missing argument: \'order\' which is required when \'take\' is present')
+
+            if skip is not None:
+                raise TypeError('Missing argument: \'order\' which is required when \'skip\' is present')
+
+        root_selection: List[str] = [*by]
+        if avg is not None:
+            root_selection.append(_select_fields('_avg', avg))
+
+        if min is not None:
+            root_selection.append(_select_fields('_min', min))
+
+        if sum is not None:
+            root_selection.append(_select_fields('_sum', sum))
+
+        if max is not None:
+            root_selection.append(_select_fields('_max', max))
+
+        if count is not None:
+            if count is True:
+                root_selection.append('_count { _all }')
+            elif isinstance(count, dict):
+                root_selection.append(_select_fields('_count', count))
+
+        resp = await self._client._execute(
+            method='group_by',
+            model=self._model,
+            arguments={
+                'by': by,
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'having': having,
+                'orderBy': order,
+            },
+            root_selection=root_selection,
+        )
+        return resp['data']['result']  # type: ignore[no-any-return]
+
+
+class ProductActions(Generic[_PrismaModelT]):
+    __slots__ = (
+        '_client',
+        '_model',
+    )
+
+    def __init__(self, client: Prisma, model: Type[_PrismaModelT]) -> None:
+        self._client = client
+        self._model = model
+
+    async def query_raw(
+        self,
+        query: LiteralString,
+        *args: Any,
+    ) -> List[_PrismaModelT]:
+        """Execute a raw SQL query
+
+        Parameters
+        ----------
+        query
+            The raw SQL query string to be executed
+        *args
+            Parameters to be passed to the SQL query, these MUST be used over
+            string formatting to avoid an SQL injection vulnerability
+
+        Returns
+        -------
+        List[prisma.models.Product]
+            The records returned by the SQL query
+
+        Raises
+        ------
+        prisma_errors.RawQueryError
+            This could be due to invalid syntax, mismatched number of parameters or any other error
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        users = await Product.prisma().query_raw(
+            'SELECT * FROM Product WHERE id = $1',
+            1644289366,
+        )
+        ```
+        """
+        return await self._client.query_raw(query, *args, model=self._model)
+
+    async def query_first(
+        self,
+        query: LiteralString,
+        *args: Any,
+    ) -> Optional[_PrismaModelT]:
+        """Execute a raw SQL query, returning the first result
+
+        Parameters
+        ----------
+        query
+            The raw SQL query string to be executed
+        *args
+            Parameters to be passed to the SQL query, these MUST be used over
+            string formatting to avoid an SQL injection vulnerability
+
+        Returns
+        -------
+        prisma.models.Product
+            The first record returned by the SQL query
+        None
+            The raw SQL query did not return any records
+
+        Raises
+        ------
+        prisma_errors.RawQueryError
+            This could be due to invalid syntax, mismatched number of parameters or any other error
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        user = await Product.prisma().query_first(
+            'SELECT * FROM Product WHERE name = $1',
+            'bdiicjafbj',
+        )
+        ```
+        """
+        return await self._client.query_first(query, *args, model=self._model)
+
+    async def create(
+        self,
+        data: types.ProductCreateInput,
+        include: Optional[types.ProductInclude] = None
+    ) -> _PrismaModelT:
+        """Create a new Product record.
+
+        Parameters
+        ----------
+        data
+            Product record data
+        include
+            Specifies which relations should be loaded on the returned Product model
+
+        Returns
+        -------
+        prisma.models.Product
+            The created Product record
+
+        Raises
+        ------
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # create a Product record from just the required fields
+        product = await Product.prisma().create(
+            data={
+                # data to create a Product record
+                'name': 'bgehebiafc',
+                'price': 1675546029.176727,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='create',
+            model=self._model,
+            arguments={
+                'data': data,
+                'include': include,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def create_many(
+        self,
+        data: List[types.ProductCreateWithoutRelationsInput],
+        *,
+        skip_duplicates: Optional[bool] = None,
+    ) -> int:
+        """Create multiple Product records at once.
+
+        This function is *not* available when using SQLite.
+
+        Parameters
+        ----------
+        data
+            List of Product record data
+        skip_duplicates
+            Boolean flag for ignoring unique constraint errors
+
+        Returns
+        -------
+        int
+            The total number of records created
+
+        Raises
+        ------
+        prisma.errors.UnsupportedDatabaseError
+            Attempting to query when using SQLite
+        prisma.errors.UniqueViolationError
+            A unique constraint check has failed, these can be ignored with the `skip_duplicates` argument
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        total = await Product.prisma().create_many(
+            data=[
+                {
+                    # data to create a Product record
+                    'name': 'dcgchcbbf',
+                    'price': 1343201072.67578,
+                },
+                {
+                    # data to create a Product record
+                    'name': 'heejgedji',
+                    'price': 1969681615.111617,
+                },
+            ],
+            skip_duplicates=True,
+        )
+        ```
+        """
+        if skip_duplicates and self._client._active_provider in CREATE_MANY_SKIP_DUPLICATES_UNSUPPORTED:
+            raise errors.UnsupportedDatabaseError(self._client._active_provider, 'create_many_skip_duplicates')
+
+        resp = await self._client._execute(
+            method='create_many',
+            model=self._model,
+            arguments={
+                'data': data,
+                'skipDuplicates': skip_duplicates,
+            },
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    async def delete(
+        self,
+        where: types.ProductWhereUniqueInput,
+        include: Optional[types.ProductInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Delete a single Product record.
+
+        Parameters
+        ----------
+        where
+            Product filter to select the record to be deleted, must be unique
+        include
+            Specifies which relations should be loaded on the returned Product model
+
+        Returns
+        -------
+        prisma.models.Product
+            The deleted Product record
+        None
+            Could not find a record to delete
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        product = await Product.prisma().delete(
+            where={
+                'id': 861472101,
+            },
+        )
+        ```
+        """
+        try:
+            resp = await self._client._execute(
+                method='delete',
+                model=self._model,
+                arguments={
+                    'where': where,
+                    'include': include,
+                },
+            )
+        except errors.RecordNotFoundError:
+            return None
+
+        return model_parse(self._model, resp['data']['result'])
+
+    async def find_unique(
+        self,
+        where: types.ProductWhereUniqueInput,
+        include: Optional[types.ProductInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Find a unique Product record.
+
+        Parameters
+        ----------
+        where
+            Product filter to find the record, must be unique
+        include
+            Specifies which relations should be loaded on the returned Product model
+
+        Returns
+        -------
+        prisma.models.Product
+            The found Product record
+        None
+            No record matching the given input could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        product = await Product.prisma().find_unique(
+            where={
+                'id': 1303003706,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_unique',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+        result = resp['data']['result']
+        if result is None:
+            return None
+        return model_parse(self._model, result)
+
+    async def find_unique_or_raise(
+        self,
+        where: types.ProductWhereUniqueInput,
+        include: Optional[types.ProductInclude] = None
+    ) -> _PrismaModelT:
+        """Find a unique Product record. Raises `RecordNotFoundError` if no record is found.
+
+        Parameters
+        ----------
+        where
+            Product filter to find the record, must be unique
+        include
+            Specifies which relations should be loaded on the returned Product model
+
+        Returns
+        -------
+        prisma.models.Product
+            The found Product record
+
+        Raises
+        ------
+        prisma.errors.RecordNotFoundError
+            No record was found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        product = await Product.prisma().find_unique_or_raise(
+            where={
+                'id': 1686638315,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_unique_or_raise',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def find_many(
+        self,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductWhereInput] = None,
+        cursor: Optional[types.ProductWhereUniqueInput] = None,
+        include: Optional[types.ProductInclude] = None,
+        order: Optional[Union[types.ProductOrderByInput, List[types.ProductOrderByInput]]] = None,
+        distinct: Optional[List[types.ProductScalarFieldKeys]] = None,
+    ) -> List[_PrismaModelT]:
+        """Find multiple Product records.
+
+        An empty list is returned if no records could be found.
+
+        Parameters
+        ----------
+        take
+            Limit the maximum number of Product records returned
+        skip
+            Ignore the first N results
+        where
+            Product filter to select records
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned Product model
+        order
+            Order the returned Product records by any field
+        distinct
+            Filter Product records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        List[prisma.models.Product]
+            The list of all Product records that could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the first 10 Product records
+        products = await Product.prisma().find_many(take=10)
+
+        # find the first 5 Product records ordered by the price field
+        products = await Product.prisma().find_many(
+            take=5,
+            order={
+                'price': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_many',
+            model=self._model,
+            arguments={
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        return [model_parse(self._model, r) for r in resp['data']['result']]
+
+    async def find_first(
+        self,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductWhereInput] = None,
+        cursor: Optional[types.ProductWhereUniqueInput] = None,
+        include: Optional[types.ProductInclude] = None,
+        order: Optional[Union[types.ProductOrderByInput, List[types.ProductOrderByInput]]] = None,
+        distinct: Optional[List[types.ProductScalarFieldKeys]] = None,
+    ) -> Optional[_PrismaModelT]:
+        """Find a single Product record.
+
+        Parameters
+        ----------
+        skip
+            Ignore the first N records
+        where
+            Product filter to select the record
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned Product model
+        order
+            Order the returned Product records by any field
+        distinct
+            Filter Product records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        prisma.models.Product
+            The first Product record found, matching the given arguments
+        None
+            No record could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the second Product record ordered by the stock field
+        product = await Product.prisma().find_first(
+            skip=1,
+            order={
+                'stock': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_first',
+            model=self._model,
+            arguments={
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        result = resp['data']['result']
+        if result is None:
+            return None
+
+        return model_parse(self._model, result)
+
+    async def find_first_or_raise(
+        self,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductWhereInput] = None,
+        cursor: Optional[types.ProductWhereUniqueInput] = None,
+        include: Optional[types.ProductInclude] = None,
+        order: Optional[Union[types.ProductOrderByInput, List[types.ProductOrderByInput]]] = None,
+        distinct: Optional[List[types.ProductScalarFieldKeys]] = None,
+    ) -> _PrismaModelT:
+        """Find a single Product record. Raises `RecordNotFoundError` if no record was found.
+
+        Parameters
+        ----------
+        skip
+            Ignore the first N records
+        where
+            Product filter to select the record
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned Product model
+        order
+            Order the returned Product records by any field
+        distinct
+            Filter Product records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        prisma.models.Product
+            The first Product record found, matching the given arguments
+
+        Raises
+        ------
+        prisma.errors.RecordNotFoundError
+            No record was found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the second Product record ordered by the rating field
+        product = await Product.prisma().find_first_or_raise(
+            skip=1,
+            order={
+                'rating': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_first_or_raise',
+            model=self._model,
+            arguments={
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def update(
+        self,
+        data: types.ProductUpdateInput,
+        where: types.ProductWhereUniqueInput,
+        include: Optional[types.ProductInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Update a single Product record.
+
+        Parameters
+        ----------
+        data
+            Product record data specifying what to update
+        where
+            Product filter to select the unique record to create / update
+        include
+            Specifies which relations should be loaded on the returned Product model
+
+        Returns
+        -------
+        prisma.models.Product
+            The updated Product record
+        None
+            No record could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        product = await Product.prisma().update(
+            where={
+                'id': 2000430152,
+            },
+            data={
+                # data to update the Product record to
+            },
+        )
+        ```
+        """
+        try:
+            resp = await self._client._execute(
+                method='update',
+                model=self._model,
+                arguments={
+                    'data': data,
+                    'where': where,
+                    'include': include,
+                },
+            )
+        except errors.RecordNotFoundError:
+            return None
+
+        return model_parse(self._model, resp['data']['result'])
+
+    async def upsert(
+        self,
+        where: types.ProductWhereUniqueInput,
+        data: types.ProductUpsertInput,
+        include: Optional[types.ProductInclude] = None,
+    ) -> _PrismaModelT:
+        """Updates an existing record or create a new one
+
+        Parameters
+        ----------
+        where
+            Product filter to select the unique record to create / update
+        data
+            Data specifying what fields to set on create and update
+        include
+            Specifies which relations should be loaded on the returned Product model
+
+        Returns
+        -------
+        prisma.models.Product
+            The created or updated Product record
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        product = await Product.prisma().upsert(
+            where={
+                'id': 1868141281,
+            },
+            data={
+                'create': {
+                    'id': 1868141281,
+                    'name': 'heejgedji',
+                    'price': 1969681615.111617,
+                },
+                'update': {
+                    'name': 'heejgedji',
+                    'price': 1969681615.111617,
+                },
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='upsert',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+                'create': data.get('create'),
+                'update': data.get('update'),
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def update_many(
+        self,
+        data: types.ProductUpdateManyMutationInput,
+        where: types.ProductWhereInput,
+    ) -> int:
+        """Update multiple Product records
+
+        Parameters
+        ----------
+        data
+            Product data to update the selected Product records to
+        where
+            Filter to select the Product records to update
+
+        Returns
+        -------
+        int
+            The total number of Product records that were updated
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # update all Product records
+        total = await Product.prisma().update_many(
+            data={
+                'createdAt': datetime.datetime.utcnow()
+            },
+            where={}
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='update_many',
+            model=self._model,
+            arguments={'data': data, 'where': where,},
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    @overload
+    async def count(
+        self,
+        select: None = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductWhereInput] = None,
+        cursor: Optional[types.ProductWhereUniqueInput] = None,
+    ) -> int:
+        """Count the number of Product records present in the database
+
+        Parameters
+        ----------
+        select
+            Select the Product fields to be counted
+        take
+            Limit the maximum result
+        skip
+            Ignore the first N records
+        where
+            Product filter to find records
+        cursor
+            Specifies the position in the list to start counting results from, (typically an ID field)
+        order
+            This parameter is deprecated and will be removed in a future release
+
+        Returns
+        -------
+        int
+            The total number of records found, returned if `select` is not given
+
+        prisma.types.ProductCountAggregateOutput
+            Data returned when `select` is used, the fields present in this dictionary will
+            match the fields passed in the `select` argument
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # total: int
+        total = await Product.prisma().count()
+
+        # results: prisma.types.ProductCountAggregateOutput
+        results = await Product.prisma().count(
+            select={
+                '_all': True,
+                'id': True,
+            },
+        )
+        ```
+        """
+
+
+    @overload
+    async def count(
+        self,
+        select: types.ProductCountAggregateInput,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductWhereInput] = None,
+        cursor: Optional[types.ProductWhereUniqueInput] = None,
+    ) -> types.ProductCountAggregateOutput:
+        ...
+
+    async def count(
+        self,
+        select: Optional[types.ProductCountAggregateInput] = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductWhereInput] = None,
+        cursor: Optional[types.ProductWhereUniqueInput] = None,
+    ) -> Union[int, types.ProductCountAggregateOutput]:
+        """Count the number of Product records present in the database
+
+        Parameters
+        ----------
+        select
+            Select the Product fields to be counted
+        take
+            Limit the maximum result
+        skip
+            Ignore the first N records
+        where
+            Product filter to find records
+        cursor
+            Specifies the position in the list to start counting results from, (typically an ID field)
+        order
+            This parameter is deprecated and will be removed in a future release
+
+        Returns
+        -------
+        int
+            The total number of records found, returned if `select` is not given
+
+        prisma.types.ProductCountAggregateOutput
+            Data returned when `select` is used, the fields present in this dictionary will
+            match the fields passed in the `select` argument
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # total: int
+        total = await Product.prisma().count()
+
+        # results: prisma.types.ProductCountAggregateOutput
+        results = await Product.prisma().count(
+            select={
+                '_all': True,
+                'name': True,
+            },
+        )
+        ```
+        """
+
+        # TODO: this selection building should be moved to the QueryBuilder
+        #
+        # note the distinction between checking for `not select` here and `select is None`
+        # later is to handle the case that the given select dictionary is empty, this
+        # is a limitation of our types.
+        if not select:
+            root_selection = ['_count { _all }']
+        else:
+
+            root_selection = [
+                '_count {{ {0} }}'.format(' '.join(k for k, v in select.items() if v is True))
+            ]
+
+        resp = await self._client._execute(
+            method='count',
+            model=self._model,
+            arguments={
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'cursor': cursor,
+            },
+            root_selection=root_selection,
+        )
+
+        if select is None:
+            return cast(int, resp['data']['result']['_count']['_all'])
+        else:
+            return cast(types.ProductCountAggregateOutput, resp['data']['result']['_count'])
+
+    async def delete_many(
+        self,
+        where: Optional[types.ProductWhereInput] = None
+    ) -> int:
+        """Delete multiple Product records.
+
+        Parameters
+        ----------
+        where
+            Optional Product filter to find the records to be deleted
+
+        Returns
+        -------
+        int
+            The total number of Product records that were deleted
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # delete all Product records
+        total = await Product.prisma().delete_many()
+        ```
+        """
+        resp = await self._client._execute(
+            method='delete_many',
+            model=self._model,
+            arguments={'where': where},
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    # TODO: make this easier to work with safely, currently output fields are typed as
+    #       not required, we should refactor the return type
+    # TODO: consider returning a Dict where the keys are a Tuple of the `by` selection
+    # TODO: statically type that the order argument is required when take or skip are present
+    async def group_by(
+        self,
+        by: List['types.ProductScalarFieldKeys'],
+        *,
+        where: Optional['types.ProductWhereInput'] = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        avg: Optional['types.ProductAvgAggregateInput'] = None,
+        sum: Optional['types.ProductSumAggregateInput'] = None,
+        min: Optional['types.ProductMinAggregateInput'] = None,
+        max: Optional['types.ProductMaxAggregateInput'] = None,
+        having: Optional['types.ProductScalarWhereWithAggregatesInput'] = None,
+        count: Optional[Union[bool, 'types.ProductCountAggregateInput']] = None,
+        order: Optional[Union[Mapping['types.ProductScalarFieldKeys', 'types.SortOrder'], List[Mapping['types.ProductScalarFieldKeys', 'types.SortOrder']]]] = None,
+    ) -> List['types.ProductGroupByOutput']:
+        """Group Product records by one or more field values and perform aggregations
+        each group such as finding the average.
+
+        Parameters
+        ----------
+        by
+            List of scalar Product fields to group records by
+        where
+            Product filter to select records
+        take
+            Limit the maximum number of Product records returned
+        skip
+            Ignore the first N records
+        avg
+            Adds the average of all values of the specified fields to the `_avg` field
+            in the returned data.
+        sum
+            Adds the sum of all values of the specified fields to the `_sum` field
+            in the returned data.
+        min
+            Adds the smallest available value for the specified fields to the `_min` field
+            in the returned data.
+        max
+            Adds the largest available value for the specified fields to the `_max` field
+            in the returned data.
+        count
+            Adds a count of non-fields to the `_count` field in the returned data.
+        having
+            Allows you to filter groups by an aggregate value - for example only return
+            groups having an average age less than 50.
+        order
+            Lets you order the returned list by any property that is also present in `by`.
+            Only **one** field is allowed at a time.
+
+        Returns
+        -------
+        List[prisma.types.ProductGroupByOutput]
+            A list of dictionaries representing the Product record,
+            this will also have additional fields present if aggregation arguments
+            are used (see the above parameters)
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # group Product records by price values
+        # and count how many records are in each group
+        results = await Product.prisma().group_by(
+            ['price'],
+            count=True,
+        )
+        ```
+        """
+        if order is None:
+            if take is not None:
+                raise TypeError('Missing argument: \'order\' which is required when \'take\' is present')
+
+            if skip is not None:
+                raise TypeError('Missing argument: \'order\' which is required when \'skip\' is present')
+
+        root_selection: List[str] = [*by]
+        if avg is not None:
+            root_selection.append(_select_fields('_avg', avg))
+
+        if min is not None:
+            root_selection.append(_select_fields('_min', min))
+
+        if sum is not None:
+            root_selection.append(_select_fields('_sum', sum))
+
+        if max is not None:
+            root_selection.append(_select_fields('_max', max))
+
+        if count is not None:
+            if count is True:
+                root_selection.append('_count { _all }')
+            elif isinstance(count, dict):
+                root_selection.append(_select_fields('_count', count))
+
+        resp = await self._client._execute(
+            method='group_by',
+            model=self._model,
+            arguments={
+                'by': by,
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'having': having,
+                'orderBy': order,
+            },
+            root_selection=root_selection,
+        )
+        return resp['data']['result']  # type: ignore[no-any-return]
+
+
+class ProductImageActions(Generic[_PrismaModelT]):
+    __slots__ = (
+        '_client',
+        '_model',
+    )
+
+    def __init__(self, client: Prisma, model: Type[_PrismaModelT]) -> None:
+        self._client = client
+        self._model = model
+
+    async def query_raw(
+        self,
+        query: LiteralString,
+        *args: Any,
+    ) -> List[_PrismaModelT]:
+        """Execute a raw SQL query
+
+        Parameters
+        ----------
+        query
+            The raw SQL query string to be executed
+        *args
+            Parameters to be passed to the SQL query, these MUST be used over
+            string formatting to avoid an SQL injection vulnerability
+
+        Returns
+        -------
+        List[prisma.models.ProductImage]
+            The records returned by the SQL query
+
+        Raises
+        ------
+        prisma_errors.RawQueryError
+            This could be due to invalid syntax, mismatched number of parameters or any other error
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        users = await ProductImage.prisma().query_raw(
+            'SELECT * FROM ProductImage WHERE id = $1',
+            1860847622,
+        )
+        ```
+        """
+        return await self._client.query_raw(query, *args, model=self._model)
+
+    async def query_first(
+        self,
+        query: LiteralString,
+        *args: Any,
+    ) -> Optional[_PrismaModelT]:
+        """Execute a raw SQL query, returning the first result
+
+        Parameters
+        ----------
+        query
+            The raw SQL query string to be executed
+        *args
+            Parameters to be passed to the SQL query, these MUST be used over
+            string formatting to avoid an SQL injection vulnerability
+
+        Returns
+        -------
+        prisma.models.ProductImage
+            The first record returned by the SQL query
+        None
+            The raw SQL query did not return any records
+
+        Raises
+        ------
+        prisma_errors.RawQueryError
+            This could be due to invalid syntax, mismatched number of parameters or any other error
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        user = await ProductImage.prisma().query_first(
+            'SELECT * FROM ProductImage WHERE productId = $1',
+            1448521415,
+        )
+        ```
+        """
+        return await self._client.query_first(query, *args, model=self._model)
+
+    async def create(
+        self,
+        data: types.ProductImageCreateInput,
+        include: Optional[types.ProductImageInclude] = None
+    ) -> _PrismaModelT:
+        """Create a new ProductImage record.
+
+        Parameters
+        ----------
+        data
+            ProductImage record data
+        include
+            Specifies which relations should be loaded on the returned ProductImage model
+
+        Returns
+        -------
+        prisma.models.ProductImage
+            The created ProductImage record
+
+        Raises
+        ------
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # create a ProductImage record from just the required fields
+        productimage = await ProductImage.prisma().create(
+            data={
+                # data to create a ProductImage record
+                'productId': 1628650740,
+                'imageUrl': 'bcejgaggif',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='create',
+            model=self._model,
+            arguments={
+                'data': data,
+                'include': include,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def create_many(
+        self,
+        data: List[types.ProductImageCreateWithoutRelationsInput],
+        *,
+        skip_duplicates: Optional[bool] = None,
+    ) -> int:
+        """Create multiple ProductImage records at once.
+
+        This function is *not* available when using SQLite.
+
+        Parameters
+        ----------
+        data
+            List of ProductImage record data
+        skip_duplicates
+            Boolean flag for ignoring unique constraint errors
+
+        Returns
+        -------
+        int
+            The total number of records created
+
+        Raises
+        ------
+        prisma.errors.UnsupportedDatabaseError
+            Attempting to query when using SQLite
+        prisma.errors.UniqueViolationError
+            A unique constraint check has failed, these can be ignored with the `skip_duplicates` argument
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        total = await ProductImage.prisma().create_many(
+            data=[
+                {
+                    # data to create a ProductImage record
+                    'productId': 835903122,
+                    'imageUrl': 'hgdhbjhhj',
+                },
+                {
+                    # data to create a ProductImage record
+                    'productId': 429995104,
+                    'imageUrl': 'bhhfibbigf',
+                },
+            ],
+            skip_duplicates=True,
+        )
+        ```
+        """
+        if skip_duplicates and self._client._active_provider in CREATE_MANY_SKIP_DUPLICATES_UNSUPPORTED:
+            raise errors.UnsupportedDatabaseError(self._client._active_provider, 'create_many_skip_duplicates')
+
+        resp = await self._client._execute(
+            method='create_many',
+            model=self._model,
+            arguments={
+                'data': data,
+                'skipDuplicates': skip_duplicates,
+            },
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    async def delete(
+        self,
+        where: types.ProductImageWhereUniqueInput,
+        include: Optional[types.ProductImageInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Delete a single ProductImage record.
+
+        Parameters
+        ----------
+        where
+            ProductImage filter to select the record to be deleted, must be unique
+        include
+            Specifies which relations should be loaded on the returned ProductImage model
+
+        Returns
+        -------
+        prisma.models.ProductImage
+            The deleted ProductImage record
+        None
+            Could not find a record to delete
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        productimage = await ProductImage.prisma().delete(
+            where={
+                'id': 893145566,
+            },
+        )
+        ```
+        """
+        try:
+            resp = await self._client._execute(
+                method='delete',
+                model=self._model,
+                arguments={
+                    'where': where,
+                    'include': include,
+                },
+            )
+        except errors.RecordNotFoundError:
+            return None
+
+        return model_parse(self._model, resp['data']['result'])
+
+    async def find_unique(
+        self,
+        where: types.ProductImageWhereUniqueInput,
+        include: Optional[types.ProductImageInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Find a unique ProductImage record.
+
+        Parameters
+        ----------
+        where
+            ProductImage filter to find the record, must be unique
+        include
+            Specifies which relations should be loaded on the returned ProductImage model
+
+        Returns
+        -------
+        prisma.models.ProductImage
+            The found ProductImage record
+        None
+            No record matching the given input could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        productimage = await ProductImage.prisma().find_unique(
+            where={
+                'id': 995405759,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_unique',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+        result = resp['data']['result']
+        if result is None:
+            return None
+        return model_parse(self._model, result)
+
+    async def find_unique_or_raise(
+        self,
+        where: types.ProductImageWhereUniqueInput,
+        include: Optional[types.ProductImageInclude] = None
+    ) -> _PrismaModelT:
+        """Find a unique ProductImage record. Raises `RecordNotFoundError` if no record is found.
+
+        Parameters
+        ----------
+        where
+            ProductImage filter to find the record, must be unique
+        include
+            Specifies which relations should be loaded on the returned ProductImage model
+
+        Returns
+        -------
+        prisma.models.ProductImage
+            The found ProductImage record
+
+        Raises
+        ------
+        prisma.errors.RecordNotFoundError
+            No record was found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        productimage = await ProductImage.prisma().find_unique_or_raise(
+            where={
+                'id': 2102736524,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_unique_or_raise',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def find_many(
+        self,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductImageWhereInput] = None,
+        cursor: Optional[types.ProductImageWhereUniqueInput] = None,
+        include: Optional[types.ProductImageInclude] = None,
+        order: Optional[Union[types.ProductImageOrderByInput, List[types.ProductImageOrderByInput]]] = None,
+        distinct: Optional[List[types.ProductImageScalarFieldKeys]] = None,
+    ) -> List[_PrismaModelT]:
+        """Find multiple ProductImage records.
+
+        An empty list is returned if no records could be found.
+
+        Parameters
+        ----------
+        take
+            Limit the maximum number of ProductImage records returned
+        skip
+            Ignore the first N results
+        where
+            ProductImage filter to select records
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned ProductImage model
+        order
+            Order the returned ProductImage records by any field
+        distinct
+            Filter ProductImage records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        List[prisma.models.ProductImage]
+            The list of all ProductImage records that could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the first 10 ProductImage records
+        productimages = await ProductImage.prisma().find_many(take=10)
+
+        # find the first 5 ProductImage records ordered by the imageUrl field
+        productimages = await ProductImage.prisma().find_many(
+            take=5,
+            order={
+                'imageUrl': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_many',
+            model=self._model,
+            arguments={
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        return [model_parse(self._model, r) for r in resp['data']['result']]
+
+    async def find_first(
+        self,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductImageWhereInput] = None,
+        cursor: Optional[types.ProductImageWhereUniqueInput] = None,
+        include: Optional[types.ProductImageInclude] = None,
+        order: Optional[Union[types.ProductImageOrderByInput, List[types.ProductImageOrderByInput]]] = None,
+        distinct: Optional[List[types.ProductImageScalarFieldKeys]] = None,
+    ) -> Optional[_PrismaModelT]:
+        """Find a single ProductImage record.
+
+        Parameters
+        ----------
+        skip
+            Ignore the first N records
+        where
+            ProductImage filter to select the record
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned ProductImage model
+        order
+            Order the returned ProductImage records by any field
+        distinct
+            Filter ProductImage records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        prisma.models.ProductImage
+            The first ProductImage record found, matching the given arguments
+        None
+            No record could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the second ProductImage record ordered by the order field
+        productimage = await ProductImage.prisma().find_first(
+            skip=1,
+            order={
+                'order': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_first',
+            model=self._model,
+            arguments={
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        result = resp['data']['result']
+        if result is None:
+            return None
+
+        return model_parse(self._model, result)
+
+    async def find_first_or_raise(
+        self,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductImageWhereInput] = None,
+        cursor: Optional[types.ProductImageWhereUniqueInput] = None,
+        include: Optional[types.ProductImageInclude] = None,
+        order: Optional[Union[types.ProductImageOrderByInput, List[types.ProductImageOrderByInput]]] = None,
+        distinct: Optional[List[types.ProductImageScalarFieldKeys]] = None,
+    ) -> _PrismaModelT:
+        """Find a single ProductImage record. Raises `RecordNotFoundError` if no record was found.
+
+        Parameters
+        ----------
+        skip
+            Ignore the first N records
+        where
+            ProductImage filter to select the record
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned ProductImage model
+        order
+            Order the returned ProductImage records by any field
+        distinct
+            Filter ProductImage records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        prisma.models.ProductImage
+            The first ProductImage record found, matching the given arguments
+
+        Raises
+        ------
+        prisma.errors.RecordNotFoundError
+            No record was found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the second ProductImage record ordered by the id field
+        productimage = await ProductImage.prisma().find_first_or_raise(
+            skip=1,
+            order={
+                'id': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_first_or_raise',
+            model=self._model,
+            arguments={
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def update(
+        self,
+        data: types.ProductImageUpdateInput,
+        where: types.ProductImageWhereUniqueInput,
+        include: Optional[types.ProductImageInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Update a single ProductImage record.
+
+        Parameters
+        ----------
+        data
+            ProductImage record data specifying what to update
+        where
+            ProductImage filter to select the unique record to create / update
+        include
+            Specifies which relations should be loaded on the returned ProductImage model
+
+        Returns
+        -------
+        prisma.models.ProductImage
+            The updated ProductImage record
+        None
+            No record could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        productimage = await ProductImage.prisma().update(
+            where={
+                'id': 271520213,
+            },
+            data={
+                # data to update the ProductImage record to
+            },
+        )
+        ```
+        """
+        try:
+            resp = await self._client._execute(
+                method='update',
+                model=self._model,
+                arguments={
+                    'data': data,
+                    'where': where,
+                    'include': include,
+                },
+            )
+        except errors.RecordNotFoundError:
+            return None
+
+        return model_parse(self._model, resp['data']['result'])
+
+    async def upsert(
+        self,
+        where: types.ProductImageWhereUniqueInput,
+        data: types.ProductImageUpsertInput,
+        include: Optional[types.ProductImageInclude] = None,
+    ) -> _PrismaModelT:
+        """Updates an existing record or create a new one
+
+        Parameters
+        ----------
+        where
+            ProductImage filter to select the unique record to create / update
+        data
+            Data specifying what fields to set on create and update
+        include
+            Specifies which relations should be loaded on the returned ProductImage model
+
+        Returns
+        -------
+        prisma.models.ProductImage
+            The created or updated ProductImage record
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        productimage = await ProductImage.prisma().upsert(
+            where={
+                'id': 456633834,
+            },
+            data={
+                'create': {
+                    'id': 456633834,
+                    'productId': 429995104,
+                    'imageUrl': 'bhhfibbigf',
+                },
+                'update': {
+                    'productId': 429995104,
+                    'imageUrl': 'bhhfibbigf',
+                },
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='upsert',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+                'create': data.get('create'),
+                'update': data.get('update'),
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def update_many(
+        self,
+        data: types.ProductImageUpdateManyMutationInput,
+        where: types.ProductImageWhereInput,
+    ) -> int:
+        """Update multiple ProductImage records
+
+        Parameters
+        ----------
+        data
+            ProductImage data to update the selected ProductImage records to
+        where
+            Filter to select the ProductImage records to update
+
+        Returns
+        -------
+        int
+            The total number of ProductImage records that were updated
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # update all ProductImage records
+        total = await ProductImage.prisma().update_many(
+            data={
+                'productId': 2058258651
+            },
+            where={}
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='update_many',
+            model=self._model,
+            arguments={'data': data, 'where': where,},
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    @overload
+    async def count(
+        self,
+        select: None = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductImageWhereInput] = None,
+        cursor: Optional[types.ProductImageWhereUniqueInput] = None,
+    ) -> int:
+        """Count the number of ProductImage records present in the database
+
+        Parameters
+        ----------
+        select
+            Select the ProductImage fields to be counted
+        take
+            Limit the maximum result
+        skip
+            Ignore the first N records
+        where
+            ProductImage filter to find records
+        cursor
+            Specifies the position in the list to start counting results from, (typically an ID field)
+        order
+            This parameter is deprecated and will be removed in a future release
+
+        Returns
+        -------
+        int
+            The total number of records found, returned if `select` is not given
+
+        prisma.types.ProductImageCountAggregateOutput
+            Data returned when `select` is used, the fields present in this dictionary will
+            match the fields passed in the `select` argument
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # total: int
+        total = await ProductImage.prisma().count()
+
+        # results: prisma.types.ProductImageCountAggregateOutput
+        results = await ProductImage.prisma().count(
+            select={
+                '_all': True,
+                'imageUrl': True,
+            },
+        )
+        ```
+        """
+
+
+    @overload
+    async def count(
+        self,
+        select: types.ProductImageCountAggregateInput,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductImageWhereInput] = None,
+        cursor: Optional[types.ProductImageWhereUniqueInput] = None,
+    ) -> types.ProductImageCountAggregateOutput:
+        ...
+
+    async def count(
+        self,
+        select: Optional[types.ProductImageCountAggregateInput] = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.ProductImageWhereInput] = None,
+        cursor: Optional[types.ProductImageWhereUniqueInput] = None,
+    ) -> Union[int, types.ProductImageCountAggregateOutput]:
+        """Count the number of ProductImage records present in the database
+
+        Parameters
+        ----------
+        select
+            Select the ProductImage fields to be counted
+        take
+            Limit the maximum result
+        skip
+            Ignore the first N records
+        where
+            ProductImage filter to find records
+        cursor
+            Specifies the position in the list to start counting results from, (typically an ID field)
+        order
+            This parameter is deprecated and will be removed in a future release
+
+        Returns
+        -------
+        int
+            The total number of records found, returned if `select` is not given
+
+        prisma.types.ProductImageCountAggregateOutput
+            Data returned when `select` is used, the fields present in this dictionary will
+            match the fields passed in the `select` argument
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # total: int
+        total = await ProductImage.prisma().count()
+
+        # results: prisma.types.ProductImageCountAggregateOutput
+        results = await ProductImage.prisma().count(
+            select={
+                '_all': True,
+                'order': True,
+            },
+        )
+        ```
+        """
+
+        # TODO: this selection building should be moved to the QueryBuilder
+        #
+        # note the distinction between checking for `not select` here and `select is None`
+        # later is to handle the case that the given select dictionary is empty, this
+        # is a limitation of our types.
+        if not select:
+            root_selection = ['_count { _all }']
+        else:
+
+            root_selection = [
+                '_count {{ {0} }}'.format(' '.join(k for k, v in select.items() if v is True))
+            ]
+
+        resp = await self._client._execute(
+            method='count',
+            model=self._model,
+            arguments={
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'cursor': cursor,
+            },
+            root_selection=root_selection,
+        )
+
+        if select is None:
+            return cast(int, resp['data']['result']['_count']['_all'])
+        else:
+            return cast(types.ProductImageCountAggregateOutput, resp['data']['result']['_count'])
+
+    async def delete_many(
+        self,
+        where: Optional[types.ProductImageWhereInput] = None
+    ) -> int:
+        """Delete multiple ProductImage records.
+
+        Parameters
+        ----------
+        where
+            Optional ProductImage filter to find the records to be deleted
+
+        Returns
+        -------
+        int
+            The total number of ProductImage records that were deleted
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # delete all ProductImage records
+        total = await ProductImage.prisma().delete_many()
+        ```
+        """
+        resp = await self._client._execute(
+            method='delete_many',
+            model=self._model,
+            arguments={'where': where},
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    # TODO: make this easier to work with safely, currently output fields are typed as
+    #       not required, we should refactor the return type
+    # TODO: consider returning a Dict where the keys are a Tuple of the `by` selection
+    # TODO: statically type that the order argument is required when take or skip are present
+    async def group_by(
+        self,
+        by: List['types.ProductImageScalarFieldKeys'],
+        *,
+        where: Optional['types.ProductImageWhereInput'] = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        avg: Optional['types.ProductImageAvgAggregateInput'] = None,
+        sum: Optional['types.ProductImageSumAggregateInput'] = None,
+        min: Optional['types.ProductImageMinAggregateInput'] = None,
+        max: Optional['types.ProductImageMaxAggregateInput'] = None,
+        having: Optional['types.ProductImageScalarWhereWithAggregatesInput'] = None,
+        count: Optional[Union[bool, 'types.ProductImageCountAggregateInput']] = None,
+        order: Optional[Union[Mapping['types.ProductImageScalarFieldKeys', 'types.SortOrder'], List[Mapping['types.ProductImageScalarFieldKeys', 'types.SortOrder']]]] = None,
+    ) -> List['types.ProductImageGroupByOutput']:
+        """Group ProductImage records by one or more field values and perform aggregations
+        each group such as finding the average.
+
+        Parameters
+        ----------
+        by
+            List of scalar ProductImage fields to group records by
+        where
+            ProductImage filter to select records
+        take
+            Limit the maximum number of ProductImage records returned
+        skip
+            Ignore the first N records
+        avg
+            Adds the average of all values of the specified fields to the `_avg` field
+            in the returned data.
+        sum
+            Adds the sum of all values of the specified fields to the `_sum` field
+            in the returned data.
+        min
+            Adds the smallest available value for the specified fields to the `_min` field
+            in the returned data.
+        max
+            Adds the largest available value for the specified fields to the `_max` field
+            in the returned data.
+        count
+            Adds a count of non-fields to the `_count` field in the returned data.
+        having
+            Allows you to filter groups by an aggregate value - for example only return
+            groups having an average age less than 50.
+        order
+            Lets you order the returned list by any property that is also present in `by`.
+            Only **one** field is allowed at a time.
+
+        Returns
+        -------
+        List[prisma.types.ProductImageGroupByOutput]
+            A list of dictionaries representing the ProductImage record,
+            this will also have additional fields present if aggregation arguments
+            are used (see the above parameters)
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # group ProductImage records by id values
+        # and count how many records are in each group
+        results = await ProductImage.prisma().group_by(
+            ['id'],
+            count=True,
+        )
+        ```
+        """
+        if order is None:
+            if take is not None:
+                raise TypeError('Missing argument: \'order\' which is required when \'take\' is present')
+
+            if skip is not None:
+                raise TypeError('Missing argument: \'order\' which is required when \'skip\' is present')
+
+        root_selection: List[str] = [*by]
+        if avg is not None:
+            root_selection.append(_select_fields('_avg', avg))
+
+        if min is not None:
+            root_selection.append(_select_fields('_min', min))
+
+        if sum is not None:
+            root_selection.append(_select_fields('_sum', sum))
+
+        if max is not None:
+            root_selection.append(_select_fields('_max', max))
+
+        if count is not None:
+            if count is True:
+                root_selection.append('_count { _all }')
+            elif isinstance(count, dict):
+                root_selection.append(_select_fields('_count', count))
+
+        resp = await self._client._execute(
+            method='group_by',
+            model=self._model,
+            arguments={
+                'by': by,
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'having': having,
+                'orderBy': order,
+            },
+            root_selection=root_selection,
+        )
+        return resp['data']['result']  # type: ignore[no-any-return]
+
+
+class OrderActions(Generic[_PrismaModelT]):
+    __slots__ = (
+        '_client',
+        '_model',
+    )
+
+    def __init__(self, client: Prisma, model: Type[_PrismaModelT]) -> None:
+        self._client = client
+        self._model = model
+
+    async def query_raw(
+        self,
+        query: LiteralString,
+        *args: Any,
+    ) -> List[_PrismaModelT]:
+        """Execute a raw SQL query
+
+        Parameters
+        ----------
+        query
+            The raw SQL query string to be executed
+        *args
+            Parameters to be passed to the SQL query, these MUST be used over
+            string formatting to avoid an SQL injection vulnerability
+
+        Returns
+        -------
+        List[prisma.models.Order]
+            The records returned by the SQL query
+
+        Raises
+        ------
+        prisma_errors.RawQueryError
+            This could be due to invalid syntax, mismatched number of parameters or any other error
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        users = await Order.prisma().query_raw(
+            'SELECT * FROM Order WHERE id = $1',
+            1583689592,
+        )
+        ```
+        """
+        return await self._client.query_raw(query, *args, model=self._model)
+
+    async def query_first(
+        self,
+        query: LiteralString,
+        *args: Any,
+    ) -> Optional[_PrismaModelT]:
+        """Execute a raw SQL query, returning the first result
+
+        Parameters
+        ----------
+        query
+            The raw SQL query string to be executed
+        *args
+            Parameters to be passed to the SQL query, these MUST be used over
+            string formatting to avoid an SQL injection vulnerability
+
+        Returns
+        -------
+        prisma.models.Order
+            The first record returned by the SQL query
+        None
+            The raw SQL query did not return any records
+
+        Raises
+        ------
+        prisma_errors.RawQueryError
+            This could be due to invalid syntax, mismatched number of parameters or any other error
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        user = await Order.prisma().query_first(
+            'SELECT * FROM Order WHERE userId = $1',
+            'ihieecagf',
+        )
+        ```
+        """
+        return await self._client.query_first(query, *args, model=self._model)
+
+    async def create(
+        self,
+        data: types.OrderCreateInput,
+        include: Optional[types.OrderInclude] = None
+    ) -> _PrismaModelT:
+        """Create a new Order record.
+
+        Parameters
+        ----------
+        data
+            Order record data
+        include
+            Specifies which relations should be loaded on the returned Order model
+
+        Returns
+        -------
+        prisma.models.Order
+            The created Order record
+
+        Raises
+        ------
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # create a Order record from just the required fields
+        order = await Order.prisma().create(
+            data={
+                # data to create a Order record
+                'cep': 'bghfciaafe',
+                'totalPrice': 1627576247.205480,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='create',
+            model=self._model,
+            arguments={
+                'data': data,
+                'include': include,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def create_many(
+        self,
+        data: List[types.OrderCreateWithoutRelationsInput],
+        *,
+        skip_duplicates: Optional[bool] = None,
+    ) -> int:
+        """Create multiple Order records at once.
+
+        This function is *not* available when using SQLite.
+
+        Parameters
+        ----------
+        data
+            List of Order record data
+        skip_duplicates
+            Boolean flag for ignoring unique constraint errors
+
+        Returns
+        -------
+        int
+            The total number of records created
+
+        Raises
+        ------
+        prisma.errors.UnsupportedDatabaseError
+            Attempting to query when using SQLite
+        prisma.errors.UniqueViolationError
+            A unique constraint check has failed, these can be ignored with the `skip_duplicates` argument
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        total = await Order.prisma().create_many(
+            data=[
+                {
+                    # data to create a Order record
+                    'cep': 'gaddfhfh',
+                    'totalPrice': 684462146.162550,
+                },
+                {
+                    # data to create a Order record
+                    'cep': 'fcbichhci',
+                    'totalPrice': 1266032265.9325,
+                },
+            ],
+            skip_duplicates=True,
+        )
+        ```
+        """
+        if skip_duplicates and self._client._active_provider in CREATE_MANY_SKIP_DUPLICATES_UNSUPPORTED:
+            raise errors.UnsupportedDatabaseError(self._client._active_provider, 'create_many_skip_duplicates')
+
+        resp = await self._client._execute(
+            method='create_many',
+            model=self._model,
+            arguments={
+                'data': data,
+                'skipDuplicates': skip_duplicates,
+            },
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    async def delete(
+        self,
+        where: types.OrderWhereUniqueInput,
+        include: Optional[types.OrderInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Delete a single Order record.
+
+        Parameters
+        ----------
+        where
+            Order filter to select the record to be deleted, must be unique
+        include
+            Specifies which relations should be loaded on the returned Order model
+
+        Returns
+        -------
+        prisma.models.Order
+            The deleted Order record
+        None
+            Could not find a record to delete
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        order = await Order.prisma().delete(
+            where={
+                'id': 2053047983,
+            },
+        )
+        ```
+        """
+        try:
+            resp = await self._client._execute(
+                method='delete',
+                model=self._model,
+                arguments={
+                    'where': where,
+                    'include': include,
+                },
+            )
+        except errors.RecordNotFoundError:
+            return None
+
+        return model_parse(self._model, resp['data']['result'])
+
+    async def find_unique(
+        self,
+        where: types.OrderWhereUniqueInput,
+        include: Optional[types.OrderInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Find a unique Order record.
+
+        Parameters
+        ----------
+        where
+            Order filter to find the record, must be unique
+        include
+            Specifies which relations should be loaded on the returned Order model
+
+        Returns
+        -------
+        prisma.models.Order
+            The found Order record
+        None
+            No record matching the given input could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        order = await Order.prisma().find_unique(
+            where={
+                'id': 685333180,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_unique',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+        result = resp['data']['result']
+        if result is None:
+            return None
+        return model_parse(self._model, result)
+
+    async def find_unique_or_raise(
+        self,
+        where: types.OrderWhereUniqueInput,
+        include: Optional[types.OrderInclude] = None
+    ) -> _PrismaModelT:
+        """Find a unique Order record. Raises `RecordNotFoundError` if no record is found.
+
+        Parameters
+        ----------
+        where
+            Order filter to find the record, must be unique
+        include
+            Specifies which relations should be loaded on the returned Order model
+
+        Returns
+        -------
+        prisma.models.Order
+            The found Order record
+
+        Raises
+        ------
+        prisma.errors.RecordNotFoundError
+            No record was found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        order = await Order.prisma().find_unique_or_raise(
+            where={
+                'id': 127474245,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_unique_or_raise',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def find_many(
+        self,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderWhereInput] = None,
+        cursor: Optional[types.OrderWhereUniqueInput] = None,
+        include: Optional[types.OrderInclude] = None,
+        order: Optional[Union[types.OrderOrderByInput, List[types.OrderOrderByInput]]] = None,
+        distinct: Optional[List[types.OrderScalarFieldKeys]] = None,
+    ) -> List[_PrismaModelT]:
+        """Find multiple Order records.
+
+        An empty list is returned if no records could be found.
+
+        Parameters
+        ----------
+        take
+            Limit the maximum number of Order records returned
+        skip
+            Ignore the first N results
+        where
+            Order filter to select records
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned Order model
+        order
+            Order the returned Order records by any field
+        distinct
+            Filter Order records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        List[prisma.models.Order]
+            The list of all Order records that could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the first 10 Order records
+        orders = await Order.prisma().find_many(take=10)
+
+        # find the first 5 Order records ordered by the cep field
+        orders = await Order.prisma().find_many(
+            take=5,
+            order={
+                'cep': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_many',
+            model=self._model,
+            arguments={
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        return [model_parse(self._model, r) for r in resp['data']['result']]
+
+    async def find_first(
+        self,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderWhereInput] = None,
+        cursor: Optional[types.OrderWhereUniqueInput] = None,
+        include: Optional[types.OrderInclude] = None,
+        order: Optional[Union[types.OrderOrderByInput, List[types.OrderOrderByInput]]] = None,
+        distinct: Optional[List[types.OrderScalarFieldKeys]] = None,
+    ) -> Optional[_PrismaModelT]:
+        """Find a single Order record.
+
+        Parameters
+        ----------
+        skip
+            Ignore the first N records
+        where
+            Order filter to select the record
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned Order model
+        order
+            Order the returned Order records by any field
+        distinct
+            Filter Order records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        prisma.models.Order
+            The first Order record found, matching the given arguments
+        None
+            No record could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the second Order record ordered by the totalPrice field
+        order = await Order.prisma().find_first(
+            skip=1,
+            order={
+                'totalPrice': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_first',
+            model=self._model,
+            arguments={
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        result = resp['data']['result']
+        if result is None:
+            return None
+
+        return model_parse(self._model, result)
+
+    async def find_first_or_raise(
+        self,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderWhereInput] = None,
+        cursor: Optional[types.OrderWhereUniqueInput] = None,
+        include: Optional[types.OrderInclude] = None,
+        order: Optional[Union[types.OrderOrderByInput, List[types.OrderOrderByInput]]] = None,
+        distinct: Optional[List[types.OrderScalarFieldKeys]] = None,
+    ) -> _PrismaModelT:
+        """Find a single Order record. Raises `RecordNotFoundError` if no record was found.
+
+        Parameters
+        ----------
+        skip
+            Ignore the first N records
+        where
+            Order filter to select the record
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned Order model
+        order
+            Order the returned Order records by any field
+        distinct
+            Filter Order records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        prisma.models.Order
+            The first Order record found, matching the given arguments
+
+        Raises
+        ------
+        prisma.errors.RecordNotFoundError
+            No record was found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the second Order record ordered by the status field
+        order = await Order.prisma().find_first_or_raise(
+            skip=1,
+            order={
+                'status': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_first_or_raise',
+            model=self._model,
+            arguments={
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def update(
+        self,
+        data: types.OrderUpdateInput,
+        where: types.OrderWhereUniqueInput,
+        include: Optional[types.OrderInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Update a single Order record.
+
+        Parameters
+        ----------
+        data
+            Order record data specifying what to update
+        where
+            Order filter to select the unique record to create / update
+        include
+            Specifies which relations should be loaded on the returned Order model
+
+        Returns
+        -------
+        prisma.models.Order
+            The updated Order record
+        None
+            No record could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        order = await Order.prisma().update(
+            where={
+                'id': 948921754,
+            },
+            data={
+                # data to update the Order record to
+            },
+        )
+        ```
+        """
+        try:
+            resp = await self._client._execute(
+                method='update',
+                model=self._model,
+                arguments={
+                    'data': data,
+                    'where': where,
+                    'include': include,
+                },
+            )
+        except errors.RecordNotFoundError:
+            return None
+
+        return model_parse(self._model, resp['data']['result'])
+
+    async def upsert(
+        self,
+        where: types.OrderWhereUniqueInput,
+        data: types.OrderUpsertInput,
+        include: Optional[types.OrderInclude] = None,
+    ) -> _PrismaModelT:
+        """Updates an existing record or create a new one
+
+        Parameters
+        ----------
+        where
+            Order filter to select the unique record to create / update
+        data
+            Data specifying what fields to set on create and update
+        include
+            Specifies which relations should be loaded on the returned Order model
+
+        Returns
+        -------
+        prisma.models.Order
+            The created or updated Order record
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        order = await Order.prisma().upsert(
+            where={
+                'id': 1964990155,
+            },
+            data={
+                'create': {
+                    'id': 1964990155,
+                    'cep': 'fcbichhci',
+                    'totalPrice': 1266032265.9325,
+                },
+                'update': {
+                    'cep': 'fcbichhci',
+                    'totalPrice': 1266032265.9325,
+                },
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='upsert',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+                'create': data.get('create'),
+                'update': data.get('update'),
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def update_many(
+        self,
+        data: types.OrderUpdateManyMutationInput,
+        where: types.OrderWhereInput,
+    ) -> int:
+        """Update multiple Order records
+
+        Parameters
+        ----------
+        data
+            Order data to update the selected Order records to
+        where
+            Filter to select the Order records to update
+
+        Returns
+        -------
+        int
+            The total number of Order records that were updated
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # update all Order records
+        total = await Order.prisma().update_many(
+            data={
+                'createdAt': datetime.datetime.utcnow()
+            },
+            where={}
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='update_many',
+            model=self._model,
+            arguments={'data': data, 'where': where,},
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    @overload
+    async def count(
+        self,
+        select: None = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderWhereInput] = None,
+        cursor: Optional[types.OrderWhereUniqueInput] = None,
+    ) -> int:
+        """Count the number of Order records present in the database
+
+        Parameters
+        ----------
+        select
+            Select the Order fields to be counted
+        take
+            Limit the maximum result
+        skip
+            Ignore the first N records
+        where
+            Order filter to find records
+        cursor
+            Specifies the position in the list to start counting results from, (typically an ID field)
+        order
+            This parameter is deprecated and will be removed in a future release
+
+        Returns
+        -------
+        int
+            The total number of records found, returned if `select` is not given
+
+        prisma.types.OrderCountAggregateOutput
+            Data returned when `select` is used, the fields present in this dictionary will
+            match the fields passed in the `select` argument
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # total: int
+        total = await Order.prisma().count()
+
+        # results: prisma.types.OrderCountAggregateOutput
+        results = await Order.prisma().count(
+            select={
+                '_all': True,
+                'id': True,
+            },
+        )
+        ```
+        """
+
+
+    @overload
+    async def count(
+        self,
+        select: types.OrderCountAggregateInput,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderWhereInput] = None,
+        cursor: Optional[types.OrderWhereUniqueInput] = None,
+    ) -> types.OrderCountAggregateOutput:
+        ...
+
+    async def count(
+        self,
+        select: Optional[types.OrderCountAggregateInput] = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderWhereInput] = None,
+        cursor: Optional[types.OrderWhereUniqueInput] = None,
+    ) -> Union[int, types.OrderCountAggregateOutput]:
+        """Count the number of Order records present in the database
+
+        Parameters
+        ----------
+        select
+            Select the Order fields to be counted
+        take
+            Limit the maximum result
+        skip
+            Ignore the first N records
+        where
+            Order filter to find records
+        cursor
+            Specifies the position in the list to start counting results from, (typically an ID field)
+        order
+            This parameter is deprecated and will be removed in a future release
+
+        Returns
+        -------
+        int
+            The total number of records found, returned if `select` is not given
+
+        prisma.types.OrderCountAggregateOutput
+            Data returned when `select` is used, the fields present in this dictionary will
+            match the fields passed in the `select` argument
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # total: int
+        total = await Order.prisma().count()
+
+        # results: prisma.types.OrderCountAggregateOutput
+        results = await Order.prisma().count(
+            select={
+                '_all': True,
+                'userId': True,
+            },
+        )
+        ```
+        """
+
+        # TODO: this selection building should be moved to the QueryBuilder
+        #
+        # note the distinction between checking for `not select` here and `select is None`
+        # later is to handle the case that the given select dictionary is empty, this
+        # is a limitation of our types.
+        if not select:
+            root_selection = ['_count { _all }']
+        else:
+
+            root_selection = [
+                '_count {{ {0} }}'.format(' '.join(k for k, v in select.items() if v is True))
+            ]
+
+        resp = await self._client._execute(
+            method='count',
+            model=self._model,
+            arguments={
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'cursor': cursor,
+            },
+            root_selection=root_selection,
+        )
+
+        if select is None:
+            return cast(int, resp['data']['result']['_count']['_all'])
+        else:
+            return cast(types.OrderCountAggregateOutput, resp['data']['result']['_count'])
+
+    async def delete_many(
+        self,
+        where: Optional[types.OrderWhereInput] = None
+    ) -> int:
+        """Delete multiple Order records.
+
+        Parameters
+        ----------
+        where
+            Optional Order filter to find the records to be deleted
+
+        Returns
+        -------
+        int
+            The total number of Order records that were deleted
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # delete all Order records
+        total = await Order.prisma().delete_many()
+        ```
+        """
+        resp = await self._client._execute(
+            method='delete_many',
+            model=self._model,
+            arguments={'where': where},
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    # TODO: make this easier to work with safely, currently output fields are typed as
+    #       not required, we should refactor the return type
+    # TODO: consider returning a Dict where the keys are a Tuple of the `by` selection
+    # TODO: statically type that the order argument is required when take or skip are present
+    async def group_by(
+        self,
+        by: List['types.OrderScalarFieldKeys'],
+        *,
+        where: Optional['types.OrderWhereInput'] = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        avg: Optional['types.OrderAvgAggregateInput'] = None,
+        sum: Optional['types.OrderSumAggregateInput'] = None,
+        min: Optional['types.OrderMinAggregateInput'] = None,
+        max: Optional['types.OrderMaxAggregateInput'] = None,
+        having: Optional['types.OrderScalarWhereWithAggregatesInput'] = None,
+        count: Optional[Union[bool, 'types.OrderCountAggregateInput']] = None,
+        order: Optional[Union[Mapping['types.OrderScalarFieldKeys', 'types.SortOrder'], List[Mapping['types.OrderScalarFieldKeys', 'types.SortOrder']]]] = None,
+    ) -> List['types.OrderGroupByOutput']:
+        """Group Order records by one or more field values and perform aggregations
+        each group such as finding the average.
+
+        Parameters
+        ----------
+        by
+            List of scalar Order fields to group records by
+        where
+            Order filter to select records
+        take
+            Limit the maximum number of Order records returned
+        skip
+            Ignore the first N records
+        avg
+            Adds the average of all values of the specified fields to the `_avg` field
+            in the returned data.
+        sum
+            Adds the sum of all values of the specified fields to the `_sum` field
+            in the returned data.
+        min
+            Adds the smallest available value for the specified fields to the `_min` field
+            in the returned data.
+        max
+            Adds the largest available value for the specified fields to the `_max` field
+            in the returned data.
+        count
+            Adds a count of non-fields to the `_count` field in the returned data.
+        having
+            Allows you to filter groups by an aggregate value - for example only return
+            groups having an average age less than 50.
+        order
+            Lets you order the returned list by any property that is also present in `by`.
+            Only **one** field is allowed at a time.
+
+        Returns
+        -------
+        List[prisma.types.OrderGroupByOutput]
+            A list of dictionaries representing the Order record,
+            this will also have additional fields present if aggregation arguments
+            are used (see the above parameters)
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # group Order records by cep values
+        # and count how many records are in each group
+        results = await Order.prisma().group_by(
+            ['cep'],
+            count=True,
+        )
+        ```
+        """
+        if order is None:
+            if take is not None:
+                raise TypeError('Missing argument: \'order\' which is required when \'take\' is present')
+
+            if skip is not None:
+                raise TypeError('Missing argument: \'order\' which is required when \'skip\' is present')
+
+        root_selection: List[str] = [*by]
+        if avg is not None:
+            root_selection.append(_select_fields('_avg', avg))
+
+        if min is not None:
+            root_selection.append(_select_fields('_min', min))
+
+        if sum is not None:
+            root_selection.append(_select_fields('_sum', sum))
+
+        if max is not None:
+            root_selection.append(_select_fields('_max', max))
+
+        if count is not None:
+            if count is True:
+                root_selection.append('_count { _all }')
+            elif isinstance(count, dict):
+                root_selection.append(_select_fields('_count', count))
+
+        resp = await self._client._execute(
+            method='group_by',
+            model=self._model,
+            arguments={
+                'by': by,
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'having': having,
+                'orderBy': order,
+            },
+            root_selection=root_selection,
+        )
+        return resp['data']['result']  # type: ignore[no-any-return]
+
+
+class OrderItemActions(Generic[_PrismaModelT]):
+    __slots__ = (
+        '_client',
+        '_model',
+    )
+
+    def __init__(self, client: Prisma, model: Type[_PrismaModelT]) -> None:
+        self._client = client
+        self._model = model
+
+    async def query_raw(
+        self,
+        query: LiteralString,
+        *args: Any,
+    ) -> List[_PrismaModelT]:
+        """Execute a raw SQL query
+
+        Parameters
+        ----------
+        query
+            The raw SQL query string to be executed
+        *args
+            Parameters to be passed to the SQL query, these MUST be used over
+            string formatting to avoid an SQL injection vulnerability
+
+        Returns
+        -------
+        List[prisma.models.OrderItem]
+            The records returned by the SQL query
+
+        Raises
+        ------
+        prisma_errors.RawQueryError
+            This could be due to invalid syntax, mismatched number of parameters or any other error
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        users = await OrderItem.prisma().query_raw(
+            'SELECT * FROM OrderItem WHERE id = $1',
+            1228891816,
+        )
+        ```
+        """
+        return await self._client.query_raw(query, *args, model=self._model)
+
+    async def query_first(
+        self,
+        query: LiteralString,
+        *args: Any,
+    ) -> Optional[_PrismaModelT]:
+        """Execute a raw SQL query, returning the first result
+
+        Parameters
+        ----------
+        query
+            The raw SQL query string to be executed
+        *args
+            Parameters to be passed to the SQL query, these MUST be used over
+            string formatting to avoid an SQL injection vulnerability
+
+        Returns
+        -------
+        prisma.models.OrderItem
+            The first record returned by the SQL query
+        None
+            The raw SQL query did not return any records
+
+        Raises
+        ------
+        prisma_errors.RawQueryError
+            This could be due to invalid syntax, mismatched number of parameters or any other error
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        user = await OrderItem.prisma().query_first(
+            'SELECT * FROM OrderItem WHERE orderId = $1',
+            255202753,
+        )
+        ```
+        """
+        return await self._client.query_first(query, *args, model=self._model)
+
+    async def create(
+        self,
+        data: types.OrderItemCreateInput,
+        include: Optional[types.OrderItemInclude] = None
+    ) -> _PrismaModelT:
+        """Create a new OrderItem record.
+
+        Parameters
+        ----------
+        data
+            OrderItem record data
+        include
+            Specifies which relations should be loaded on the returned OrderItem model
+
+        Returns
+        -------
+        prisma.models.OrderItem
+            The created OrderItem record
+
+        Raises
+        ------
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # create a OrderItem record from just the required fields
+        orderitem = await OrderItem.prisma().create(
+            data={
+                # data to create a OrderItem record
+                'orderId': 1223573862,
+                'productId': 541269159,
+                'quantity': 1064846676,
+                'price': 508382461.102426,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='create',
+            model=self._model,
+            arguments={
+                'data': data,
+                'include': include,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def create_many(
+        self,
+        data: List[types.OrderItemCreateWithoutRelationsInput],
+        *,
+        skip_duplicates: Optional[bool] = None,
+    ) -> int:
+        """Create multiple OrderItem records at once.
+
+        This function is *not* available when using SQLite.
+
+        Parameters
+        ----------
+        data
+            List of OrderItem record data
+        skip_duplicates
+            Boolean flag for ignoring unique constraint errors
+
+        Returns
+        -------
+        int
+            The total number of records created
+
+        Raises
+        ------
+        prisma.errors.UnsupportedDatabaseError
+            Attempting to query when using SQLite
+        prisma.errors.UniqueViolationError
+            A unique constraint check has failed, these can be ignored with the `skip_duplicates` argument
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        total = await OrderItem.prisma().create_many(
+            data=[
+                {
+                    # data to create a OrderItem record
+                    'orderId': 872078403,
+                    'productId': 1874748096,
+                    'quantity': 916896761,
+                    'price': 769267518.82031,
+                },
+                {
+                    # data to create a OrderItem record
+                    'orderId': 92728044,
+                    'productId': 344858293,
+                    'quantity': 1121741130,
+                    'price': 1495896251.20852,
+                },
+            ],
+            skip_duplicates=True,
+        )
+        ```
+        """
+        if skip_duplicates and self._client._active_provider in CREATE_MANY_SKIP_DUPLICATES_UNSUPPORTED:
+            raise errors.UnsupportedDatabaseError(self._client._active_provider, 'create_many_skip_duplicates')
+
+        resp = await self._client._execute(
+            method='create_many',
+            model=self._model,
+            arguments={
+                'data': data,
+                'skipDuplicates': skip_duplicates,
+            },
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    async def delete(
+        self,
+        where: types.OrderItemWhereUniqueInput,
+        include: Optional[types.OrderItemInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Delete a single OrderItem record.
+
+        Parameters
+        ----------
+        where
+            OrderItem filter to select the record to be deleted, must be unique
+        include
+            Specifies which relations should be loaded on the returned OrderItem model
+
+        Returns
+        -------
+        prisma.models.OrderItem
+            The deleted OrderItem record
+        None
+            Could not find a record to delete
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        orderitem = await OrderItem.prisma().delete(
+            where={
+                'id': 860811569,
+            },
+        )
+        ```
+        """
+        try:
+            resp = await self._client._execute(
+                method='delete',
+                model=self._model,
+                arguments={
+                    'where': where,
+                    'include': include,
+                },
+            )
+        except errors.RecordNotFoundError:
+            return None
+
+        return model_parse(self._model, resp['data']['result'])
+
+    async def find_unique(
+        self,
+        where: types.OrderItemWhereUniqueInput,
+        include: Optional[types.OrderItemInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Find a unique OrderItem record.
+
+        Parameters
+        ----------
+        where
+            OrderItem filter to find the record, must be unique
+        include
+            Specifies which relations should be loaded on the returned OrderItem model
+
+        Returns
+        -------
+        prisma.models.OrderItem
+            The found OrderItem record
+        None
+            No record matching the given input could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        orderitem = await OrderItem.prisma().find_unique(
+            where={
+                'id': 1660932118,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_unique',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+        result = resp['data']['result']
+        if result is None:
+            return None
+        return model_parse(self._model, result)
+
+    async def find_unique_or_raise(
+        self,
+        where: types.OrderItemWhereUniqueInput,
+        include: Optional[types.OrderItemInclude] = None
+    ) -> _PrismaModelT:
+        """Find a unique OrderItem record. Raises `RecordNotFoundError` if no record is found.
+
+        Parameters
+        ----------
+        where
+            OrderItem filter to find the record, must be unique
+        include
+            Specifies which relations should be loaded on the returned OrderItem model
+
+        Returns
+        -------
+        prisma.models.OrderItem
+            The found OrderItem record
+
+        Raises
+        ------
+        prisma.errors.RecordNotFoundError
+            No record was found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        orderitem = await OrderItem.prisma().find_unique_or_raise(
+            where={
+                'id': 525761943,
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_unique_or_raise',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def find_many(
+        self,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderItemWhereInput] = None,
+        cursor: Optional[types.OrderItemWhereUniqueInput] = None,
+        include: Optional[types.OrderItemInclude] = None,
+        order: Optional[Union[types.OrderItemOrderByInput, List[types.OrderItemOrderByInput]]] = None,
+        distinct: Optional[List[types.OrderItemScalarFieldKeys]] = None,
+    ) -> List[_PrismaModelT]:
+        """Find multiple OrderItem records.
+
+        An empty list is returned if no records could be found.
+
+        Parameters
+        ----------
+        take
+            Limit the maximum number of OrderItem records returned
+        skip
+            Ignore the first N results
+        where
+            OrderItem filter to select records
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned OrderItem model
+        order
+            Order the returned OrderItem records by any field
+        distinct
+            Filter OrderItem records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        List[prisma.models.OrderItem]
+            The list of all OrderItem records that could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the first 10 OrderItem records
+        orderitems = await OrderItem.prisma().find_many(take=10)
+
+        # find the first 5 OrderItem records ordered by the productId field
+        orderitems = await OrderItem.prisma().find_many(
+            take=5,
+            order={
+                'productId': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_many',
+            model=self._model,
+            arguments={
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        return [model_parse(self._model, r) for r in resp['data']['result']]
+
+    async def find_first(
+        self,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderItemWhereInput] = None,
+        cursor: Optional[types.OrderItemWhereUniqueInput] = None,
+        include: Optional[types.OrderItemInclude] = None,
+        order: Optional[Union[types.OrderItemOrderByInput, List[types.OrderItemOrderByInput]]] = None,
+        distinct: Optional[List[types.OrderItemScalarFieldKeys]] = None,
+    ) -> Optional[_PrismaModelT]:
+        """Find a single OrderItem record.
+
+        Parameters
+        ----------
+        skip
+            Ignore the first N records
+        where
+            OrderItem filter to select the record
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned OrderItem model
+        order
+            Order the returned OrderItem records by any field
+        distinct
+            Filter OrderItem records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        prisma.models.OrderItem
+            The first OrderItem record found, matching the given arguments
+        None
+            No record could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the second OrderItem record ordered by the quantity field
+        orderitem = await OrderItem.prisma().find_first(
+            skip=1,
+            order={
+                'quantity': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_first',
+            model=self._model,
+            arguments={
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        result = resp['data']['result']
+        if result is None:
+            return None
+
+        return model_parse(self._model, result)
+
+    async def find_first_or_raise(
+        self,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderItemWhereInput] = None,
+        cursor: Optional[types.OrderItemWhereUniqueInput] = None,
+        include: Optional[types.OrderItemInclude] = None,
+        order: Optional[Union[types.OrderItemOrderByInput, List[types.OrderItemOrderByInput]]] = None,
+        distinct: Optional[List[types.OrderItemScalarFieldKeys]] = None,
+    ) -> _PrismaModelT:
+        """Find a single OrderItem record. Raises `RecordNotFoundError` if no record was found.
+
+        Parameters
+        ----------
+        skip
+            Ignore the first N records
+        where
+            OrderItem filter to select the record
+        cursor
+            Specifies the position in the list to start returning results from, (typically an ID field)
+        include
+            Specifies which relations should be loaded on the returned OrderItem model
+        order
+            Order the returned OrderItem records by any field
+        distinct
+            Filter OrderItem records by either a single distinct field or distinct combinations of fields
+
+        Returns
+        -------
+        prisma.models.OrderItem
+            The first OrderItem record found, matching the given arguments
+
+        Raises
+        ------
+        prisma.errors.RecordNotFoundError
+            No record was found
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # find the second OrderItem record ordered by the price field
+        orderitem = await OrderItem.prisma().find_first_or_raise(
+            skip=1,
+            order={
+                'price': 'desc',
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='find_first_or_raise',
+            model=self._model,
+            arguments={
+                'skip': skip,
+                'where': where,
+                'order_by': order,
+                'cursor': cursor,
+                'include': include,
+                'distinct': distinct,
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def update(
+        self,
+        data: types.OrderItemUpdateInput,
+        where: types.OrderItemWhereUniqueInput,
+        include: Optional[types.OrderItemInclude] = None
+    ) -> Optional[_PrismaModelT]:
+        """Update a single OrderItem record.
+
+        Parameters
+        ----------
+        data
+            OrderItem record data specifying what to update
+        where
+            OrderItem filter to select the unique record to create / update
+        include
+            Specifies which relations should be loaded on the returned OrderItem model
+
+        Returns
+        -------
+        prisma.models.OrderItem
+            The updated OrderItem record
+        None
+            No record could be found
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        orderitem = await OrderItem.prisma().update(
+            where={
+                'id': 736209796,
+            },
+            data={
+                # data to update the OrderItem record to
+            },
+        )
+        ```
+        """
+        try:
+            resp = await self._client._execute(
+                method='update',
+                model=self._model,
+                arguments={
+                    'data': data,
+                    'where': where,
+                    'include': include,
+                },
+            )
+        except errors.RecordNotFoundError:
+            return None
+
+        return model_parse(self._model, resp['data']['result'])
+
+    async def upsert(
+        self,
+        where: types.OrderItemWhereUniqueInput,
+        data: types.OrderItemUpsertInput,
+        include: Optional[types.OrderItemInclude] = None,
+    ) -> _PrismaModelT:
+        """Updates an existing record or create a new one
+
+        Parameters
+        ----------
+        where
+            OrderItem filter to select the unique record to create / update
+        data
+            Data specifying what fields to set on create and update
+        include
+            Specifies which relations should be loaded on the returned OrderItem model
+
+        Returns
+        -------
+        prisma.models.OrderItem
+            The created or updated OrderItem record
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+        prisma.errors.MissingRequiredValueError
+            Value is required but was not found
+
+        Example
+        -------
+        ```py
+        orderitem = await OrderItem.prisma().upsert(
+            where={
+                'id': 493907821,
+            },
+            data={
+                'create': {
+                    'id': 493907821,
+                    'orderId': 92728044,
+                    'productId': 344858293,
+                    'quantity': 1121741130,
+                    'price': 1495896251.20852,
+                },
+                'update': {
+                    'orderId': 92728044,
+                    'productId': 344858293,
+                    'quantity': 1121741130,
+                    'price': 1495896251.20852,
+                },
+            },
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='upsert',
+            model=self._model,
+            arguments={
+                'where': where,
+                'include': include,
+                'create': data.get('create'),
+                'update': data.get('update'),
+            },
+        )
+        return model_parse(self._model, resp['data']['result'])
+
+    async def update_many(
+        self,
+        data: types.OrderItemUpdateManyMutationInput,
+        where: types.OrderItemWhereInput,
+    ) -> int:
+        """Update multiple OrderItem records
+
+        Parameters
+        ----------
+        data
+            OrderItem data to update the selected OrderItem records to
+        where
+            Filter to select the OrderItem records to update
+
+        Returns
+        -------
+        int
+            The total number of OrderItem records that were updated
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # update all OrderItem records
+        total = await OrderItem.prisma().update_many(
+            data={
+                'id': 639686562
+            },
+            where={}
+        )
+        ```
+        """
+        resp = await self._client._execute(
+            method='update_many',
+            model=self._model,
+            arguments={'data': data, 'where': where,},
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    @overload
+    async def count(
+        self,
+        select: None = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderItemWhereInput] = None,
+        cursor: Optional[types.OrderItemWhereUniqueInput] = None,
+    ) -> int:
+        """Count the number of OrderItem records present in the database
+
+        Parameters
+        ----------
+        select
+            Select the OrderItem fields to be counted
+        take
+            Limit the maximum result
+        skip
+            Ignore the first N records
+        where
+            OrderItem filter to find records
+        cursor
+            Specifies the position in the list to start counting results from, (typically an ID field)
+        order
+            This parameter is deprecated and will be removed in a future release
+
+        Returns
+        -------
+        int
+            The total number of records found, returned if `select` is not given
+
+        prisma.types.OrderItemCountAggregateOutput
+            Data returned when `select` is used, the fields present in this dictionary will
+            match the fields passed in the `select` argument
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # total: int
+        total = await OrderItem.prisma().count()
+
+        # results: prisma.types.OrderItemCountAggregateOutput
+        results = await OrderItem.prisma().count(
+            select={
+                '_all': True,
+                'orderId': True,
+            },
+        )
+        ```
+        """
+
+
+    @overload
+    async def count(
+        self,
+        select: types.OrderItemCountAggregateInput,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderItemWhereInput] = None,
+        cursor: Optional[types.OrderItemWhereUniqueInput] = None,
+    ) -> types.OrderItemCountAggregateOutput:
+        ...
+
+    async def count(
+        self,
+        select: Optional[types.OrderItemCountAggregateInput] = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        where: Optional[types.OrderItemWhereInput] = None,
+        cursor: Optional[types.OrderItemWhereUniqueInput] = None,
+    ) -> Union[int, types.OrderItemCountAggregateOutput]:
+        """Count the number of OrderItem records present in the database
+
+        Parameters
+        ----------
+        select
+            Select the OrderItem fields to be counted
+        take
+            Limit the maximum result
+        skip
+            Ignore the first N records
+        where
+            OrderItem filter to find records
+        cursor
+            Specifies the position in the list to start counting results from, (typically an ID field)
+        order
+            This parameter is deprecated and will be removed in a future release
+
+        Returns
+        -------
+        int
+            The total number of records found, returned if `select` is not given
+
+        prisma.types.OrderItemCountAggregateOutput
+            Data returned when `select` is used, the fields present in this dictionary will
+            match the fields passed in the `select` argument
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # total: int
+        total = await OrderItem.prisma().count()
+
+        # results: prisma.types.OrderItemCountAggregateOutput
+        results = await OrderItem.prisma().count(
+            select={
+                '_all': True,
+                'productId': True,
+            },
+        )
+        ```
+        """
+
+        # TODO: this selection building should be moved to the QueryBuilder
+        #
+        # note the distinction between checking for `not select` here and `select is None`
+        # later is to handle the case that the given select dictionary is empty, this
+        # is a limitation of our types.
+        if not select:
+            root_selection = ['_count { _all }']
+        else:
+
+            root_selection = [
+                '_count {{ {0} }}'.format(' '.join(k for k, v in select.items() if v is True))
+            ]
+
+        resp = await self._client._execute(
+            method='count',
+            model=self._model,
+            arguments={
+                'take': take,
+                'skip': skip,
+                'where': where,
+                'cursor': cursor,
+            },
+            root_selection=root_selection,
+        )
+
+        if select is None:
+            return cast(int, resp['data']['result']['_count']['_all'])
+        else:
+            return cast(types.OrderItemCountAggregateOutput, resp['data']['result']['_count'])
+
+    async def delete_many(
+        self,
+        where: Optional[types.OrderItemWhereInput] = None
+    ) -> int:
+        """Delete multiple OrderItem records.
+
+        Parameters
+        ----------
+        where
+            Optional OrderItem filter to find the records to be deleted
+
+        Returns
+        -------
+        int
+            The total number of OrderItem records that were deleted
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # delete all OrderItem records
+        total = await OrderItem.prisma().delete_many()
+        ```
+        """
+        resp = await self._client._execute(
+            method='delete_many',
+            model=self._model,
+            arguments={'where': where},
+            root_selection=['count'],
+        )
+        return int(resp['data']['result']['count'])
+
+    # TODO: make this easier to work with safely, currently output fields are typed as
+    #       not required, we should refactor the return type
+    # TODO: consider returning a Dict where the keys are a Tuple of the `by` selection
+    # TODO: statically type that the order argument is required when take or skip are present
+    async def group_by(
+        self,
+        by: List['types.OrderItemScalarFieldKeys'],
+        *,
+        where: Optional['types.OrderItemWhereInput'] = None,
+        take: Optional[int] = None,
+        skip: Optional[int] = None,
+        avg: Optional['types.OrderItemAvgAggregateInput'] = None,
+        sum: Optional['types.OrderItemSumAggregateInput'] = None,
+        min: Optional['types.OrderItemMinAggregateInput'] = None,
+        max: Optional['types.OrderItemMaxAggregateInput'] = None,
+        having: Optional['types.OrderItemScalarWhereWithAggregatesInput'] = None,
+        count: Optional[Union[bool, 'types.OrderItemCountAggregateInput']] = None,
+        order: Optional[Union[Mapping['types.OrderItemScalarFieldKeys', 'types.SortOrder'], List[Mapping['types.OrderItemScalarFieldKeys', 'types.SortOrder']]]] = None,
+    ) -> List['types.OrderItemGroupByOutput']:
+        """Group OrderItem records by one or more field values and perform aggregations
+        each group such as finding the average.
+
+        Parameters
+        ----------
+        by
+            List of scalar OrderItem fields to group records by
+        where
+            OrderItem filter to select records
+        take
+            Limit the maximum number of OrderItem records returned
+        skip
+            Ignore the first N records
+        avg
+            Adds the average of all values of the specified fields to the `_avg` field
+            in the returned data.
+        sum
+            Adds the sum of all values of the specified fields to the `_sum` field
+            in the returned data.
+        min
+            Adds the smallest available value for the specified fields to the `_min` field
+            in the returned data.
+        max
+            Adds the largest available value for the specified fields to the `_max` field
+            in the returned data.
+        count
+            Adds a count of non-fields to the `_count` field in the returned data.
+        having
+            Allows you to filter groups by an aggregate value - for example only return
+            groups having an average age less than 50.
+        order
+            Lets you order the returned list by any property that is also present in `by`.
+            Only **one** field is allowed at a time.
+
+        Returns
+        -------
+        List[prisma.types.OrderItemGroupByOutput]
+            A list of dictionaries representing the OrderItem record,
+            this will also have additional fields present if aggregation arguments
+            are used (see the above parameters)
+
+        Raises
+        ------
+        prisma.errors.PrismaError
+            Catch all for every exception raised by Prisma Client Python
+
+        Example
+        -------
+        ```py
+        # group OrderItem records by quantity values
+        # and count how many records are in each group
+        results = await OrderItem.prisma().group_by(
+            ['quantity'],
             count=True,
         )
         ```
