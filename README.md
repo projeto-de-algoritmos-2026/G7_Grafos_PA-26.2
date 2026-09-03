@@ -1,8 +1,14 @@
 # Delivery Routing com Grafos - stock.io (G7_Grafos_PA-26.2)
 
+![Tela Inicial](frontend/public/telaInicial.png)
+*Figura 1: Visão geral da tela inicial e da interface do mapa.*
+
 Este projeto foi desenvolvido para a disciplina de **Projeto de Algoritmos (PA) - 2026.2**, com foco na aplicação prática de teoria de grafos no mundo real.
 
 A aplicação simula um sistema de rotas de entrega (delivery) para a plataforma **stock.io**, conectando pontos geográficos reais através do **OpenStreetMap**, extraindo a malha viária e calculando a rota mais curta e viável utilizando os algoritmos de **Dijkstra** e **Bellman-Ford**.
+
+![Execução Bellman-Ford](frontend/public/bellmanFord.png)
+*Figura 2: Animação e cálculo de rota utilizando o algoritmo de Bellman-Ford.*
 
 ## Tecnologias Utilizadas
 
@@ -123,11 +129,24 @@ cd frontend
 
 ## Como usar a aplicação
 
-1. Navegue até a tela de rotas de um pedido.
-2. Na barra lateral, digite o **CEP de Origem** (ex: `71940-540` para Águas Claras, ou `71065-023` para Guará II). O destino já estará preenchido dependendo da tela.
-3. O sistema tentará localizar os pontos no mapa com alta precisão através do Nominatim/ViaCEP.
-4. Escolha o algoritmo desejado (Dijkstra ou Bellman-Ford).
-5. Clique em encontrar rota. O sistema baixará a malha viária do local e desenhará na tela o avanço passo-a-passo da exploração do algoritmo até a origem ser conectada ao destino.
+### Credenciais de Acesso (Testes)
+Para acessar o sistema, você pode utilizar os seguintes usuários já cadastrados:
+
+**Cliente**
+- **Email:** mauricio@gmail.com
+- **Senha:** mauricio123@
+
+**Entregador**
+- **Email:** mauricioentregador@gmail.com
+- **Senha:** mauricio123@
+
+### Passo a Passo da Aplicação
+1. Faça login utilizando uma das credenciais acima.
+2. Navegue até a tela de rotas de um pedido.
+3. Na barra lateral, digite o **CEP de Origem** (ex: `71940-540` para Águas Claras, ou `71065-023` para Guará II). O destino já estará preenchido dependendo da tela.
+4. O sistema tentará localizar os pontos no mapa com alta precisão através do Nominatim/ViaCEP.
+5. Escolha o algoritmo desejado (Dijkstra ou Bellman-Ford).
+6. Clique em encontrar rota. O sistema baixará a malha viária do local e desenhará na tela o avanço passo-a-passo da exploração do algoritmo até a origem ser conectada ao destino.
 
 ## Autores e Contribuidores
 
