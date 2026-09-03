@@ -1,4 +1,4 @@
-# Delivery Routing com Grafos - stock.io (G7_Grafos_PA-26.2)
+# Delivery Routing com Grafos - Stock.io
 
 ![Tela Inicial](frontend/public/telaInicial.png)
 *Figura 1: Visão geral da tela inicial*
