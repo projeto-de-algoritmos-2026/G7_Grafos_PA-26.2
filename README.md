@@ -1,14 +1,11 @@
 # Delivery Routing com Grafos - stock.io (G7_Grafos_PA-26.2)
 
 ![Tela Inicial](frontend/public/telaInicial.png)
-*Figura 1: Visão geral da tela inicial e da interface do mapa.*
+*Figura 1: Visão geral da tela inicial*
 
 Este projeto foi desenvolvido para a disciplina de **Projeto de Algoritmos (PA) - 2026.2**, com foco na aplicação prática de teoria de grafos no mundo real.
 
 A aplicação simula um sistema de rotas de entrega (delivery) para a plataforma **stock.io**, conectando pontos geográficos reais através do **OpenStreetMap**, extraindo a malha viária e calculando a rota mais curta e viável utilizando os algoritmos de **Dijkstra** e **Bellman-Ford**.
-
-![Execução Bellman-Ford](frontend/public/bellmanFord.png)
-*Figura 2: Animação e cálculo de rota utilizando o algoritmo de Bellman-Ford.*
 
 ## Tecnologias Utilizadas
 
@@ -47,6 +44,9 @@ Na plataforma **stock.io**, oferecemos a visualização e execução de dois dos
 - **Complexidade de Tempo:** O(V log V + E) ou O(V^2), dependendo da estrutura de fila de prioridade utilizada.
 - **Vantagem no Mapa:** É extremamente rápido e eficiente para mapas de ruas. Ele se expande geograficamente em formato de "diamante" (buscando em largura a partir da origem), processando apenas os nós mais promissores.
 - **Uso Prático:** Para distâncias geográficas longas (acima de 15km), o Dijkstra encontra a rota em milissegundos.
+
+![Execução Bellman-Ford](frontend/public/bellmanFord.png)
+*Figura 2: Animação e cálculo de rota utilizando o algoritmo de Bellman-Ford.*
 
 ### Bellman-Ford
 - **Complexidade de Tempo:** O(V * E).
