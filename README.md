@@ -1,11 +1,40 @@
 # Delivery Routing com Grafos - Stock.io
 
-![Tela Inicial](frontend/public/telaInicial.png)
-*Figura 1: Visão geral da tela inicial*
+Número da Lista: 1<br>
+Conteúdo da Disciplina: Grafos<br>
+
+## Alunos
+
+| Foto | Nome | Matrícula |
+| :---: | :--- | ---: |
+| ![Johnnatan Salles](https://github.com/jsalless.png?size=100) | **Johnnatan Salles** | 241011330 |
+| ![Julia Gabriella](https://github.com/juliagabriellafs.png?size=100) | **Julia Gabriella** | 241036142 |
+
+## Sobre
 
 Este projeto foi desenvolvido para a disciplina de **Projeto de Algoritmos (PA) - 2026.2**, com foco na aplicação prática de teoria de grafos no mundo real.
 
 A aplicação simula um sistema de rotas de entrega (delivery) para a plataforma **stock.io**, conectando pontos geográficos reais através do **OpenStreetMap**, extraindo a malha viária e calculando a rota mais curta e viável utilizando os algoritmos de **Dijkstra** e **Bellman-Ford**.
+
+## Screenshots
+
+![Tela Inicial](frontend/public/telaInicial.png)
+*Figura 1: Visão geral da tela inicial.*
+
+![Execução Bellman-Ford](frontend/public/bellmanFord.png)
+*Figura 2: Cálculo de rota utilizando o algoritmo de Bellman-Ford.*
+
+![Execução Bellman-Ford](assets/run_bellman_ford.png)
+*Figura 3: Implementação do algoritmo Bellman-Ford.*
+
+![Min-Heap](assets/minheap.png)
+*Figura 4: Implementação do MinHeap.*
+
+![Execução Dijkstra](assets/run_dijkstra.png)
+*Figura 5: Implementação do algoritmo Dijkstra.*
+
+![Servidores em execução](assets/terminal.png)
+*Figura 6: Servidores em execução.*
 
 ## Tecnologias Utilizadas
 
@@ -45,9 +74,6 @@ Na plataforma **stock.io**, oferecemos a visualização e execução de dois dos
 - **Vantagem no Mapa:** É extremamente rápido e eficiente para mapas de ruas. Ele se expande geograficamente em formato de "diamante" (buscando em largura a partir da origem), processando apenas os nós mais promissores.
 - **Uso Prático:** Para distâncias geográficas longas (acima de 15km), o Dijkstra encontra a rota em milissegundos.
 
-![Execução Bellman-Ford](frontend/public/bellmanFord.png)
-*Figura 2: Cálculo de rota utilizando o algoritmo de Bellman-Ford.*
-
 ### Bellman-Ford
 - **Complexidade de Tempo:** O(V * E).
 - **Desvantagem no Mapa:** Ele relaxa **todas** as arestas do mapa, repetidas vezes (até V-1). Num grafo de cidade com milhares de nós (esquinas) e arestas (ruas), isso resulta em milhões de operações computacionais desnecessárias, já que não temos ruas com "distância negativa".
@@ -55,9 +81,7 @@ Na plataforma **stock.io**, oferecemos a visualização e execução de dois dos
 
 ---
 
-## Como Configurar e Executar
-
-Siga as instruções abaixo para rodar o projeto localmente na sua máquina.
+## Instalação
 
 ### 1. Clonando o repositório
 
@@ -125,11 +149,10 @@ cd frontend
 3. **Acesse a aplicação:**
    Abra o seu navegador e acesse [http://localhost:3000](http://localhost:3000).
 
----
-
-## Como usar a aplicação
+## Uso
 
 ### Credenciais de Acesso (Testes)
+
 Para acessar o sistema, você pode utilizar os seguintes usuários já cadastrados:
 
 **Cliente**
@@ -141,15 +164,15 @@ Para acessar o sistema, você pode utilizar os seguintes usuários já cadastrad
 - **Senha:** mauricio123@
 
 ### Passo a Passo da Aplicação
+
 1. Faça login utilizando uma das credenciais acima
 2. Realize o pedido de um item na plataforma
 3. Acesse a plataforma como entregador
 4. Escolha um pedido
 5. Calcule a rota do pedido com o algoritmo escolhido
 
-## Equipe
+## Outros
 
-| Foto | Nome | Matrícula|
-| :---: | :--- |---|
-| ![Johnnatan Salles](https://github.com/jsalless.png?size=100) | **Johnnatan Salles** | 241011330 |
-| ![Julia Gabriella](https://github.com/juliagabriellafs.png?size=100) | **Julia Gabriella** | 241036142 |
+### Vídeo da apresentação
+
+[![Vídeo da apresentação](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
