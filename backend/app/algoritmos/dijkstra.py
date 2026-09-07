@@ -33,3 +33,22 @@ def shift_up(self, i):
                 i = parent_idx
             else:
                 break
+def heapify(self, i):
+        size = len(self.heap)
+        
+        while True:
+            smallest = i
+            left = self.left_child(i)
+            right = self.right_child(i)
+
+            if left < size and self.heap[left]['dist'] < self.heap[smallest]['dist']:
+                smallest = left
+
+            if right < size and self.heap[right]['dist'] < self.heap[smallest]['dist']:
+                smallest = right
+
+            if smallest != i:
+                self.swap(i, smallest)
+                i = smallest
+            else:
+                break
