@@ -24,16 +24,16 @@ A aplicação simula um sistema de rotas de entrega (delivery) para a plataforma
 ![Execução Bellman-Ford](frontend/public/bellmanFord.png)
 *Figura 2: Cálculo de rota utilizando o algoritmo de Bellman-Ford.*
 
-![Execução Bellman-Ford](assets/run_bellman_ford.png)
+![Execução Bellman-Ford](assets/run_bellman_ford.PNG)
 *Figura 3: Implementação do algoritmo Bellman-Ford.*
 
-![Min-Heap](assets/minheap.png)
+![Min-Heap](assets/minheap.PNG)
 *Figura 4: Implementação do MinHeap.*
 
-![Execução Dijkstra](assets/run_dijkstra.png)
+![Execução Dijkstra](assets/run_dijkstra.PNG)
 *Figura 5: Implementação do algoritmo Dijkstra.*
 
-![Servidores em execução](assets/terminal.png)
+![Servidores em execução](assets/terminal.PNG)
 *Figura 6: Servidores em execução.*
 
 ## Tecnologias Utilizadas
