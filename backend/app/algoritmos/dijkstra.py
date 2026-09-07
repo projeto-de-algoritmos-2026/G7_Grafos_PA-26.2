@@ -22,4 +22,19 @@ def run_dijkstra(graph_nodes: Dict[int, dict], graph_edges: Dict[int, List[dict]
     distances[start_node] = 0.0
     pq.insert(start_node, 0.0)
 
+    while not pq.is_empty():
+        current = pq.extract_min()
+        
+        if current is None:
+            break
+            
+        u = current['node']
+        current_dist = current['dist']
+
+        if u == end_node:
+            break
+
+        if current_dist > distances[u]:
+            continue
+
     return None
