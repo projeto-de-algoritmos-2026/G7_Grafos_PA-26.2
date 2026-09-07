@@ -4,10 +4,11 @@ from .bellman_ford import RouteResult
 from .min_heap import MinHeap
 
 def run_dijkstra(graph_nodes: Dict[int, dict], graph_edges: Dict[int, List[dict]], start_node: int, end_node: int) -> Optional[RouteResult]:
+    print("----RODANDO DIJKSTRA----")
     vertices = set([int(k) for k in graph_nodes.keys()])
     
     if start_node not in vertices:
-        return None
+        return None 
 
     distances: Dict[int, float] = {}
     predecessors: Dict[int, Optional[int]] = {}
@@ -84,4 +85,4 @@ def run_dijkstra(graph_nodes: Dict[int, dict], graph_edges: Dict[int, List[dict]
         path=path,
         total_distance=distances[end_node],
         visited_edges=visited_edges
-    )
+    ) 

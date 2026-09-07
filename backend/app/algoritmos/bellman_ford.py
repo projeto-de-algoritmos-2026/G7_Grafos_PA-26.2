@@ -10,6 +10,7 @@ class RouteResult:
         self.visitedEdges = visited_edges
 
 def run_bellman_ford(graph_nodes: Dict[int, dict], graph_edges: Dict[int, List[dict]], start_node: int, end_node: int) -> Optional[RouteResult]:
+    print("----RODANDO BELLMAN-FORD----")
     all_edges = []
     vertices: Set[int] = set()
     
