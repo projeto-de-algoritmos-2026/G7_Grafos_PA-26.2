@@ -149,7 +149,7 @@ Para acessar o sistema, você pode utilizar os seguintes usuários já cadastrad
 
 ## Equipe
 
-| Foto | Nome |
-| :---: | :--- |
-| ![Johnnatan Salles](https://github.com/jsalless.png?size=100) | **Johnnatan Salles** |
-| ![Julia Gabriella](https://github.com/juliagabriellafs.png?size=100) | **Julia Gabriella** |
+| Foto | Nome | Matrícula|
+| :---: | :--- |---|
+| ![Johnnatan Salles](https://github.com/jsalless.png?size=100) | **Johnnatan Salles** | 241011330 |
+| ![Julia Gabriella](https://github.com/juliagabriellafs.png?size=100) | **Julia Gabriella** | 241036142 |

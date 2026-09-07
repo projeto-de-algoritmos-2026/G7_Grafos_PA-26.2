@@ -106,3 +106,26 @@ export async function getOrderById(orderId: string | number) {
         return null;
     }
 }
+
+export async function calculateRouteAPI(graph: any, startNode: number, endNode: number, algorithm: string) {
+    try {
+        const payload = {
+            graph,
+            startNode,
+            endNode,
+            algorithm
+        };
+        const res = await fetch(`${BASE_URL}/api/routes/calculate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        if (!res.ok) return null;
+        return await res.json();
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+}
