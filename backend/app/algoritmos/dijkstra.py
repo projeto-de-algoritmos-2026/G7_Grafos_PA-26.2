@@ -23,3 +23,13 @@ class MinHeap:
         self.pos_map[node_j['node']] = i
 
         self.heap[i], self.heap[j] = self.heap[j], self.heap[i]
+
+def shift_up(self, i):
+        while i > 0:
+            parent_idx = self.parent(i)
+            
+            if self.heap[i]['dist'] < self.heap[parent_idx]['dist']:
+                self.swap(i, parent_idx)
+                i = parent_idx
+            else:
+                break
