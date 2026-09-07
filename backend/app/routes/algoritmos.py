@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from typing import Dict, List, Optional
 from app.algoritmos.bellman_ford import run_bellman_ford
+from app.algoritmos.dijkstra import run_dijkstra
 
 router = APIRouter(
     prefix="/api",
@@ -40,20 +41,20 @@ class RouteResultResponse(BaseModel):
 @router.post("/routes/calculate", response_model=RouteResultResponse)
 async def calculate_route(payload: CalculateRouteRequest):
     """
-    Calcula a menor rota usando Bellman-Ford.
+    Calcula a menor rota usando o algoritmo escolhido.
     """
-    if payload.algorithm != "bellman":
-        raise HTTPException(status_code=400, detail="Apenas o algoritmo 'bellman' é suportado no momento.")
+    if payload.algorithm not in ["bellman", "dijkstra"]:
+        raise HTTPException(status_code=400, detail="Algoritmo inválido. Escolha 'bellman' ou 'dijkstra'.")
 
-    # Converte os modelos Pydantic para os dicionários que a função original espera
-    # graph_nodes: Dict[int, dict]
+    # Converte os modelos Pydantic para os dicionários que as funções originais esperam
     graph_nodes = {node_id: node.model_dump() for node_id, node in payload.graph_data.nodes.items()}
-    
-    # graph_edges: Dict[int, List[dict]]
     graph_edges = {node_id: [edge.model_dump() for edge in edges] for node_id, edges in payload.graph_data.edges.items()}
 
-    # O algoritmo tem run_bellman_ford que recebe (nodes, edges, start, end)
-    result = run_bellman_ford(graph_nodes, graph_edges, payload.start_node, payload.end_node)
+    #Decide qual algoritmo chamar com base na requisição do frontend
+    if payload.algorithm == "dijkstra":
+        result = run_dijkstra(graph_nodes, graph_edges, payload.start_node, payload.end_node)
+    else:
+        result = run_bellman_ford(graph_nodes, graph_edges, payload.start_node, payload.end_node)
 
     if result is None:
         raise HTTPException(status_code=404, detail="Não foi possível traçar uma rota conexa entre os pontos ou grafo contém ciclo negativo.")
