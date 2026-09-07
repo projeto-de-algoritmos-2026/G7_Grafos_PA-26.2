@@ -37,4 +37,22 @@ def run_dijkstra(graph_nodes: Dict[int, dict], graph_edges: Dict[int, List[dict]
         if current_dist > distances[u]:
             continue
 
+        for edge in graph_edges.get(u, []):
+            v = int(edge['target'])
+            weight = float(edge['distance'])
+            
+            if len(visited_edges) < 5000:
+                visited_edges.append({'u': u, 'v': v})
+
+            new_dist = current_dist + weight
+
+            if new_dist < distances[v]:
+                distances[v] = new_dist
+                predecessors[v] = u
+                
+                if v in pq.pos_map:
+                    pq.decrease_key(v, new_dist)
+                else:
+                    pq.insert(v, new_dist)
+
     return None
