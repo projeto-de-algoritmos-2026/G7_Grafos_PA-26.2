@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getOrderById } from "../../../api/api";
-import { buildRoadGraph, geocodeCEP, findNearestNode, runBellmanFord, runDijkstra, OSMGraph, RouteResult } from "../../../utils/osmGraph";
+import { getOrderById, calculateRouteAPI } from "../../../api/api";
+import { buildRoadGraph, geocodeCEP, findNearestNode, OSMGraph, RouteResult } from "../../../utils/osmGraph";
 import { FiArrowLeft, FiMapPin, FiClock, FiSearch } from "react-icons/fi";
 import { FaWalking, FaBicycle, FaMotorcycle, FaCar } from "react-icons/fa";
 import dynamic from "next/dynamic";
@@ -21,7 +21,7 @@ export default function DeliveryRoutePage() {
     const [loadingMsg, setLoadingMsg] = useState<string>("Buscando pedido...");
     const [graphData, setGraphData] = useState<{ graph: OSMGraph, start: number, end: number } | null>(null);
     const [routeResult, setRouteResult] = useState<RouteResult | null>(null);
-    const [algorithm, setAlgorithm] = useState<"bellman" | "dijkstra">("bellman");
+    const [algorithm, setAlgorithm] = useState<"bellman">("bellman");
     const [transport, setTransport] = useState<"walk" | "bike" | "moto" | "car">("bike");
 
     // Novo estado para o CEP de origem
@@ -94,8 +94,10 @@ export default function DeliveryRoutePage() {
 
             setGraphData({ graph, start: sNode, end: eNode });
 
-            setLoadingMsg(`Calculando menor caminho com ${algorithm === 'bellman' ? 'Bellman-Ford' : 'Dijkstra'}...`);
-            const result = algorithm === 'bellman' ? runBellmanFord(graph, sNode, eNode) : runDijkstra(graph, sNode, eNode);
+            setLoadingMsg(`Calculando menor caminho com Bellman-Ford...`);
+            
+            const result = await calculateRouteAPI(graph, sNode, eNode, "bellman");
+
             if (!result) toast.warning("Não foi possível traçar uma rota conexa entre os pontos.");
 
             setRouteResult(result);
@@ -108,7 +110,7 @@ export default function DeliveryRoutePage() {
         }
     };
 
-    const handleAlgorithmChange = (alg: "bellman" | "dijkstra") => {
+    const handleAlgorithmChange = (alg: "bellman") => {
         setAlgorithm(alg);
     };
 
@@ -231,13 +233,13 @@ export default function DeliveryRoutePage() {
                         <div className="flex gap-2 mb-6 p-1 bg-[#F5F2EB] rounded-full">
                             <button
                                 onClick={() => handleAlgorithmChange('bellman')}
-                                className={`flex-1 py-2.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${algorithm === 'bellman' ? 'bg-white shadow-sm text-[#6032F6]' : 'text-[#17181A]/50'}`}
+                                className={`flex-1 py-2.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all cursor-pointer bg-white shadow-sm text-[#6032F6]`}
                             >
                                 Bellman-Ford
                             </button>
                             <button
-                                onClick={() => handleAlgorithmChange('dijkstra')}
-                                className={`flex-1 py-2.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${algorithm === 'dijkstra' ? 'bg-white shadow-sm text-[#6032F6]' : 'text-[#17181A]/50'}`}
+                                onClick={() => toast.info("Dijkstra em desenvolvimento / indisponível no momento!")}
+                                className={`flex-1 py-2.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all cursor-pointer text-[#17181A]/50 hover:bg-white/50`}
                             >
                                 Dijkstra
                             </button>
