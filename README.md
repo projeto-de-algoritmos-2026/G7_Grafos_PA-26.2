@@ -28,7 +28,7 @@ A aplicação simula um sistema de rotas de entrega (delivery) para a plataforma
 *Figura 3: Implementação do algoritmo Bellman-Ford.*
 
 ![Min-Heap](assets/minheap.PNG)
-*Figura 4: Implementação do MinHeap.*
+<br>*Figura 4: Implementação do MinHeap.*
 
 ![Execução Dijkstra](assets/run_dijkstra.PNG)
 *Figura 5: Implementação do algoritmo Dijkstra.*
