@@ -55,4 +55,33 @@ def run_dijkstra(graph_nodes: Dict[int, dict], graph_edges: Dict[int, List[dict]
                 else:
                     pq.insert(v, new_dist)
 
-    return None
+
+    if distances.get(end_node, math.inf) == math.inf:
+        return None
+
+    path: List[int] = []
+    current: Optional[int] = end_node
+    
+    visited_in_path: set[int] = set()
+    
+    while current is not None:
+        if current in visited_in_path:
+            break
+        visited_in_path.add(current)
+        
+        path.append(current)
+        
+        if current == start_node:
+            break
+            
+        current = predecessors.get(current)
+        
+    path.reverse()
+
+    return RouteResult(
+        distances=distances,
+        predecessors=predecessors,
+        path=path,
+        total_distance=distances[end_node],
+        visited_edges=visited_edges
+    )
