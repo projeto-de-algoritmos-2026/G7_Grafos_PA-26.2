@@ -52,3 +52,34 @@ def heapify(self, i):
                 i = smallest
             else:
                 break
+
+def insert(self, node_id, dist):
+        node = {'node': node_id, 'dist': dist}
+        self.heap.append(node)
+        
+        current_idx = len(self.heap) - 1
+        self.pos_map[node_id] = current_idx
+        
+        self.shift_up(current_idx)
+
+def extract_min(self):
+        if self.is_empty():
+            return None
+            
+        min_node = self.heap[0]
+        last_node = self.heap.pop()
+        del self.pos_map[min_node['node']]
+        
+        if not self.is_empty():
+            self.heap[0] = last_node
+            self.pos_map[last_node['node']] = 0
+            self.heapify(0)
+            
+        return min_node
+
+def decrease_key(self, node_id, new_dist):
+        if node_id in self.pos_map:
+            idx = self.pos_map[node_id]
+            if new_dist < self.heap[idx]['dist']:
+                self.heap[idx]['dist'] = new_dist
+                self.shift_up(idx)
