@@ -175,4 +175,4 @@ Para acessar o sistema, você pode utilizar os seguintes usuários já cadastrad
 
 ### Vídeo da apresentação
 
-[![Vídeo da apresentação](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+[![Vídeo da apresentação](https://img.youtube.com/vi/GAYAPzIV_Iw/0.jpg)](https://youtu.be/GAYAPzIV_Iw)
